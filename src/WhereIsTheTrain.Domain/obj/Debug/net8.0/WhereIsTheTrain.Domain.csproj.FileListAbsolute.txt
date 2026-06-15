@@ -1,0 +1,13 @@
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Domain\bin\Debug\net8.0\WhereIsTheTrain.Domain.deps.json
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Domain\bin\Debug\net8.0\WhereIsTheTrain.Domain.dll
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Domain\bin\Debug\net8.0\WhereIsTheTrain.Domain.pdb
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Domain\obj\Debug\net8.0\WhereIsTheTrain.Domain.csproj.AssemblyReference.cache
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Domain\obj\Debug\net8.0\WhereIsTheTrain.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Domain\obj\Debug\net8.0\WhereIsTheTrain.Domain.AssemblyInfoInputs.cache
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Domain\obj\Debug\net8.0\WhereIsTheTrain.Domain.AssemblyInfo.cs
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Domain\obj\Debug\net8.0\WhereIsTheTrain.Domain.csproj.CoreCompileInputs.cache
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Domain\obj\Debug\net8.0\WhereIsTheTrain.Domain.sourcelink.json
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Domain\obj\Debug\net8.0\WhereIsTheTrain.Domain.dll
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Domain\obj\Debug\net8.0\refint\WhereIsTheTrain.Domain.dll
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Domain\obj\Debug\net8.0\WhereIsTheTrain.Domain.pdb
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Domain\obj\Debug\net8.0\ref\WhereIsTheTrain.Domain.dll

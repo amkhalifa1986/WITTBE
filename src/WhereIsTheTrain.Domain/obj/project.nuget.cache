@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "mxqFEh0C4UTcC0JGnuuGCJ/82U70glgp/Mi430L5zzBtakzb9ryyy0oSdDK9HqAP3rSQK9VakHz1KrV2D6NbGA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.Domain\\WhereIsTheTrain.Domain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\progk\\.nuget\\packages\\nettopologysuite\\2.5.0\\nettopologysuite.2.5.0.nupkg.sha512",
+    "C:\\Users\\progk\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512"
+  ],
+  "logs": []
+}

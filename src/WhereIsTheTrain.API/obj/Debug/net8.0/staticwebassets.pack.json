@@ -1,0 +1,237 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\app.js",
+      "PackagePath": "staticwebassets\\admin\\app.js"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\font-awesome\\css\\all.min.css",
+      "PackagePath": "staticwebassets\\admin\\font-awesome\\css\\all.min.css"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\font-awesome\\webfonts\\fa-brands-400.ttf",
+      "PackagePath": "staticwebassets\\admin\\font-awesome\\webfonts\\fa-brands-400.ttf"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\font-awesome\\webfonts\\fa-brands-400.woff2",
+      "PackagePath": "staticwebassets\\admin\\font-awesome\\webfonts\\fa-brands-400.woff2"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\font-awesome\\webfonts\\fa-regular-400.ttf",
+      "PackagePath": "staticwebassets\\admin\\font-awesome\\webfonts\\fa-regular-400.ttf"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\font-awesome\\webfonts\\fa-regular-400.woff2",
+      "PackagePath": "staticwebassets\\admin\\font-awesome\\webfonts\\fa-regular-400.woff2"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\font-awesome\\webfonts\\fa-solid-900.ttf",
+      "PackagePath": "staticwebassets\\admin\\font-awesome\\webfonts\\fa-solid-900.ttf"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\font-awesome\\webfonts\\fa-solid-900.woff2",
+      "PackagePath": "staticwebassets\\admin\\font-awesome\\webfonts\\fa-solid-900.woff2"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\font-awesome\\webfonts\\fa-v4compat.woff2",
+      "PackagePath": "staticwebassets\\admin\\font-awesome\\webfonts\\fa-v4compat.woff2"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\fonts\\0_UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2JL7SUc.woff2",
+      "PackagePath": "staticwebassets\\admin\\fonts\\0_UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2JL7SUc.woff2"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\fonts\\10_nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlj5Jv4r4xA.woff2",
+      "PackagePath": "staticwebassets\\admin\\fonts\\10_nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlj5Jv4r4xA.woff2"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\fonts\\11_nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlj5bv4r4xA.woff2",
+      "PackagePath": "staticwebassets\\admin\\fonts\\11_nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlj5bv4r4xA.woff2"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\fonts\\12_nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlj47v4r4xA.woff2",
+      "PackagePath": "staticwebassets\\admin\\fonts\\12_nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlj47v4r4xA.woff2"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\fonts\\13_nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlj41v4o.woff2",
+      "PackagePath": "staticwebassets\\admin\\fonts\\13_nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlj41v4o.woff2"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\fonts\\1_UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa0ZL7SUc.woff2",
+      "PackagePath": "staticwebassets\\admin\\fonts\\1_UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa0ZL7SUc.woff2"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\fonts\\2_UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2ZL7SUc.woff2",
+      "PackagePath": "staticwebassets\\admin\\fonts\\2_UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2ZL7SUc.woff2"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\fonts\\3_UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1pL7SUc.woff2",
+      "PackagePath": "staticwebassets\\admin\\fonts\\3_UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1pL7SUc.woff2"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\fonts\\4_UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2pL7SUc.woff2",
+      "PackagePath": "staticwebassets\\admin\\fonts\\4_UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2pL7SUc.woff2"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\fonts\\5_UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa25L7SUc.woff2",
+      "PackagePath": "staticwebassets\\admin\\fonts\\5_UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa25L7SUc.woff2"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\fonts\\6_UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+      "PackagePath": "staticwebassets\\admin\\fonts\\6_UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\fonts\\7_QGYvz_MVcBeNP4NJuktqQ4E.woff2",
+      "PackagePath": "staticwebassets\\admin\\fonts\\7_QGYvz_MVcBeNP4NJuktqQ4E.woff2"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\fonts\\8_QGYvz_MVcBeNP4NJtEtq.woff2",
+      "PackagePath": "staticwebassets\\admin\\fonts\\8_QGYvz_MVcBeNP4NJtEtq.woff2"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\fonts\\9_nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlj4wv4r4xA.woff2",
+      "PackagePath": "staticwebassets\\admin\\fonts\\9_nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlj4wv4r4xA.woff2"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\fonts\\fonts.css",
+      "PackagePath": "staticwebassets\\admin\\fonts\\fonts.css"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\index.html",
+      "PackagePath": "staticwebassets\\admin\\index.html"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\admin\\styles.css",
+      "PackagePath": "staticwebassets\\admin\\styles.css"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\favicon-dark.png",
+      "PackagePath": "staticwebassets\\favicon-dark.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\favicon-light.png",
+      "PackagePath": "staticwebassets\\favicon-light.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\logo-dark.png",
+      "PackagePath": "staticwebassets\\logo-dark.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\logo-light.png",
+      "PackagePath": "staticwebassets\\logo-light.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\2b145a4e-ef2e-48c6-b501-a91d6692e6d6.jpg",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\2b145a4e-ef2e-48c6-b501-a91d6692e6d6.jpg"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\31098dd2-03cb-4f75-a117-8f21d2ef8082.png",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\31098dd2-03cb-4f75-a117-8f21d2ef8082.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\34badb2b-b2b3-43bb-849c-b35054191f6e.png",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\34badb2b-b2b3-43bb-849c-b35054191f6e.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\5a1fa556-b50d-4c91-84b4-7ee6feb35bb8.png",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\5a1fa556-b50d-4c91-84b4-7ee6feb35bb8.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\639778f6-ac4e-4160-a5e2-c9c09e1186c9.png",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\639778f6-ac4e-4160-a5e2-c9c09e1186c9.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\68f21705-e863-47cf-923e-ed7dc4f6e4b4.png",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\68f21705-e863-47cf-923e-ed7dc4f6e4b4.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\8a585950-392b-4cc5-9583-49a911e7e7a6.png",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\8a585950-392b-4cc5-9583-49a911e7e7a6.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\8cced18d-16cb-4e16-b5b9-9ab7d78a730b.png",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\8cced18d-16cb-4e16-b5b9-9ab7d78a730b.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\8d8b52ea-d7f7-4045-ab67-54ede9a9628d.png",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\8d8b52ea-d7f7-4045-ab67-54ede9a9628d.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\a22f0c30-9f84-4e8c-a3bf-069ba5f8a673.jpg",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\a22f0c30-9f84-4e8c-a3bf-069ba5f8a673.jpg"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\b973da76-98ae-4547-a886-496972fcfa7a.png",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\b973da76-98ae-4547-a886-496972fcfa7a.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\b9eb2231-bf78-404f-908c-77786ec6a757.png",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\b9eb2231-bf78-404f-908c-77786ec6a757.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\ca241d8e-948c-4dd9-bc96-be22e2f9bce8.png",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\ca241d8e-948c-4dd9-bc96-be22e2f9bce8.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\d71a2458-3c32-4f35-950b-bdbf8eeb940d.jpg",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\d71a2458-3c32-4f35-950b-bdbf8eeb940d.jpg"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\e01b7be3-49a4-4554-b8fb-1e197098dca0.jpg",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\e01b7be3-49a4-4554-b8fb-1e197098dca0.jpg"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\e3ef384b-7e60-4ee0-8ee2-ce80257f53a8.png",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\e3ef384b-7e60-4ee0-8ee2-ce80257f53a8.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\f565ece3-9b74-4530-96b1-ec1ca889a784.png",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\f565ece3-9b74-4530-96b1-ec1ca889a784.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\f9c2c96c-e51e-42dc-b370-77d6c41361bd.png",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\f9c2c96c-e51e-42dc-b370-77d6c41361bd.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\markers\\40dbb589-262d-4e9b-957d-ee4f87eb4733.png",
+      "PackagePath": "staticwebassets\\uploads\\markers\\40dbb589-262d-4e9b-957d-ee4f87eb4733.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\markers\\41239905-2da8-4f1e-a9da-66170125a4d4.png",
+      "PackagePath": "staticwebassets\\uploads\\markers\\41239905-2da8-4f1e-a9da-66170125a4d4.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\markers\\a124c9c6-031f-484a-8127-1f47219ecd21.png",
+      "PackagePath": "staticwebassets\\uploads\\markers\\a124c9c6-031f-484a-8127-1f47219ecd21.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\markers\\bbc160f5-d403-49d0-9fd7-2b3eadafce37.png",
+      "PackagePath": "staticwebassets\\uploads\\markers\\bbc160f5-d403-49d0-9fd7-2b3eadafce37.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\markers\\eb28d2f9-f28e-43cd-af22-f5139e9b05c0.png",
+      "PackagePath": "staticwebassets\\uploads\\markers\\eb28d2f9-f28e-43cd-af22-f5139e9b05c0.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.WhereIsTheTrain.API.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.WhereIsTheTrain.API.props",
+      "PackagePath": "build\\WhereIsTheTrain.API.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.WhereIsTheTrain.API.props",
+      "PackagePath": "buildMultiTargeting\\WhereIsTheTrain.API.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.WhereIsTheTrain.API.props",
+      "PackagePath": "buildTransitive\\WhereIsTheTrain.API.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

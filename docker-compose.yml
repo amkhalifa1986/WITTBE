@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  witt-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: witt_api
+    restart: always
+    ports:
+      # Map host port 5245 to container port 8080
+      - "5245:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      # You can override database connection strings or JWT secrets here
+      # - ConnectionStrings__DefaultConnection=Data Source=/app/data/app.db
+    volumes:
+      # Persist the SQLite database file outside the container
+      - witt_data:/app/data
+
+volumes:
+  witt_data:

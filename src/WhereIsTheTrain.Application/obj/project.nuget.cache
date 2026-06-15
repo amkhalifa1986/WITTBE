@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "dgSpecHash": "PBw78yO+O+rRtzf82IRI2Flbsl13VZjiFG+6zDc8ztrBoIvOsTTaAFYesCA9Bxp5G9jqbKxnJg6DmHHG3s8yUw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.Application\\WhereIsTheTrain.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\progk\\.nuget\\packages\\bcrypt.net-next\\4.2.0\\bcrypt.net-next.4.2.0.nupkg.sha512",
+    "C:\\Users\\progk\\.nuget\\packages\\fluentvalidation\\11.11.0\\fluentvalidation.11.11.0.nupkg.sha512",
+    "C:\\Users\\progk\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.11.0\\fluentvalidation.dependencyinjectionextensions.11.11.0.nupkg.sha512",
+    "C:\\Users\\progk\\.nuget\\packages\\mediatr\\12.4.1\\mediatr.12.4.1.nupkg.sha512",
+    "C:\\Users\\progk\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
+    "C:\\Users\\progk\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\progk\\.nuget\\packages\\nettopologysuite\\2.5.0\\nettopologysuite.2.5.0.nupkg.sha512",
+    "C:\\Users\\progk\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,16 @@
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Application\bin\Debug\net8.0\WhereIsTheTrain.Application.deps.json
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Application\bin\Debug\net8.0\WhereIsTheTrain.Application.dll
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Application\bin\Debug\net8.0\WhereIsTheTrain.Application.pdb
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Application\bin\Debug\net8.0\WhereIsTheTrain.Domain.dll
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Application\bin\Debug\net8.0\WhereIsTheTrain.Domain.pdb
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Application\obj\Debug\net8.0\WhereIsTheTrain.Application.csproj.AssemblyReference.cache
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Application\obj\Debug\net8.0\WhereIsTheTrain.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Application\obj\Debug\net8.0\WhereIsTheTrain.Application.AssemblyInfoInputs.cache
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Application\obj\Debug\net8.0\WhereIsTheTrain.Application.AssemblyInfo.cs
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Application\obj\Debug\net8.0\WhereIsTheTrain.Application.csproj.CoreCompileInputs.cache
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Application\obj\Debug\net8.0\WhereIsTheTrain.Application.sourcelink.json
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Application\obj\Debug\net8.0\WhereIsT.571E38DB.Up2Date
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Application\obj\Debug\net8.0\WhereIsTheTrain.Application.dll
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Application\obj\Debug\net8.0\refint\WhereIsTheTrain.Application.dll
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Application\obj\Debug\net8.0\WhereIsTheTrain.Application.pdb
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Application\obj\Debug\net8.0\ref\WhereIsTheTrain.Application.dll
