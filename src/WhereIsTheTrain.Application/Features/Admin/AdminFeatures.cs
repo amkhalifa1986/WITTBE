@@ -775,15 +775,24 @@ public class TripsAdminHandlers :
             await _unitOfWork.SaveChangesAsync(ct);
         }
 
+        var trainType = train.TrainTypeId.HasValue
+            ? await _unitOfWork.Repository<TrainType>().GetByIdAsync(train.TrainTypeId.Value, ct)
+            : null;
+
         return Result<TripDto>.Success(new TripDto
         {
             Id = trip.Id,
+            TrainId = trip.TrainId,
             TrainNumber = train.TrainNumber,
             TrainNameAr = train.NameAr,
             TrainNameEn = train.NameEn,
             TripDate = trip.TripDate,
             Status = trip.Status.ToString(),
-            FollowerCount = autoEnrolledCount
+            FollowerCount = autoEnrolledCount,
+            TrainTypeId = train.TrainTypeId,
+            TrainTypeNameAr = trainType?.NameAr,
+            TrainTypeNameEn = trainType?.NameEn,
+            MarkerPngUrl = trainType?.MarkerPngUrl
         }, 201);
     }
 
@@ -817,10 +826,14 @@ public class TripsAdminHandlers :
 
         var train = await _unitOfWork.Trains.GetByIdAsync(trip.TrainId, ct);
         var followers = await _unitOfWork.Repository<TripFollower>().CountAsync(tf => tf.TripId == trip.Id, ct);
+        var trainType = train?.TrainTypeId.HasValue == true
+            ? await _unitOfWork.Repository<TrainType>().GetByIdAsync(train.TrainTypeId.Value, ct)
+            : null;
 
         return Result<TripDto>.Success(new TripDto
         {
             Id = trip.Id,
+            TrainId = trip.TrainId,
             TrainNumber = train?.TrainNumber ?? string.Empty,
             TrainNameAr = train?.NameAr ?? string.Empty,
             TrainNameEn = train?.NameEn ?? string.Empty,
@@ -828,7 +841,11 @@ public class TripsAdminHandlers :
             Status = trip.Status.ToString(),
             ActualDeparture = trip.ActualDeparture,
             ActualArrival = trip.ActualArrival,
-            FollowerCount = followers
+            FollowerCount = followers,
+            TrainTypeId = train?.TrainTypeId,
+            TrainTypeNameAr = trainType?.NameAr,
+            TrainTypeNameEn = trainType?.NameEn,
+            MarkerPngUrl = trainType?.MarkerPngUrl
         });
     }
 
@@ -860,16 +877,23 @@ public class TripsAdminHandlers :
     public async Task<Result<List<TripDto>>> Handle(GetAllTripsQuery request, CancellationToken ct)
     {
         var trips = await _unitOfWork.Repository<Trip>().GetAllAsync(ct);
+        var trainTypes = await _unitOfWork.Repository<TrainType>().GetAllAsync(ct);
+        var trainTypesDict = trainTypes.ToDictionary(t => t.Id);
         var dtos = new List<TripDto>();
 
         foreach (var trip in trips)
         {
             var train = await _unitOfWork.Trains.GetByIdAsync(trip.TrainId, ct);
             var followers = await _unitOfWork.Repository<TripFollower>().CountAsync(tf => tf.TripId == trip.Id, ct);
+            
+            var trainType = train?.TrainTypeId.HasValue == true && trainTypesDict.TryGetValue(train.TrainTypeId.Value, out var tt)
+                ? tt
+                : null;
 
             dtos.Add(new TripDto
             {
                 Id = trip.Id,
+                TrainId = trip.TrainId,
                 TrainNumber = train?.TrainNumber ?? string.Empty,
                 TrainNameAr = train?.NameAr ?? string.Empty,
                 TrainNameEn = train?.NameEn ?? string.Empty,
@@ -877,7 +901,11 @@ public class TripsAdminHandlers :
                 Status = trip.Status.ToString(),
                 ActualDeparture = trip.ActualDeparture,
                 ActualArrival = trip.ActualArrival,
-                FollowerCount = followers
+                FollowerCount = followers,
+                TrainTypeId = train?.TrainTypeId,
+                TrainTypeNameAr = trainType?.NameAr,
+                TrainTypeNameEn = trainType?.NameEn,
+                MarkerPngUrl = trainType?.MarkerPngUrl
             });
         }
 
@@ -889,22 +917,50 @@ public class TripsAdminHandlers :
 // 📩 SUGGESTIONS COMMANDS & QUERIES
 // ==========================================
 
-public record GetPendingSuggestionsQuery() : IRequest<Result<List<TrainSuggestionDto>>>;
+public record GetPendingTrainSuggestionsQuery() : IRequest<Result<List<TrainSuggestionDto>>>;
 
-public record ReviewSuggestionCommand(
-    Guid SuggestionId, SuggestionStatus Status, string? AdminNotes
+public record GetPendingStopSuggestionsQuery() : IRequest<Result<List<StopSuggestionDto>>>;
+
+public record ReviewTrainSuggestionCommand(
+    Guid SuggestionId,
+    SuggestionStatus Status,
+    string? AdminNotes,
+    string TrainNumber,
+    string NameAr,
+    string NameEn,
+    string? DescriptionAr,
+    string? DescriptionEn,
+    string? RouteDescriptionEn
 ) : IRequest<Result<TrainSuggestionDto>>;
 
-// Handlers for Suggestions
+public record ReviewStopSuggestionCommand(
+    Guid SuggestionId,
+    SuggestionStatus Status,
+    string? AdminNotes,
+    string Code,
+    string NameAr,
+    string NameEn,
+    Guid? CityId,
+    string? NewCityNameAr,
+    string? NewCityNameEn,
+    Guid? NewCityGovernorateId,
+    double? Latitude,
+    double? Longitude,
+    string? DescriptionAr,
+    string? DescriptionEn
+) : IRequest<Result<StopSuggestionDto>>;
+
 public class SuggestionsAdminHandlers :
-    IRequestHandler<GetPendingSuggestionsQuery, Result<List<TrainSuggestionDto>>>,
-    IRequestHandler<ReviewSuggestionCommand, Result<TrainSuggestionDto>>
+    IRequestHandler<GetPendingTrainSuggestionsQuery, Result<List<TrainSuggestionDto>>>,
+    IRequestHandler<GetPendingStopSuggestionsQuery, Result<List<StopSuggestionDto>>>,
+    IRequestHandler<ReviewTrainSuggestionCommand, Result<TrainSuggestionDto>>,
+    IRequestHandler<ReviewStopSuggestionCommand, Result<StopSuggestionDto>>
 {
     private readonly IUnitOfWork _unitOfWork;
 
     public SuggestionsAdminHandlers(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-    public async Task<Result<List<TrainSuggestionDto>>> Handle(GetPendingSuggestionsQuery request, CancellationToken ct)
+    public async Task<Result<List<TrainSuggestionDto>>> Handle(GetPendingTrainSuggestionsQuery request, CancellationToken ct)
     {
         var suggestions = await _unitOfWork.Repository<TrainSuggestion>()
             .FindAsync(s => s.Status == SuggestionStatus.Pending, ct);
@@ -933,7 +989,55 @@ public class SuggestionsAdminHandlers :
         return Result<List<TrainSuggestionDto>>.Success(dtos.OrderByDescending(s => s.CreatedAt).ToList());
     }
 
-    public async Task<Result<TrainSuggestionDto>> Handle(ReviewSuggestionCommand request, CancellationToken ct)
+    public async Task<Result<List<StopSuggestionDto>>> Handle(GetPendingStopSuggestionsQuery request, CancellationToken ct)
+    {
+        var suggestions = await _unitOfWork.Repository<StopSuggestion>()
+            .FindAsync(s => s.Status == SuggestionStatus.Pending, ct);
+
+        var dtos = new List<StopSuggestionDto>();
+        foreach (var s in suggestions)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(s.SuggestedById, ct);
+            City? city = null;
+            if (s.CityId.HasValue)
+            {
+                city = await _unitOfWork.Repository<City>().GetByIdAsync(s.CityId.Value, ct);
+            }
+            Governorate? gov = null;
+            if (s.NewCityGovernorateId.HasValue)
+            {
+                gov = await _unitOfWork.Repository<Governorate>().GetByIdAsync(s.NewCityGovernorateId.Value, ct);
+            }
+
+            dtos.Add(new StopSuggestionDto
+            {
+                Id = s.Id,
+                Code = s.Code,
+                NameAr = s.NameAr,
+                NameEn = s.NameEn,
+                CityId = s.CityId,
+                CityNameAr = city?.NameAr,
+                CityNameEn = city?.NameEn,
+                NewCityNameAr = s.NewCityNameAr,
+                NewCityNameEn = s.NewCityNameEn,
+                NewCityGovernorateId = s.NewCityGovernorateId,
+                NewCityGovernorateNameAr = gov?.NameAr,
+                NewCityGovernorateNameEn = gov?.NameEn,
+                Latitude = s.Latitude,
+                Longitude = s.Longitude,
+                DescriptionAr = s.DescriptionAr,
+                DescriptionEn = s.DescriptionEn,
+                Status = s.Status.ToString(),
+                AdminNotes = s.AdminNotes,
+                SuggestedByName = user?.DisplayName ?? "Unknown",
+                CreatedAt = s.CreatedAt
+            });
+        }
+
+        return Result<List<StopSuggestionDto>>.Success(dtos.OrderByDescending(s => s.CreatedAt).ToList());
+    }
+
+    public async Task<Result<TrainSuggestionDto>> Handle(ReviewTrainSuggestionCommand request, CancellationToken ct)
     {
         var suggestion = await _unitOfWork.Repository<TrainSuggestion>().GetByIdAsync(request.SuggestionId, ct);
         if (suggestion == null)
@@ -942,17 +1046,66 @@ public class SuggestionsAdminHandlers :
         if (suggestion.Status != SuggestionStatus.Pending)
             return Result<TrainSuggestionDto>.Failure("Suggestion has already been reviewed.", 400);
 
-        suggestion.Status = request.Status;
+        suggestion.TrainNumber = request.TrainNumber;
+        suggestion.NameAr = request.NameAr;
+        suggestion.NameEn = request.NameEn;
+        suggestion.DescriptionAr = request.DescriptionAr;
+        suggestion.DescriptionEn = request.DescriptionEn;
+        suggestion.RouteDescriptionEn = request.RouteDescriptionEn;
         suggestion.AdminNotes = request.AdminNotes;
+        suggestion.Status = request.Status;
+
+        if (request.Status == SuggestionStatus.Approved)
+        {
+            var existingTrains = await _unitOfWork.Repository<Train>().FindAsync(t => t.TrainNumber == request.TrainNumber.Trim(), ct);
+            if (existingTrains.Any())
+            {
+                return Result<TrainSuggestionDto>.Failure($"A train with number {request.TrainNumber} already exists in the system.", 400);
+            }
+
+            var train = new Train
+            {
+                TrainNumber = request.TrainNumber.Trim(),
+                NameAr = request.NameAr.Trim(),
+                NameEn = request.NameEn.Trim(),
+                DescriptionAr = request.DescriptionAr?.Trim(),
+                DescriptionEn = request.DescriptionEn?.Trim(),
+                IsActive = true,
+                CreatedById = suggestion.SuggestedById
+            };
+
+            await _unitOfWork.Repository<Train>().AddAsync(train, ct);
+            await _unitOfWork.SaveChangesAsync(ct);
+
+            if (!string.IsNullOrWhiteSpace(request.RouteDescriptionEn))
+            {
+                var stopNames = request.RouteDescriptionEn.Split(new[] { " -> " }, StringSplitOptions.RemoveEmptyEntries);
+                int order = 1;
+                foreach (var name in stopNames)
+                {
+                    var cleanName = name.Trim();
+                    var stops = await _unitOfWork.Repository<Stop>().FindAsync(s => s.NameEn.ToLower() == cleanName.ToLower(), ct);
+                    var stop = stops.FirstOrDefault();
+                    if (stop != null)
+                    {
+                        var routeStop = new TrainRouteStop
+                        {
+                            TrainId = train.Id,
+                            StopId = stop.Id,
+                            StopOrder = order++,
+                            DistanceAlongRoute = 0
+                        };
+                        await _unitOfWork.Repository<TrainRouteStop>().AddAsync(routeStop, ct);
+                    }
+                }
+                await _unitOfWork.SaveChangesAsync(ct);
+            }
+        }
 
         await _unitOfWork.Repository<TrainSuggestion>().UpdateAsync(suggestion, ct);
         await _unitOfWork.SaveChangesAsync(ct);
 
         var user = await _unitOfWork.Users.GetByIdAsync(suggestion.SuggestedById, ct);
-
-        // If approved, optionally create the train route or let the admin do it manually.
-        // We'll let them do it manually for flexibility, but update the suggestion status.
-
         return Result<TrainSuggestionDto>.Success(new TrainSuggestionDto
         {
             Id = suggestion.Id,
@@ -963,6 +1116,130 @@ public class SuggestionsAdminHandlers :
             DescriptionEn = suggestion.DescriptionEn,
             RouteDescriptionAr = suggestion.RouteDescriptionAr,
             RouteDescriptionEn = suggestion.RouteDescriptionEn,
+            Status = suggestion.Status.ToString(),
+            AdminNotes = suggestion.AdminNotes,
+            SuggestedByName = user?.DisplayName ?? "Unknown",
+            CreatedAt = suggestion.CreatedAt
+        });
+    }
+
+    public async Task<Result<StopSuggestionDto>> Handle(ReviewStopSuggestionCommand request, CancellationToken ct)
+    {
+        var suggestion = await _unitOfWork.Repository<StopSuggestion>().GetByIdAsync(request.SuggestionId, ct);
+        if (suggestion == null)
+            return Result<StopSuggestionDto>.Failure("Suggestion not found.", 404);
+
+        if (suggestion.Status != SuggestionStatus.Pending)
+            return Result<StopSuggestionDto>.Failure("Suggestion has already been reviewed.", 400);
+
+        suggestion.Code = request.Code.Trim().ToUpper();
+        suggestion.NameAr = request.NameAr.Trim();
+        suggestion.NameEn = request.NameEn.Trim();
+        suggestion.CityId = request.CityId;
+        suggestion.NewCityNameAr = request.NewCityNameAr?.Trim();
+        suggestion.NewCityNameEn = request.NewCityNameEn?.Trim();
+        suggestion.NewCityGovernorateId = request.NewCityGovernorateId;
+        suggestion.Latitude = request.Latitude;
+        suggestion.Longitude = request.Longitude;
+        suggestion.DescriptionAr = request.DescriptionAr?.Trim();
+        suggestion.DescriptionEn = request.DescriptionEn?.Trim();
+        suggestion.AdminNotes = request.AdminNotes;
+        suggestion.Status = request.Status;
+
+        City? cityObj = null;
+
+        if (request.Status == SuggestionStatus.Approved)
+        {
+            var existingStops = await _unitOfWork.Repository<Stop>().FindAsync(s => s.Code.ToLower() == request.Code.Trim().ToLower(), ct);
+            if (existingStops.Any())
+            {
+                return Result<StopSuggestionDto>.Failure($"A stop with code {request.Code} already exists in the system.", 400);
+            }
+
+            Guid actualCityId;
+            if (request.CityId.HasValue)
+            {
+                actualCityId = request.CityId.Value;
+                cityObj = await _unitOfWork.Repository<City>().GetByIdAsync(actualCityId, ct);
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(request.NewCityNameEn) || string.IsNullOrWhiteSpace(request.NewCityNameAr) || !request.NewCityGovernorateId.HasValue)
+                {
+                    return Result<StopSuggestionDto>.Failure("For new city suggestions, new city names (Ar/En) and governorate must be filled.", 400);
+                }
+
+                var existingCities = await _unitOfWork.Repository<City>()
+                    .FindAsync(c => c.NameEn.ToLower() == request.NewCityNameEn.Trim().ToLower(), ct);
+                var existingCity = existingCities.FirstOrDefault();
+
+                if (existingCity != null)
+                {
+                    actualCityId = existingCity.Id;
+                    cityObj = existingCity;
+                }
+                else
+                {
+                    var newCity = new City
+                    {
+                        NameAr = request.NewCityNameAr.Trim(),
+                        NameEn = request.NewCityNameEn.Trim(),
+                        GovernorateId = request.NewCityGovernorateId.Value
+                    };
+                    await _unitOfWork.Repository<City>().AddAsync(newCity, ct);
+                    await _unitOfWork.SaveChangesAsync(ct);
+                    actualCityId = newCity.Id;
+                    cityObj = newCity;
+                }
+            }
+
+            var point = request.Longitude.HasValue && request.Latitude.HasValue
+                ? new NetTopologySuite.Geometries.Point(request.Longitude.Value, request.Latitude.Value) { SRID = 4326 }
+                : null;
+
+            var stop = new Stop
+            {
+                Code = request.Code.Trim().ToUpper(),
+                NameAr = request.NameAr.Trim(),
+                NameEn = request.NameEn.Trim(),
+                CityId = actualCityId,
+                Latitude = request.Latitude ?? 0,
+                Longitude = request.Longitude ?? 0,
+                DescriptionAr = request.DescriptionAr?.Trim(),
+                DescriptionEn = request.DescriptionEn?.Trim(),
+                Location = point
+            };
+
+            await _unitOfWork.Repository<Stop>().AddAsync(stop, ct);
+            await _unitOfWork.SaveChangesAsync(ct);
+        }
+
+        await _unitOfWork.Repository<StopSuggestion>().UpdateAsync(suggestion, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
+
+        var user = await _unitOfWork.Users.GetByIdAsync(suggestion.SuggestedById, ct);
+        var govObj = suggestion.NewCityGovernorateId.HasValue 
+            ? await _unitOfWork.Repository<Governorate>().GetByIdAsync(suggestion.NewCityGovernorateId.Value, ct)
+            : null;
+
+        return Result<StopSuggestionDto>.Success(new StopSuggestionDto
+        {
+            Id = suggestion.Id,
+            Code = suggestion.Code,
+            NameAr = suggestion.NameAr,
+            NameEn = suggestion.NameEn,
+            CityId = suggestion.CityId,
+            CityNameAr = cityObj?.NameAr,
+            CityNameEn = cityObj?.NameEn,
+            NewCityNameAr = suggestion.NewCityNameAr,
+            NewCityNameEn = suggestion.NewCityNameEn,
+            NewCityGovernorateId = suggestion.NewCityGovernorateId,
+            NewCityGovernorateNameAr = govObj?.NameAr,
+            NewCityGovernorateNameEn = govObj?.NameEn,
+            Latitude = suggestion.Latitude,
+            Longitude = suggestion.Longitude,
+            DescriptionAr = suggestion.DescriptionAr,
+            DescriptionEn = suggestion.DescriptionEn,
             Status = suggestion.Status.ToString(),
             AdminNotes = suggestion.AdminNotes,
             SuggestedByName = user?.DisplayName ?? "Unknown",

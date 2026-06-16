@@ -24,6 +24,7 @@ public class User : AuditableEntity
     public ICollection<LostFoundPost> LostFoundPosts { get; set; } = new List<LostFoundPost>();
     public ICollection<LostFoundComment> LostFoundComments { get; set; } = new List<LostFoundComment>();
     public ICollection<TrainSuggestion> TrainSuggestions { get; set; } = new List<TrainSuggestion>();
+    public ICollection<StopSuggestion> StopSuggestions { get; set; } = new List<StopSuggestion>();
     public ICollection<DeviceToken> DeviceTokens { get; set; } = new List<DeviceToken>();
     public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
     public ICollection<TripLiveUpdateThanks> ThanksList { get; set; } = new List<TripLiveUpdateThanks>();

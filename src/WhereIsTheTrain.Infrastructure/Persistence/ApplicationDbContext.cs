@@ -21,6 +21,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<LostFoundPost> LostFoundPosts => Set<LostFoundPost>();
     public DbSet<LostFoundComment> LostFoundComments => Set<LostFoundComment>();
     public DbSet<TrainSuggestion> TrainSuggestions => Set<TrainSuggestion>();
+    public DbSet<StopSuggestion> StopSuggestions => Set<StopSuggestion>();
     public DbSet<TripTelemetry> TripTelemetries => Set<TripTelemetry>();
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<TripLiveUpdateThanks> TripLiveUpdateThanks => Set<TripLiveUpdateThanks>();

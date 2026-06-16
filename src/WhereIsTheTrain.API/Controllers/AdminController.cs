@@ -353,19 +353,60 @@ public class AdminController : ControllerBase
     // 📩 SUGGESTIONS ENDPOINTS
     // ==========================================
 
-    [HttpGet("suggestions")]
+    [HttpGet("suggestions/trains")]
     [AdminPermission("Suggestions", "View")]
-    public async Task<IActionResult> GetPendingSuggestions()
+    public async Task<IActionResult> GetPendingTrainSuggestions()
     {
-        var result = await _mediator.Send(new GetPendingSuggestionsQuery());
+        var result = await _mediator.Send(new GetPendingTrainSuggestionsQuery());
         return Ok(result);
     }
 
-    [HttpPut("suggestions/{id:guid}/review")]
-    [AdminPermission("Suggestions", "Edit")]
-    public async Task<IActionResult> ReviewSuggestion(Guid id, [FromBody] ReviewSuggestionRequest request)
+    [HttpGet("suggestions/stops")]
+    [AdminPermission("Suggestions", "View")]
+    public async Task<IActionResult> GetPendingStopSuggestions()
     {
-        var result = await _mediator.Send(new ReviewSuggestionCommand(id, request.Status, request.AdminNotes));
+        var result = await _mediator.Send(new GetPendingStopSuggestionsQuery());
+        return Ok(result);
+    }
+
+    [HttpPut("suggestions/trains/{id:guid}/review")]
+    [AdminPermission("Suggestions", "Edit")]
+    public async Task<IActionResult> ReviewTrainSuggestion(Guid id, [FromBody] ReviewTrainSuggestionRequest request)
+    {
+        var result = await _mediator.Send(new ReviewTrainSuggestionCommand(
+            id,
+            request.Status,
+            request.AdminNotes,
+            request.TrainNumber,
+            request.NameAr,
+            request.NameEn,
+            request.DescriptionAr,
+            request.DescriptionEn,
+            request.RouteDescriptionEn
+        ));
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
+    }
+
+    [HttpPut("suggestions/stops/{id:guid}/review")]
+    [AdminPermission("Suggestions", "Edit")]
+    public async Task<IActionResult> ReviewStopSuggestion(Guid id, [FromBody] ReviewStopSuggestionRequest request)
+    {
+        var result = await _mediator.Send(new ReviewStopSuggestionCommand(
+            id,
+            request.Status,
+            request.AdminNotes,
+            request.Code,
+            request.NameAr,
+            request.NameEn,
+            request.CityId,
+            request.NewCityNameAr,
+            request.NewCityNameEn,
+            request.NewCityGovernorateId,
+            request.Latitude,
+            request.Longitude,
+            request.DescriptionAr,
+            request.DescriptionEn
+        ));
         return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 
@@ -685,10 +726,33 @@ public class UpdateTripStatusRequest
     public DateTime? ActualArrival { get; set; }
 }
 
-public class ReviewSuggestionRequest
+public class ReviewTrainSuggestionRequest
 {
     public SuggestionStatus Status { get; set; }
     public string? AdminNotes { get; set; }
+    public string TrainNumber { get; set; } = string.Empty;
+    public string NameAr { get; set; } = string.Empty;
+    public string NameEn { get; set; } = string.Empty;
+    public string? DescriptionAr { get; set; }
+    public string? DescriptionEn { get; set; }
+    public string? RouteDescriptionEn { get; set; }
+}
+
+public class ReviewStopSuggestionRequest
+{
+    public SuggestionStatus Status { get; set; }
+    public string? AdminNotes { get; set; }
+    public string Code { get; set; } = string.Empty;
+    public string NameAr { get; set; } = string.Empty;
+    public string NameEn { get; set; } = string.Empty;
+    public Guid? CityId { get; set; }
+    public string? NewCityNameAr { get; set; }
+    public string? NewCityNameEn { get; set; }
+    public Guid? NewCityGovernorateId { get; set; }
+    public double? Latitude { get; set; }
+    public double? Longitude { get; set; }
+    public string? DescriptionAr { get; set; }
+    public string? DescriptionEn { get; set; }
 }
 
 public class UpdatePostStatusRequest
