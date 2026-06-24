@@ -43,14 +43,18 @@ public class SubmitTelemetryCommandHandler : IRequestHandler<SubmitTelemetryComm
             return Result<TelemetryResponseDto>.Failure("Trip not found.", 404);
 
         // Automatically start the trip if it receives telemetry coordinates
-        if (trip.Status == WhereIsTheTrain.Domain.Enums.TripStatus.Scheduled || trip.Status == WhereIsTheTrain.Domain.Enums.TripStatus.Delayed)
+        if (trip.StatusId == TripStatuses.Scheduled || trip.StatusId == TripStatuses.Delayed)
         {
-            var oldStatus = trip.Status.ToString();
-            trip.Status = WhereIsTheTrain.Domain.Enums.TripStatus.InTransit;
+            var oldStatusLookup = await _unitOfWork.Repository<TripStatusLookup>().GetByIdAsync(trip.StatusId, cancellationToken);
+            var inTransitLookup = await _unitOfWork.Repository<TripStatusLookup>().GetByIdAsync(TripStatuses.InTransit, cancellationToken);
+            var oldStatusCode = oldStatusLookup?.Code ?? "Scheduled";
+            var newStatusCode = inTransitLookup?.Code ?? "InTransit";
+
+            trip.StatusId = TripStatuses.InTransit;
             await _unitOfWork.Repository<Trip>().UpdateAsync(trip, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            await _notificationHelper.NotifyFollowersOfTripStatusAsync(trip.Id, oldStatus, trip.Status.ToString(), cancellationToken);
+            await _notificationHelper.NotifyFollowersOfTripStatusAsync(trip.Id, oldStatusCode, newStatusCode, cancellationToken);
         }
 
         var train = await _unitOfWork.Trains.GetByIdAsync(trip.TrainId, cancellationToken);
@@ -188,7 +192,7 @@ public class ClearEndedTripsTelemetryCommandHandler : IRequestHandler<ClearEnded
     public async Task<Result<int>> Handle(ClearEndedTripsTelemetryCommand request, CancellationToken cancellationToken)
     {
         var endedTrips = await _unitOfWork.Repository<Trip>()
-            .FindAsync(t => t.Status == WhereIsTheTrain.Domain.Enums.TripStatus.Arrived || t.Status == WhereIsTheTrain.Domain.Enums.TripStatus.Cancelled, cancellationToken);
+            .FindAsync(t => t.StatusId == TripStatuses.Arrived || t.StatusId == TripStatuses.Cancelled, cancellationToken);
         
         if (!endedTrips.Any())
             return Result<int>.Success(0);

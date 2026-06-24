@@ -289,6 +289,35 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
                     b.ToTable("CrowdLevelLookups", (string)null);
                 });
 
+            modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.DashboardGalleryItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("CaptionAr")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CaptionEn")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("IsVisible")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DashboardGalleryItems");
+                });
+
             modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.DeviceToken", b =>
                 {
                     b.Property<Guid>("Id")
@@ -316,6 +345,25 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("DeviceTokens", (string)null);
+                });
+
+            modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.GenderLookup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GenderLookups");
                 });
 
             modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.Governorate", b =>
@@ -702,6 +750,51 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
                     b.ToTable("StopSuggestions", (string)null);
                 });
 
+            modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.SystemLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ErrorMessage")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("LogLevel")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("StackTrace")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Target")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UserEmail")
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SystemLogs");
+                });
+
             modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.SystemSetting", b =>
                 {
                     b.Property<Guid>("Id")
@@ -960,8 +1053,8 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<Guid>("StatusId")
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid>("TrainId")
                         .HasColumnType("char(36)");
@@ -973,6 +1066,8 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("StatusId");
 
                     b.HasIndex("TrainId", "TripDate")
                         .IsUnique();
@@ -1094,6 +1189,39 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
                     b.ToTable("TripLiveUpdateThanks", (string)null);
                 });
 
+            modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.TripStatusLookup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("TripStatusLookups", (string)null);
+                });
+
             modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.TripTelemetry", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1174,6 +1302,9 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<Guid?>("GenderId")
+                        .HasColumnType("char(36)");
+
                     b.Property<bool>("IsSuspended")
                         .HasColumnType("tinyint(1)");
 
@@ -1198,6 +1329,8 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("Email")
                         .IsUnique();
+
+                    b.HasIndex("GenderId");
 
                     b.ToTable("Users", (string)null);
                 });
@@ -1452,11 +1585,19 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.Trip", b =>
                 {
+                    b.HasOne("WhereIsTheTrain.Domain.Entities.TripStatusLookup", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("WhereIsTheTrain.Domain.Entities.Train", "Train")
                         .WithMany("Trips")
                         .HasForeignKey("TrainId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Status");
 
                     b.Navigation("Train");
                 });
@@ -1541,6 +1682,15 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
                     b.Navigation("Trip");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.User", b =>
+                {
+                    b.HasOne("WhereIsTheTrain.Domain.Entities.GenderLookup", "Gender")
+                        .WithMany()
+                        .HasForeignKey("GenderId");
+
+                    b.Navigation("Gender");
                 });
 
             modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.AdminRole", b =>

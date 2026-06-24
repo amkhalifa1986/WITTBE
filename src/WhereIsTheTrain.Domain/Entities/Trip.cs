@@ -7,7 +7,8 @@ public class Trip : AuditableEntity
 {
     public Guid TrainId { get; set; }
     public DateOnly TripDate { get; set; }
-    public TripStatus Status { get; set; } = TripStatus.Scheduled;
+    public Guid StatusId { get; set; }
+    public TripStatusLookup Status { get; set; } = null!;
     public DateTime? ActualDeparture { get; set; }
     public DateTime? ActualArrival { get; set; }
 

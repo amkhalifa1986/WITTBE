@@ -702,11 +702,11 @@ public class TrainsAdminHandlers :
 // ==========================================
 
 public record CreateTripCommand(
-    Guid TrainId, DateOnly TripDate, TripStatus Status
+    Guid TrainId, DateOnly TripDate, Guid? StatusId = null
 ) : IRequest<Result<TripDto>>;
 
 public record UpdateTripStatusCommand(
-    Guid TripId, TripStatus Status, DateTime? ActualDeparture, DateTime? ActualArrival
+    Guid TripId, Guid StatusId, DateTime? ActualDeparture, DateTime? ActualArrival
 ) : IRequest<Result<TripDto>>;
 
 public record DeleteTripCommand(Guid Id) : IRequest<Result<bool>>;
@@ -744,7 +744,7 @@ public class TripsAdminHandlers :
         {
             TrainId = request.TrainId,
             TripDate = request.TripDate,
-            Status = request.Status
+            StatusId = request.StatusId ?? TripStatuses.Scheduled
         };
 
         await _unitOfWork.Repository<Trip>().AddAsync(trip, ct);
@@ -779,6 +779,16 @@ public class TripsAdminHandlers :
             ? await _unitOfWork.Repository<TrainType>().GetByIdAsync(train.TrainTypeId.Value, ct)
             : null;
 
+        var statusLookup = await _unitOfWork.Repository<TripStatusLookup>().GetByIdAsync(trip.StatusId, ct);
+        var statusDto = statusLookup != null ? new TripStatusLookupDto
+        {
+            Id = statusLookup.Id,
+            Code = statusLookup.Code,
+            NameEn = statusLookup.NameEn,
+            NameAr = statusLookup.NameAr,
+            Color = statusLookup.Color
+        } : new TripStatusLookupDto();
+
         return Result<TripDto>.Success(new TripDto
         {
             Id = trip.Id,
@@ -787,7 +797,8 @@ public class TripsAdminHandlers :
             TrainNameAr = train.NameAr,
             TrainNameEn = train.NameEn,
             TripDate = trip.TripDate,
-            Status = trip.Status.ToString(),
+            Status = statusLookup?.Code ?? "Scheduled",
+            StatusDetails = statusDto,
             FollowerCount = autoEnrolledCount,
             TrainTypeId = train.TrainTypeId,
             TrainTypeNameAr = trainType?.NameAr,
@@ -802,26 +813,31 @@ public class TripsAdminHandlers :
         if (trip == null)
             return Result<TripDto>.Failure("Trip not found.", 404);
 
-        if (trip.Status == TripStatus.Arrived || trip.Status == TripStatus.Cancelled)
+        if (trip.StatusId == TripStatuses.Arrived || trip.StatusId == TripStatuses.Cancelled)
             return Result<TripDto>.Failure("Cannot modify a finished or cancelled trip.", 400);
 
-        var oldStatus = trip.Status.ToString();
-        trip.Status = request.Status;
+        var oldStatusLookup = await _unitOfWork.Repository<TripStatusLookup>().GetByIdAsync(trip.StatusId, ct);
+        var oldStatusCode = oldStatusLookup?.Code ?? "Scheduled";
+
+        trip.StatusId = request.StatusId;
         if (request.ActualDeparture.HasValue) trip.ActualDeparture = request.ActualDeparture;
         if (request.ActualArrival.HasValue) trip.ActualArrival = request.ActualArrival;
 
         // Auto set actuals on transition if not provided
-        if ((request.Status == TripStatus.Departed || request.Status == TripStatus.InTransit) && !trip.ActualDeparture.HasValue)
+        if ((request.StatusId == TripStatuses.Departed || request.StatusId == TripStatuses.InTransit) && !trip.ActualDeparture.HasValue)
             trip.ActualDeparture = DateTime.UtcNow;
-        if (request.Status == TripStatus.Arrived && !trip.ActualArrival.HasValue)
+        if (request.StatusId == TripStatuses.Arrived && !trip.ActualArrival.HasValue)
             trip.ActualArrival = DateTime.UtcNow;
 
         await _unitOfWork.Repository<Trip>().UpdateAsync(trip, ct);
         await _unitOfWork.SaveChangesAsync(ct);
 
-        if (oldStatus != trip.Status.ToString())
+        var newStatusLookup = await _unitOfWork.Repository<TripStatusLookup>().GetByIdAsync(trip.StatusId, ct);
+        var newStatusCode = newStatusLookup?.Code ?? "Scheduled";
+
+        if (oldStatusCode != newStatusCode)
         {
-            await _notificationHelper.NotifyFollowersOfTripStatusAsync(trip.Id, oldStatus, trip.Status.ToString(), ct);
+            await _notificationHelper.NotifyFollowersOfTripStatusAsync(trip.Id, oldStatusCode, newStatusCode, ct);
         }
 
         var train = await _unitOfWork.Trains.GetByIdAsync(trip.TrainId, ct);
@@ -829,6 +845,15 @@ public class TripsAdminHandlers :
         var trainType = train?.TrainTypeId.HasValue == true
             ? await _unitOfWork.Repository<TrainType>().GetByIdAsync(train.TrainTypeId.Value, ct)
             : null;
+
+        var statusDto = newStatusLookup != null ? new TripStatusLookupDto
+        {
+            Id = newStatusLookup.Id,
+            Code = newStatusLookup.Code,
+            NameEn = newStatusLookup.NameEn,
+            NameAr = newStatusLookup.NameAr,
+            Color = newStatusLookup.Color
+        } : new TripStatusLookupDto();
 
         return Result<TripDto>.Success(new TripDto
         {
@@ -838,7 +863,8 @@ public class TripsAdminHandlers :
             TrainNameAr = train?.NameAr ?? string.Empty,
             TrainNameEn = train?.NameEn ?? string.Empty,
             TripDate = trip.TripDate,
-            Status = trip.Status.ToString(),
+            Status = newStatusCode,
+            StatusDetails = statusDto,
             ActualDeparture = trip.ActualDeparture,
             ActualArrival = trip.ActualArrival,
             FollowerCount = followers,
@@ -879,6 +905,8 @@ public class TripsAdminHandlers :
         var trips = await _unitOfWork.Repository<Trip>().GetAllAsync(ct);
         var trainTypes = await _unitOfWork.Repository<TrainType>().GetAllAsync(ct);
         var trainTypesDict = trainTypes.ToDictionary(t => t.Id);
+        var statusLookups = await _unitOfWork.Repository<TripStatusLookup>().GetAllAsync(ct);
+        var statusLookupsDict = statusLookups.ToDictionary(s => s.Id);
         var dtos = new List<TripDto>();
 
         foreach (var trip in trips)
@@ -890,6 +918,16 @@ public class TripsAdminHandlers :
                 ? tt
                 : null;
 
+            var statusLookup = statusLookupsDict.TryGetValue(trip.StatusId, out var sl) ? sl : null;
+            var statusDto = statusLookup != null ? new TripStatusLookupDto
+            {
+                Id = statusLookup.Id,
+                Code = statusLookup.Code,
+                NameEn = statusLookup.NameEn,
+                NameAr = statusLookup.NameAr,
+                Color = statusLookup.Color
+            } : new TripStatusLookupDto();
+
             dtos.Add(new TripDto
             {
                 Id = trip.Id,
@@ -898,7 +936,8 @@ public class TripsAdminHandlers :
                 TrainNameAr = train?.NameAr ?? string.Empty,
                 TrainNameEn = train?.NameEn ?? string.Empty,
                 TripDate = trip.TripDate,
-                Status = trip.Status.ToString(),
+                Status = statusLookup?.Code ?? "Scheduled",
+                StatusDetails = statusDto,
                 ActualDeparture = trip.ActualDeparture,
                 ActualArrival = trip.ActualArrival,
                 FollowerCount = followers,

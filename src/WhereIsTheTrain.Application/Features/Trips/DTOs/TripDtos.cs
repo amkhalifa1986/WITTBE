@@ -2,6 +2,15 @@ using WhereIsTheTrain.Domain.Enums;
 
 namespace WhereIsTheTrain.Application.Features.Trips.DTOs;
 
+public class TripStatusLookupDto
+{
+    public Guid Id { get; set; }
+    public string Code { get; set; } = string.Empty;
+    public string NameEn { get; set; } = string.Empty;
+    public string NameAr { get; set; } = string.Empty;
+    public string Color { get; set; } = string.Empty;
+}
+
 public class TripDto
 {
     public Guid Id { get; set; }
@@ -11,6 +20,7 @@ public class TripDto
     public string TrainNameEn { get; set; } = string.Empty;
     public DateOnly TripDate { get; set; }
     public string Status { get; set; } = string.Empty;
+    public TripStatusLookupDto StatusDetails { get; set; } = null!;
     public DateTime? ActualDeparture { get; set; }
     public DateTime? ActualArrival { get; set; }
     public int FollowerCount { get; set; }
@@ -21,6 +31,8 @@ public class TripDto
     public string? TrainTypeNameAr { get; set; }
     public string? TrainTypeNameEn { get; set; }
     public string? MarkerPngUrl { get; set; }
+    /// <summary>Scheduled departure of the first route stop — used for sorting today's trips by start time.</summary>
+    public TimeSpan? ScheduledDeparture { get; set; }
 }
 
 public class TripDetailDto : TripDto

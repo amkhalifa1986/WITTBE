@@ -68,7 +68,14 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 // Controllers
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<WhereIsTheTrain.API.Filters.LogAdminActionFilter>();
+})
+.AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+});
 
 // Background Services
 builder.Services.AddHostedService<WhereIsTheTrain.API.BackgroundServices.MidnightTripGenerationService>();

@@ -1,8 +1,10 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Text.Json;
+using System.Security.Claims;
 
 namespace WhereIsTheTrain.API.Middleware;
 
@@ -45,6 +47,41 @@ public class ExceptionHandlingMiddleware
         catch (Exception ex)
         {
             _logger.LogError(ex, "Unhandled exception");
+
+            try
+            {
+                var dbContext = context.RequestServices.GetRequiredService<WhereIsTheTrain.Infrastructure.Persistence.ApplicationDbContext>();
+                
+                Guid? userId = null;
+                var userIdClaim = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userIdClaim != null && Guid.TryParse(userIdClaim, out var parsedId))
+                {
+                    userId = parsedId;
+                }
+
+                var userEmail = context.User.FindFirst(ClaimTypes.Email)?.Value;
+
+                var log = new WhereIsTheTrain.Domain.Entities.SystemLog
+                {
+                    Timestamp = DateTime.UtcNow,
+                    LogLevel = "Error",
+                    Source = "API",
+                    Target = context.Request.Path.Value ?? string.Empty,
+                    UserId = userId,
+                    UserEmail = userEmail,
+                    Description = $"Unhandled Exception: {ex.Message}",
+                    ErrorMessage = ex.Message,
+                    StackTrace = ex.StackTrace
+                };
+
+                dbContext.Set<WhereIsTheTrain.Domain.Entities.SystemLog>().Add(log);
+                await dbContext.SaveChangesAsync();
+            }
+            catch (Exception dbEx)
+            {
+                _logger.LogError(dbEx, "Failed to log unhandled exception to database");
+            }
+
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             context.Response.ContentType = "application/json";
 

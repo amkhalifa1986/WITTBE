@@ -50,4 +50,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         => predicate == null
             ? await _dbSet.CountAsync(cancellationToken)
             : await _dbSet.CountAsync(predicate, cancellationToken);
+
+    public IQueryable<T> AsQueryable()
+        => _dbSet.AsQueryable();
 }

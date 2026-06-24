@@ -12,6 +12,15 @@ public static class DatabaseSeeder
         // Extract train types from existing train names and populate the lookup table
         await ExtractAndPopulateTrainTypesAsync(context);
 
+        if (!await context.GenderLookups.AnyAsync())
+        {
+            context.GenderLookups.AddRange(
+                new GenderLookup { Id = Guid.Parse("00000000-0000-0000-0000-000000003001"), NameEn = "Male", NameAr = "ذكر" },
+                new GenderLookup { Id = Guid.Parse("00000000-0000-0000-0000-000000003002"), NameEn = "Female", NameAr = "أنثى" }
+            );
+            await context.SaveChangesAsync();
+        }
+
         // Ensure new Admin roles and users are seeded even if operational data already exists
         if (!await context.AdminUsers.AnyAsync())
         {
@@ -1160,10 +1169,10 @@ public static class DatabaseSeeder
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
         var tomorrow = today.AddDays(1);
 
-        var trip1 = new Trip { Id = Guid.Parse("30000000-0000-0000-0000-000000000001"), TrainId = train1.Id, TripDate = today, Status = TripStatus.InTransit };
-        var trip2 = new Trip { Id = Guid.Parse("30000000-0000-0000-0000-000000000002"), TrainId = train2.Id, TripDate = today, Status = TripStatus.Scheduled };
-        var trip3 = new Trip { Id = Guid.Parse("30000000-0000-0000-0000-000000000003"), TrainId = train3.Id, TripDate = today, Status = TripStatus.Scheduled };
-        var trip4 = new Trip { Id = Guid.Parse("30000000-0000-0000-0000-000000000004"), TrainId = train2.Id, TripDate = tomorrow, Status = TripStatus.Scheduled };
+        var trip1 = new Trip { Id = Guid.Parse("30000000-0000-0000-0000-000000000001"), TrainId = train1.Id, TripDate = today, StatusId = TripStatuses.InTransit };
+        var trip2 = new Trip { Id = Guid.Parse("30000000-0000-0000-0000-000000000002"), TrainId = train2.Id, TripDate = today, StatusId = TripStatuses.Scheduled };
+        var trip3 = new Trip { Id = Guid.Parse("30000000-0000-0000-0000-000000000003"), TrainId = train3.Id, TripDate = today, StatusId = TripStatuses.Scheduled };
+        var trip4 = new Trip { Id = Guid.Parse("30000000-0000-0000-0000-000000000004"), TrainId = train2.Id, TripDate = tomorrow, StatusId = TripStatuses.Scheduled };
 
         context.Trips.AddRange(trip1, trip2, trip3, trip4);
 
@@ -1240,11 +1249,42 @@ public static class DatabaseSeeder
             new StatusTagLookup { Id = Guid.NewGuid(), Code = "AtStation", NameAr = "في المحطة", NameEn = "At Station" }
         );
 
+        context.TripStatusLookups.AddRange(
+            new TripStatusLookup { Id = TripStatuses.Scheduled, Code = "Scheduled", NameAr = "مجدول", NameEn = "Scheduled", Color = "#71717a" },
+            new TripStatusLookup { Id = TripStatuses.Departed, Code = "Departed", NameAr = "غادر", NameEn = "Departed", Color = "#3b82f6" },
+            new TripStatusLookup { Id = TripStatuses.InTransit, Code = "InTransit", NameAr = "في الطريق", NameEn = "In Transit", Color = "#6366f1" },
+            new TripStatusLookup { Id = TripStatuses.Arrived, Code = "Arrived", NameAr = "وصل", NameEn = "Arrived", Color = "#10b981" },
+            new TripStatusLookup { Id = TripStatuses.Cancelled, Code = "Cancelled", NameAr = "ملغي", NameEn = "Cancelled", Color = "#ef4444" },
+            new TripStatusLookup { Id = TripStatuses.Delayed, Code = "Delayed", NameAr = "متأخر", NameEn = "Delayed", Color = "#f59e0b" }
+        );
+
         context.CrowdLevelLookups.AddRange(
             new CrowdLevelLookup { Id = Guid.NewGuid(), Code = "EmptyChairs", NameAr = "كراسي شاغرة", NameEn = "Empty Chairs" },
             new CrowdLevelLookup { Id = Guid.NewGuid(), Code = "FullChairs", NameAr = "كراسي ممتلئة", NameEn = "Full Chairs" },
             new CrowdLevelLookup { Id = Guid.NewGuid(), Code = "AisleCrowded", NameAr = "الممرات مزدحمة", NameEn = "Aisle Crowded" }
         );
+
+        if (!context.DashboardGalleryItems.Any())
+        {
+            context.DashboardGalleryItems.AddRange(
+                new DashboardGalleryItem 
+                { 
+                    Id = Guid.NewGuid(), 
+                    ImagePath = "/hero-banner.png", 
+                    CaptionAr = "مرحباً بك في نظام تتبع القطارات الذكي", 
+                    CaptionEn = "Welcome to the Smart Train Tracking System", 
+                    IsVisible = true 
+                },
+                new DashboardGalleryItem 
+                { 
+                    Id = Guid.NewGuid(), 
+                    ImagePath = "/scenic-route.png", 
+                    CaptionAr = "استكشف مناظر الرحلات الريفية الخلابة عبر خطوطنا", 
+                    CaptionEn = "Explore breathtaking scenic routes along our valley lines", 
+                    IsVisible = true 
+                }
+            );
+        }
 
         await ExtractAndPopulateTrainTypesAsync(context);
 

@@ -36,7 +36,15 @@ public class GetTodayTripsQueryHandler : IRequestHandler<GetTodayTripsQuery, Res
                 TrainNameAr = t.Train.NameAr,
                 TrainNameEn = t.Train.NameEn,
                 TripDate = t.TripDate,
-                Status = t.Status.ToString(),
+                Status = t.Status?.Code ?? "Scheduled",
+                StatusDetails = t.Status != null ? new TripStatusLookupDto
+                {
+                    Id = t.Status.Id,
+                    Code = t.Status.Code,
+                    NameEn = t.Status.NameEn,
+                    NameAr = t.Status.NameAr,
+                    Color = t.Status.Color
+                } : new TripStatusLookupDto(),
                 ActualDeparture = t.ActualDeparture,
                 ActualArrival = t.ActualArrival,
                 FollowerCount = t.Followers?.Count ?? 0,
@@ -46,7 +54,12 @@ public class GetTodayTripsQueryHandler : IRequestHandler<GetTodayTripsQuery, Res
                 TrainTypeId = t.Train.TrainTypeId,
                 TrainTypeNameAr = t.Train.TrainType?.NameAr,
                 TrainTypeNameEn = t.Train.TrainType?.NameEn,
-                MarkerPngUrl = t.Train.TrainType?.MarkerPngUrl
+                MarkerPngUrl = t.Train.TrainType?.MarkerPngUrl,
+                // First stop's scheduled departure = trip start time
+                ScheduledDeparture = t.Train.RouteStops?
+                    .OrderBy(rs => rs.ScheduledDeparture)
+                    .Select(rs => rs.ScheduledDeparture)
+                    .FirstOrDefault()
             };
         }).ToList();
 
@@ -85,7 +98,15 @@ public class GetTripDetailsQueryHandler : IRequestHandler<GetTripDetailsQuery, R
             TrainNameAr = trip.Train.NameAr,
             TrainNameEn = trip.Train.NameEn,
             TripDate = trip.TripDate,
-            Status = trip.Status.ToString(),
+            Status = trip.Status?.Code ?? "Scheduled",
+            StatusDetails = trip.Status != null ? new TripStatusLookupDto
+            {
+                Id = trip.Status.Id,
+                Code = trip.Status.Code,
+                NameEn = trip.Status.NameEn,
+                NameAr = trip.Status.NameAr,
+                Color = trip.Status.Color
+            } : new TripStatusLookupDto(),
             ActualDeparture = trip.ActualDeparture,
             ActualArrival = trip.ActualArrival,
             FollowerCount = trip.Followers?.Count ?? 0,
@@ -156,7 +177,15 @@ public class GetFollowedTripsQueryHandler : IRequestHandler<GetFollowedTripsQuer
                 TrainNameAr = t.Train.NameAr,
                 TrainNameEn = t.Train.NameEn,
                 TripDate = t.TripDate,
-                Status = t.Status.ToString(),
+                Status = t.Status?.Code ?? "Scheduled",
+                StatusDetails = t.Status != null ? new TripStatusLookupDto
+                {
+                    Id = t.Status.Id,
+                    Code = t.Status.Code,
+                    NameEn = t.Status.NameEn,
+                    NameAr = t.Status.NameAr,
+                    Color = t.Status.Color
+                } : new TripStatusLookupDto(),
                 ActualDeparture = t.ActualDeparture,
                 ActualArrival = t.ActualArrival,
                 FollowerCount = t.Followers?.Count ?? 0,
@@ -379,8 +408,8 @@ public class GetDashboardStatsQueryHandler : IRequestHandler<GetDashboardStatsQu
         var totalUsers = await _unitOfWork.Users.CountAsync(cancellationToken: ct);
         var totalTrains = await _unitOfWork.Trains.CountAsync(t => t.IsActive, ct);
         var activeTripsToday = await _unitOfWork.Trips.CountAsync(t => t.TripDate == today, ct);
-        var pendingTripsToday = await _unitOfWork.Trips.CountAsync(t => t.TripDate == today && t.Status == TripStatus.Scheduled, ct);
-        var runningTripsToday = await _unitOfWork.Trips.CountAsync(t => t.TripDate == today && (t.Status == TripStatus.Departed || t.Status == TripStatus.InTransit || t.Status == TripStatus.Delayed), ct);
+        var pendingTripsToday = await _unitOfWork.Trips.CountAsync(t => t.TripDate == today && t.StatusId == TripStatuses.Scheduled, ct);
+        var runningTripsToday = await _unitOfWork.Trips.CountAsync(t => t.TripDate == today && (t.StatusId == TripStatuses.Departed || t.StatusId == TripStatuses.InTransit || t.StatusId == TripStatuses.Delayed), ct);
         var todayStart = DateTime.UtcNow.Date;
         var totalUpdatesToday = await _unitOfWork.Repository<Domain.Entities.TripLiveUpdate>()
             .CountAsync(u => u.CreatedAt >= todayStart && u.IsApproved, ct);
@@ -442,7 +471,15 @@ public class GetTrainTripsQueryHandler : IRequestHandler<GetTrainTripsQuery, Res
             TrainNameAr = t.Train.NameAr,
             TrainNameEn = t.Train.NameEn,
             TripDate = t.TripDate,
-            Status = t.Status.ToString(),
+            Status = t.Status?.Code ?? "Scheduled",
+            StatusDetails = t.Status != null ? new TripStatusLookupDto
+            {
+                Id = t.Status.Id,
+                Code = t.Status.Code,
+                NameEn = t.Status.NameEn,
+                NameAr = t.Status.NameAr,
+                Color = t.Status.Color
+            } : new TripStatusLookupDto(),
             ActualDeparture = t.ActualDeparture,
             ActualArrival = t.ActualArrival,
             FollowerCount = t.Followers?.Count ?? 0,

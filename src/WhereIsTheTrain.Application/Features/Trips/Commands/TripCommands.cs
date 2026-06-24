@@ -22,7 +22,7 @@ public class FollowTripCommandHandler : IRequestHandler<FollowTripCommand, Resul
         if (trip == null)
             return Result<string>.Failure("Trip not found.", 404);
 
-        if (trip.Status == TripStatus.Arrived || trip.Status == TripStatus.Cancelled)
+        if (trip.StatusId == TripStatuses.Arrived || trip.StatusId == TripStatuses.Cancelled)
             return Result<string>.Failure("Cannot modify a finished or cancelled trip.", 400);
 
         var existing = await _unitOfWork.Repository<TripFollower>()
@@ -59,7 +59,7 @@ public class UnfollowTripCommandHandler : IRequestHandler<UnfollowTripCommand, R
         if (trip == null)
             return Result<string>.Failure("Trip not found.", 404);
 
-        if (trip.Status == TripStatus.Arrived || trip.Status == TripStatus.Cancelled)
+        if (trip.StatusId == TripStatuses.Arrived || trip.StatusId == TripStatuses.Cancelled)
             return Result<string>.Failure("Cannot modify a finished or cancelled trip.", 400);
 
         var followers = await _unitOfWork.Repository<TripFollower>()
@@ -91,7 +91,7 @@ public class MarkPersonalTripStatusCommandHandler : IRequestHandler<MarkPersonal
         if (trip == null)
             return Result<string>.Failure("Trip not found.", 404);
 
-        if (trip.Status == TripStatus.Arrived || trip.Status == TripStatus.Cancelled)
+        if (trip.StatusId == TripStatuses.Arrived || trip.StatusId == TripStatuses.Cancelled)
             return Result<string>.Failure("Cannot modify a finished or cancelled trip.", 400);
 
         var followers = await _unitOfWork.Repository<TripFollower>()
@@ -137,7 +137,7 @@ public class CreateLiveUpdateCommandHandler : IRequestHandler<CreateLiveUpdateCo
         if (trip == null)
             return Result<LiveUpdateDto>.Failure("Trip not found.", 404);
 
-        if (trip.Status == TripStatus.Arrived || trip.Status == TripStatus.Cancelled)
+        if (trip.StatusId == TripStatuses.Arrived || trip.StatusId == TripStatuses.Cancelled)
             return Result<LiveUpdateDto>.Failure("Cannot modify a finished or cancelled trip.", 400);
 
         var author = await _unitOfWork.Users.GetByIdAsync(request.AuthorId, ct);

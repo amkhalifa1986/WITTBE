@@ -65,7 +65,7 @@ public class TelemetryController : ControllerBase
         var trip = await _unitOfWork.Repository<Trip>().GetByIdAsync(tripId);
         if (trip != null)
         {
-            trip.Status = WhereIsTheTrain.Domain.Enums.TripStatus.Scheduled;
+            trip.StatusId = WhereIsTheTrain.Domain.Entities.TripStatuses.Scheduled;
             await _unitOfWork.Repository<Trip>().UpdateAsync(trip);
         }
 

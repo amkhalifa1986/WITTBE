@@ -17,5 +17,10 @@ public class TripConfiguration : IEntityTypeConfiguration<Trip>
             .WithMany(tr => tr.Trips)
             .HasForeignKey(t => t.TrainId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(t => t.Status)
+            .WithMany()
+            .HasForeignKey(t => t.StatusId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

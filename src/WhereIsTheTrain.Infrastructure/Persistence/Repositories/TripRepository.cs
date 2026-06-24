@@ -13,18 +13,23 @@ public class TripRepository : GenericRepository<Trip>, ITripRepository
     {
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
         return await _dbSet
+            .Include(t => t.Status)
             .Include(t => t.Train)
                 .ThenInclude(tr => tr.TrainType)
             .Include(t => t.Train)
                 .ThenInclude(tr => tr.RouteStops.OrderBy(rs => rs.StopOrder))
                     .ThenInclude(rs => rs.Stop)
             .Where(t => t.TripDate == today)
-            .OrderBy(t => t.Train.TrainNumber)
+            .OrderBy(t => t.Train.RouteStops
+                .OrderBy(rs => rs.StopOrder)
+                .Select(rs => rs.ScheduledDeparture)
+                .FirstOrDefault())
             .ToListAsync(cancellationToken);
     }
 
     public async Task<Trip?> GetWithDetailsAsync(Guid tripId, CancellationToken cancellationToken = default)
         => await _dbSet
+            .Include(t => t.Status)
             .Include(t => t.Train)
                 .ThenInclude(tr => tr.TrainType)
             .Include(t => t.Train)
@@ -40,6 +45,7 @@ public class TripRepository : GenericRepository<Trip>, ITripRepository
 
     public async Task<IReadOnlyList<Trip>> GetFollowedTripsAsync(Guid userId, CancellationToken cancellationToken = default)
         => await _dbSet
+            .Include(t => t.Status)
             .Include(t => t.Train)
                 .ThenInclude(tr => tr.TrainType)
             .Include(t => t.Followers)
@@ -49,6 +55,7 @@ public class TripRepository : GenericRepository<Trip>, ITripRepository
 
     public async Task<IReadOnlyList<Trip>> GetUserTripHistoryAsync(Guid userId, CancellationToken cancellationToken = default)
         => await _dbSet
+            .Include(t => t.Status)
             .Include(t => t.Train)
                 .ThenInclude(tr => tr.TrainType)
             .Include(t => t.Followers)
@@ -61,6 +68,7 @@ public class TripRepository : GenericRepository<Trip>, ITripRepository
 
     public async Task<IReadOnlyList<Trip>> GetTripsByTrainIdAsync(Guid trainId, CancellationToken cancellationToken = default)
         => await _dbSet
+            .Include(t => t.Status)
             .Include(t => t.Train)
             .Include(t => t.Followers)
             .Where(t => t.TrainId == trainId)

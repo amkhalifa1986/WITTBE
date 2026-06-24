@@ -11,6 +11,8 @@ public class User : AuditableEntity
     public string? AvatarUrl { get; set; }
     public string? Bio { get; set; }
     public UserRole Role { get; set; } = UserRole.User;
+    public Guid? GenderId { get; set; }
+    public GenderLookup? Gender { get; set; }
     public bool EmailConfirmed { get; set; } = false;
     public bool IsSuspended { get; set; } = false;
     public string? EmailConfirmationToken { get; set; }

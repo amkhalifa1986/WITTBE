@@ -28,12 +28,16 @@ public class ApplicationDbContext : DbContext
     public DbSet<RailwayPath> RailwayPaths => Set<RailwayPath>();
     public DbSet<AdImpression> AdImpressions => Set<AdImpression>();
     public DbSet<AdClick> AdClicks => Set<AdClick>();
+    public DbSet<SystemLog> SystemLogs => Set<SystemLog>();
 
     public DbSet<DeviceToken> DeviceTokens => Set<DeviceToken>();
     public DbSet<ServiceDisruption> ServiceDisruptions => Set<ServiceDisruption>();
     public DbSet<SystemSetting> SystemSettings => Set<SystemSetting>();
     public DbSet<StatusTagLookup> StatusTagLookups => Set<StatusTagLookup>();
     public DbSet<CrowdLevelLookup> CrowdLevelLookups => Set<CrowdLevelLookup>();
+    public DbSet<GenderLookup> GenderLookups => Set<GenderLookup>();
+    public DbSet<TripStatusLookup> TripStatusLookups => Set<TripStatusLookup>();
+    public DbSet<DashboardGalleryItem> DashboardGalleryItems => Set<DashboardGalleryItem>();
 
     public DbSet<AdminUser> AdminUsers => Set<AdminUser>();
     public DbSet<AdminRole> AdminRoles => Set<AdminRole>();

@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Text.Json;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using WhereIsTheTrain.Application.Features.Trips.Commands;
 using WhereIsTheTrain.Application.Features.Trips.DTOs;
 using WhereIsTheTrain.Application.Features.Trips.Queries;
 using WhereIsTheTrain.Domain.Enums;
+using WhereIsTheTrain.Domain.Entities;
 using WhereIsTheTrain.Application.Features.Admin;
 
 namespace WhereIsTheTrain.API.Controllers;
@@ -175,12 +177,32 @@ public class TripsController : ControllerBase
             return StatusCode(403, new { IsSuccess = false, Message = "Only followers can update the status of this trip." });
         }
 
-        if (request.Status != TripStatus.InTransit && request.Status != TripStatus.Arrived)
+        Guid statusId;
+        string? statusValue = null;
+
+        if (request.Status.ValueKind == JsonValueKind.Number)
+        {
+            statusValue = request.Status.GetInt32().ToString();
+        }
+        else if (request.Status.ValueKind == JsonValueKind.String)
+        {
+            statusValue = request.Status.GetString();
+        }
+
+        if (statusValue == "2" || string.Equals(statusValue, "InTransit", StringComparison.OrdinalIgnoreCase))
+        {
+            statusId = TripStatuses.InTransit;
+        }
+        else if (statusValue == "3" || string.Equals(statusValue, "Arrived", StringComparison.OrdinalIgnoreCase))
+        {
+            statusId = TripStatuses.Arrived;
+        }
+        else
         {
             return BadRequest(new { IsSuccess = false, Message = "Followers can only transition trip status to InTransit or Arrived." });
         }
 
-        var result = await _mediator.Send(new UpdateTripStatusCommand(id, request.Status, null, null));
+        var result = await _mediator.Send(new UpdateTripStatusCommand(id, statusId, null, null));
         return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 }
@@ -204,5 +226,5 @@ public class SubmitTelemetryRequest
 
 public class UpdateTripStatusFollowerRequest
 {
-    public TripStatus Status { get; set; }
+    public JsonElement Status { get; set; }
 }

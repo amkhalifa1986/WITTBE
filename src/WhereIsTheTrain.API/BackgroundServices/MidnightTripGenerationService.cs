@@ -108,7 +108,7 @@ public class MidnightTripGenerationService : BackgroundService
                     Id = Guid.NewGuid(),
                     TrainId = train.Id,
                     TripDate = date,
-                    Status = TripStatus.Scheduled
+                    StatusId = TripStatuses.Scheduled
                 };
                 
                 await unitOfWork.Trips.AddAsync(trip, ct);

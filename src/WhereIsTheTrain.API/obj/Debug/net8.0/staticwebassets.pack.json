@@ -141,6 +141,10 @@
       "PackagePath": "staticwebassets\\uploads\\avatars\\5a1fa556-b50d-4c91-84b4-7ee6feb35bb8.png"
     },
     {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\5e36f549-ba9b-41c9-a2ba-9a404346a090.jpeg",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\5e36f549-ba9b-41c9-a2ba-9a404346a090.jpeg"
+    },
+    {
       "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\639778f6-ac4e-4160-a5e2-c9c09e1186c9.png",
       "PackagePath": "staticwebassets\\uploads\\avatars\\639778f6-ac4e-4160-a5e2-c9c09e1186c9.png"
     },
@@ -189,12 +193,28 @@
       "PackagePath": "staticwebassets\\uploads\\avatars\\e3ef384b-7e60-4ee0-8ee2-ce80257f53a8.png"
     },
     {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\f1008c64-5428-4059-b801-4a09d459a24e.jpeg",
+      "PackagePath": "staticwebassets\\uploads\\avatars\\f1008c64-5428-4059-b801-4a09d459a24e.jpeg"
+    },
+    {
       "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\f565ece3-9b74-4530-96b1-ec1ca889a784.png",
       "PackagePath": "staticwebassets\\uploads\\avatars\\f565ece3-9b74-4530-96b1-ec1ca889a784.png"
     },
     {
       "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\avatars\\f9c2c96c-e51e-42dc-b370-77d6c41361bd.png",
       "PackagePath": "staticwebassets\\uploads\\avatars\\f9c2c96c-e51e-42dc-b370-77d6c41361bd.png"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\gallery\\085b856d-f8a5-4352-b220-50a09e730cb1.jpg",
+      "PackagePath": "staticwebassets\\uploads\\gallery\\085b856d-f8a5-4352-b220-50a09e730cb1.jpg"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\gallery\\69915479-f8d0-4bdf-a284-d4cb068d0cc5.jpg",
+      "PackagePath": "staticwebassets\\uploads\\gallery\\69915479-f8d0-4bdf-a284-d4cb068d0cc5.jpg"
+    },
+    {
+      "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\gallery\\aa7fa7c8-acac-4b01-a96f-e721ab0ec6ab.png",
+      "PackagePath": "staticwebassets\\uploads\\gallery\\aa7fa7c8-acac-4b01-a96f-e721ab0ec6ab.png"
     },
     {
       "Id": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\wwwroot\\uploads\\markers\\40dbb589-262d-4e9b-957d-ee4f87eb4733.png",

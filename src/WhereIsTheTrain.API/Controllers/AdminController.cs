@@ -321,7 +321,7 @@ public class AdminController : ControllerBase
     public async Task<IActionResult> UpdateTripStatus(Guid id, [FromBody] UpdateTripStatusRequest request)
     {
         var result = await _mediator.Send(new UpdateTripStatusCommand(
-            id, request.Status, request.ActualDeparture, request.ActualArrival));
+            id, request.StatusId, request.ActualDeparture, request.ActualArrival));
         return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 
@@ -482,6 +482,22 @@ public class AdminController : ControllerBase
     public async Task<IActionResult> GetUsers()
     {
         var result = await _mediator.Send(new GetUsersQuery());
+        return Ok(result);
+    }
+
+    [HttpGet("users/analytics/registrations")]
+    [AdminPermission("Users", "View")]
+    public async Task<IActionResult> GetRegistrationAnalytics([FromQuery] string timeframe = "Day", [FromQuery] string genderFilter = "All")
+    {
+        var result = await _mediator.Send(new GetRegistrationAnalyticsQuery(timeframe, genderFilter));
+        return Ok(result);
+    }
+
+    [HttpGet("users/analytics/engagement")]
+    [AdminPermission("Users", "View")]
+    public async Task<IActionResult> GetEngagementAnalytics([FromQuery] string timeframe = "Day", [FromQuery] DateTime? dateContext = null)
+    {
+        var result = await _mediator.Send(new GetEngagementAnalyticsQuery(timeframe, dateContext ?? DateTime.UtcNow));
         return Ok(result);
     }
 
@@ -721,7 +737,7 @@ public class UpdateTrainRequest
 
 public class UpdateTripStatusRequest
 {
-    public TripStatus Status { get; set; }
+    public Guid StatusId { get; set; }
     public DateTime? ActualDeparture { get; set; }
     public DateTime? ActualArrival { get; set; }
 }

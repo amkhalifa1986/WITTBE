@@ -164,7 +164,7 @@ public class AdminFollowerHandlers :
         if (trip == null)
             return Result<bool>.Failure("Trip not found.", 404);
 
-        if (trip.Status == TripStatus.Arrived || trip.Status == TripStatus.Cancelled)
+        if (trip.StatusId == TripStatuses.Arrived || trip.StatusId == TripStatuses.Cancelled)
             return Result<bool>.Failure("Cannot modify a finished or cancelled trip.", 400);
 
         var followers = await _unitOfWork.Repository<TripFollower>()
@@ -267,7 +267,7 @@ public class AdminFollowerHandlers :
         if (trip == null)
             return Result<bool>.Failure("Trip not found.", 404);
 
-        if (trip.Status == TripStatus.Arrived || trip.Status == TripStatus.Cancelled)
+        if (trip.StatusId == TripStatuses.Arrived || trip.StatusId == TripStatuses.Cancelled)
             return Result<bool>.Failure("Cannot modify a finished or cancelled trip.", 400);
 
         IReadOnlyList<TripFollower> followers;
