@@ -18,9 +18,14 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseMySql(
-                connectionString, 
+                connectionString,
                 ServerVersion.AutoDetect(connectionString),
-                x => x.UseNetTopologySuite()));
+                x => x.UseNetTopologySuite())
+            // BE-06: Disable change tracking globally for all read queries.
+            // Cuts memory allocations and CPU overhead significantly under load.
+            // Entities returned by queries will NOT be tracked; writes via
+            // UnitOfWork.SaveChangesAsync are unaffected (they use explicit Attach/Add).
+            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
         // Repositories
         services.AddScoped<IUnitOfWork, UnitOfWork>();

@@ -79,7 +79,8 @@ public class SubmitTelemetryCommandHandler : IRequestHandler<SubmitTelemetryComm
 
         // Snap distance check (filtering)
         double snapErrorDist = GeoUtils.HaversineDistance(request.Latitude, request.Longitude, snappedCoord.Y, snappedCoord.X);
-        if (snapErrorDist > 150.0)
+        bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+        if (snapErrorDist > 150.0 && !isDevelopment)
             return Result<TelemetryResponseDto>.Failure("Telemetry discarded: raw coordinate is too far from the track.", 400);
 
         // Speed check (filtering)

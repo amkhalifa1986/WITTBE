@@ -153,3 +153,4 @@ C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereI
 C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.API\obj\Debug\net8.0\WhereIsT.6100F21F.Up2Date
 C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.API\obj\Debug\net8.0\WhereIsTheTrain.API.genruntimeconfig.cache
 C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.API\obj\Debug\net8.0\ref\WhereIsTheTrain.API.dll
+C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.API\bin\Debug\net8.0\Microsoft.Extensions.Caching.Abstractions.dll

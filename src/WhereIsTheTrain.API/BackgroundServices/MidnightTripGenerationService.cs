@@ -25,7 +25,7 @@ public class MidnightTripGenerationService : BackgroundService
         // Fallback: Check on startup if today's trips exist.
         try
         {
-            await GenerateTripsForDateAsync(DateOnly.FromDateTime(DateTime.Today), stoppingToken);
+            await GenerateTripsForDateAsync(WhereIsTheTrain.Domain.Common.DateHelper.GetEgyptToday(), stoppingToken);
         }
         catch (Exception ex)
         {
@@ -34,7 +34,7 @@ public class MidnightTripGenerationService : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            var now = DateTime.Now;
+            var now = WhereIsTheTrain.Domain.Common.DateHelper.GetEgyptNow();
             var nextMidnight = now.Date.AddDays(1);
             var delay = nextMidnight - now;
             
@@ -53,7 +53,7 @@ public class MidnightTripGenerationService : BackgroundService
             var retryCount = 0;
             const int maxRetries = 3;
             var success = false;
-            var targetDate = DateOnly.FromDateTime(DateTime.Today);
+            var targetDate = WhereIsTheTrain.Domain.Common.DateHelper.GetEgyptToday();
 
             while (!success && retryCount < maxRetries && !stoppingToken.IsCancellationRequested)
             {

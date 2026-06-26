@@ -499,7 +499,8 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId", "IsRead")
+                        .HasDatabaseName("IX_Notifications_UserId_IsRead");
 
                     b.ToTable("Notifications", (string)null);
                 });
@@ -804,6 +805,9 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("GpsTrackingEnabled")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("LostFoundCommentAutoPublish")
                         .HasColumnType("tinyint(1)");
 
@@ -1067,7 +1071,11 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex("StatusId")
+                        .HasDatabaseName("IX_Trips_StatusId");
+
+                    b.HasIndex("TripDate")
+                        .HasDatabaseName("IX_Trips_TripDate");
 
                     b.HasIndex("TrainId", "TripDate")
                         .IsUnique();
@@ -1102,7 +1110,8 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("SourcePlanId");
 
-                    b.HasIndex("TripId");
+                    b.HasIndex("TripId")
+                        .HasDatabaseName("IX_TripFollowers_TripId");
 
                     b.HasIndex("UserId", "TripId")
                         .IsUnique();
@@ -1262,9 +1271,10 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TripId");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("TripId", "Timestamp")
+                        .HasDatabaseName("IX_TripTelemetry_TripId_Timestamp");
 
                     b.ToTable("TripTelemetry", (string)null);
                 });

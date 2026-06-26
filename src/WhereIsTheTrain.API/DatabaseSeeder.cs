@@ -1166,7 +1166,7 @@ public static class DatabaseSeeder
         );
 
         // Create today's trips for all trains
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var today = WhereIsTheTrain.Domain.Common.DateHelper.GetEgyptToday();
         var tomorrow = today.AddDays(1);
 
         var trip1 = new Trip { Id = Guid.Parse("30000000-0000-0000-0000-000000000001"), TrainId = train1.Id, TripDate = today, StatusId = TripStatuses.InTransit };

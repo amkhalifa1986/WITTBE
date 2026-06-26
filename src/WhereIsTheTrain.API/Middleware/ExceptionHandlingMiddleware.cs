@@ -46,47 +46,51 @@ public class ExceptionHandlingMiddleware
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Unhandled exception");
+            _logger.LogError(ex, "Unhandled exception on {Method} {Path}", 
+                context.Request.Method, context.Request.Path);
 
-            try
-            {
-                var dbContext = context.RequestServices.GetRequiredService<WhereIsTheTrain.Infrastructure.Persistence.ApplicationDbContext>();
-                
-                Guid? userId = null;
-                var userIdClaim = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (userIdClaim != null && Guid.TryParse(userIdClaim, out var parsedId))
-                {
-                    userId = parsedId;
-                }
-
-                var userEmail = context.User.FindFirst(ClaimTypes.Email)?.Value;
-
-                var log = new WhereIsTheTrain.Domain.Entities.SystemLog
-                {
-                    Timestamp = DateTime.UtcNow,
-                    LogLevel = "Error",
-                    Source = "API",
-                    Target = context.Request.Path.Value ?? string.Empty,
-                    UserId = userId,
-                    UserEmail = userEmail,
-                    Description = $"Unhandled Exception: {ex.Message}",
-                    ErrorMessage = ex.Message,
-                    StackTrace = ex.StackTrace
-                };
-
-                dbContext.Set<WhereIsTheTrain.Domain.Entities.SystemLog>().Add(log);
-                await dbContext.SaveChangesAsync();
-            }
-            catch (Exception dbEx)
-            {
-                _logger.LogError(dbEx, "Failed to log unhandled exception to database");
-            }
-
+            // Return the error response IMMEDIATELY — do not block on DB write
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             context.Response.ContentType = "application/json";
-
             var response = new { IsSuccess = false, Error = "An unexpected error occurred." };
             await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+
+            // Fire-and-forget: write the SystemLog in the background
+            // Uses a new DI scope so the scoped DbContext is not reused after response completion
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await using var scope = context.RequestServices.CreateAsyncScope();
+                    var dbContext = scope.ServiceProvider
+                        .GetRequiredService<WhereIsTheTrain.Infrastructure.Persistence.ApplicationDbContext>();
+
+                    Guid? userId = null;
+                    var userIdClaim = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                    if (userIdClaim != null && Guid.TryParse(userIdClaim, out var parsedId))
+                        userId = parsedId;
+
+                    var log = new WhereIsTheTrain.Domain.Entities.SystemLog
+                    {
+                        Timestamp = DateTime.UtcNow,
+                        LogLevel = "Error",
+                        Source = "API",
+                        Target = context.Request.Path.Value ?? string.Empty,
+                        UserId = userId,
+                        UserEmail = context.User.FindFirst(ClaimTypes.Email)?.Value,
+                        Description = $"Unhandled Exception: {ex.Message}",
+                        ErrorMessage = ex.Message,
+                        StackTrace = ex.StackTrace
+                    };
+
+                    dbContext.Set<WhereIsTheTrain.Domain.Entities.SystemLog>().Add(log);
+                    await dbContext.SaveChangesAsync();
+                }
+                catch (Exception dbEx)
+                {
+                    _logger.LogError(dbEx, "Failed to log unhandled exception to database");
+                }
+            });
         }
     }
 }

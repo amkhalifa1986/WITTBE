@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.Extensions.Caching.Memory;
 using NetTopologySuite.Geometries;
 using WhereIsTheTrain.Application.Common;
 using WhereIsTheTrain.Application.Features.Trips.DTOs;
@@ -41,44 +42,59 @@ public class StopTrackingDto
 public class GetTripTrackingQueryHandler : IRequestHandler<GetTripTrackingQuery, Result<TripTrackingDto>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMemoryCache _cache;
 
-    public GetTripTrackingQueryHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+    public GetTripTrackingQueryHandler(IUnitOfWork unitOfWork, IMemoryCache cache)
+    {
+        _unitOfWork = unitOfWork;
+        _cache = cache;
+    }
 
     public async Task<Result<TripTrackingDto>> Handle(GetTripTrackingQuery request, CancellationToken ct)
     {
+        // TODO (future): GetWithDetailsAsync performs a 7-level eager load; replace with a
+        //  targeted projection query once a lightweight repository method is available.
         var trip = await _unitOfWork.Trips.GetWithDetailsAsync(request.TripId, ct);
         if (trip == null)
             return Result<TripTrackingDto>.Failure("Trip not found.", 404);
 
-        var railwayPaths = await _unitOfWork.RailwayPaths.GetAllWithStopsAsync(ct);
-        var routePath = RoutePathBuilder.BuildRoutePath(trip.Train.RouteStops, railwayPaths);
+        // Cache railway paths — they are static reference data, expensive to load
+        var railwayPaths = await _cache.GetOrCreateAsync("railway_paths", async entry =>
+        {
+            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
+            return await _unitOfWork.RailwayPaths.GetAllWithStopsAsync(ct);
+        }) ?? new List<WhereIsTheTrain.Domain.Entities.RailwayPath>();
+
+        // Cache computed geometry per train — CPU-intensive, deterministic per route
+        var routePath = _cache.GetOrCreate($"route_path_{trip.Train.Id}", entry =>
+        {
+            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
+            return RoutePathBuilder.BuildRoutePath(trip.Train.RouteStops, railwayPaths);
+        })!;
         bool hasRoutePath = routePath.Coordinates.Length >= 2;
 
-        // Fetch telemetries in the last 10 minutes
+        // Fetch recent telemetry (last 10 min)
         var tenMinutesAgo = DateTime.UtcNow.AddMinutes(-10);
+
         var telemetries = await _unitOfWork.Repository<TripTelemetry>()
             .FindAsync(t => t.TripId == request.TripId && t.Timestamp >= tenMinutesAgo, ct);
-
-        double snappedLat = 0;
-        double snappedLon = 0;
-        double currentSpeed = 0;
-        double currentDistance = 0;
-        double velocity = 16.67; // Default 60 km/h in m/s
 
         var latestTelemetry = telemetries.OrderByDescending(t => t.Timestamp).FirstOrDefault();
         if (latestTelemetry == null)
         {
-            // Fallback: Check if there's any telemetry ever
-            var anyTelemetry = (await _unitOfWork.Repository<TripTelemetry>()
-                .FindAsync(t => t.TripId == request.TripId, ct))
-                .OrderByDescending(t => t.Timestamp)
-                .FirstOrDefault();
-
-            if (anyTelemetry != null)
-            {
-                latestTelemetry = anyTelemetry;
-            }
+            // Fallback: use the single most recent telemetry ever recorded for this trip
+            var fallback = await _unitOfWork.Repository<TripTelemetry>()
+                .FindAsync(t => t.TripId == request.TripId, ct);
+                
+            latestTelemetry = fallback.OrderByDescending(t => t.Timestamp).FirstOrDefault();
         }
+
+        // Initialise state variables
+        double snappedLat     = 0;
+        double snappedLon     = 0;
+        double currentSpeed   = 0;
+        double currentDistance = 0;
+        double velocity       = 16.67; // Default 60 km/h in m/s
 
         if (latestTelemetry != null)
         {

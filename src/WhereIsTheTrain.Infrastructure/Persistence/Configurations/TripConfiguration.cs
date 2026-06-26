@@ -12,6 +12,12 @@ public class TripConfiguration : IEntityTypeConfiguration<Trip>
         builder.HasKey(t => t.Id);
         builder.Property(t => t.Id).ValueGeneratedNever();
         builder.HasIndex(t => new { t.TrainId, t.TripDate }).IsUnique();
+        // Index on TripDate — GetTodayTrips is called on every dashboard load
+        builder.HasIndex(t => t.TripDate)
+            .HasDatabaseName("IX_Trips_TripDate");
+        // Index on StatusId — used by dashboard stats count queries
+        builder.HasIndex(t => t.StatusId)
+            .HasDatabaseName("IX_Trips_StatusId");
 
         builder.HasOne(t => t.Train)
             .WithMany(tr => tr.Trips)

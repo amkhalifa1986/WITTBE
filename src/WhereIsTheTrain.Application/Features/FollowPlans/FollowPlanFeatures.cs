@@ -161,7 +161,7 @@ public class CreateOrUpdateFollowPlanCommandHandler : IRequestHandler<CreateOrUp
         await _unitOfWork.SaveChangesAsync(ct);
 
         // 3. Sync upcoming trips
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var today = WhereIsTheTrain.Domain.Common.DateHelper.GetEgyptToday();
         var upcomingTrips = await _unitOfWork.Repository<Trip>()
             .FindAsync(t => t.TrainId == request.TrainId && t.TripDate >= today, ct);
 
@@ -238,7 +238,7 @@ public class DeleteFollowPlanCommandHandler : IRequestHandler<DeleteFollowPlanCo
             return Result<bool>.Failure("Follow plans not found.", 404);
 
         // Cancel upcoming trip followers created by any of these plans
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var today = WhereIsTheTrain.Domain.Common.DateHelper.GetEgyptToday();
         var upcomingTrips = await _unitOfWork.Repository<Trip>()
             .FindAsync(t => t.TrainId == request.TrainId && t.TripDate >= today, ct);
         var upcomingTripIds = upcomingTrips.Select(t => t.Id).ToList();
@@ -279,7 +279,7 @@ public class GetUpcomingFollowedTripsQueryHandler : IRequestHandler<GetUpcomingF
     public async Task<Result<List<UpcomingTripDto>>> Handle(GetUpcomingFollowedTripsQuery request, CancellationToken ct)
     {
         var now = DateTime.UtcNow;
-        var today = DateOnly.FromDateTime(now);
+        var today = WhereIsTheTrain.Domain.Common.DateHelper.GetEgyptToday();
         var yesterday = today.AddDays(-1);
 
         var plans = await _unitOfWork.Repository<TrainFollowPlan>()

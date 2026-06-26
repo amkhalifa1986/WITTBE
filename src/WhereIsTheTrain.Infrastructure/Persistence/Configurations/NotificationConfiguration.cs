@@ -14,6 +14,9 @@ public class NotificationConfiguration : IEntityTypeConfiguration<Notification>
         builder.Property(n => n.Message).HasMaxLength(500).IsRequired();
         builder.Property(n => n.Link).HasMaxLength(250).IsRequired(false);
         builder.Property(n => n.IsRead).HasDefaultValue(false);
+        // Composite index on (UserId, IsRead) — notification badge polled frequently by every user
+        builder.HasIndex(n => new { n.UserId, n.IsRead })
+            .HasDatabaseName("IX_Notifications_UserId_IsRead");
 
         builder.HasOne(n => n.User)
             .WithMany(u => u.Notifications)

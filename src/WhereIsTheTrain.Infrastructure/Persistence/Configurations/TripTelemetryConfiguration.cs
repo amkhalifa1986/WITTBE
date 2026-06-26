@@ -20,6 +20,10 @@ public class TripTelemetryConfiguration : IEntityTypeConfiguration<TripTelemetry
         builder.Property(t => t.DistanceAlongRoute).IsRequired();
         builder.Property(t => t.Timestamp).IsRequired();
 
+        // Index on (TripId, Timestamp) — critical for tracking query polled every 10s per user
+        builder.HasIndex(t => new { t.TripId, t.Timestamp })
+            .HasDatabaseName("IX_TripTelemetry_TripId_Timestamp");
+
         builder.HasOne(t => t.Trip)
             .WithMany()
             .HasForeignKey(t => t.TripId)

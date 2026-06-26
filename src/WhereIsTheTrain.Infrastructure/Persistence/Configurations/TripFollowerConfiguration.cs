@@ -12,6 +12,10 @@ public class TripFollowerConfiguration : IEntityTypeConfiguration<TripFollower>
         builder.HasKey(tf => tf.Id);
         builder.Property(tf => tf.Id).ValueGeneratedNever();
         builder.HasIndex(tf => new { tf.UserId, tf.TripId }).IsUnique();
+        // Single-column index on TripId — needed for follower count queries by trip
+        // (the composite unique index UserId+TripId can't be used for TripId-only lookups)
+        builder.HasIndex(tf => tf.TripId)
+            .HasDatabaseName("IX_TripFollowers_TripId");
 
         builder.HasOne(tf => tf.User)
             .WithMany(u => u.FollowedTrips)

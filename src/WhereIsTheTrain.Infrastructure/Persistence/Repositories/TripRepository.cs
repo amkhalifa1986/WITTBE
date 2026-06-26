@@ -11,7 +11,7 @@ public class TripRepository : GenericRepository<Trip>, ITripRepository
 
     public async Task<IReadOnlyList<Trip>> GetTodayTripsAsync(CancellationToken cancellationToken = default)
     {
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var today = WhereIsTheTrain.Domain.Common.DateHelper.GetEgyptToday();
         return await _dbSet
             .Include(t => t.Status)
             .Include(t => t.Train)

@@ -1,0 +1,160 @@
+2026-06-26 20:01:17.800 +03:00 [INF] TelemetryCleanupService started. Retention window: 48h.
+2026-06-26 20:01:17.800 +03:00 [INF] Midnight Trip Generation Service is starting.
+2026-06-26 20:01:17.860 +03:00 [INF] TelemetryCleanupService: next cleanup in 9.0h at ~02:00 UTC.
+2026-06-26 20:01:17.876 +03:00 [ERR] Hosting failed to start
+System.IO.IOException: Failed to bind to address http://0.0.0.0:5245: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.ListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+2026-06-26 20:01:17.930 +03:00 [INF] TelemetryCleanupService stopped.
+2026-06-26 20:01:17.979 +03:00 [ERR] An error occurred using the connection to database 'WhereIsTheTrain' on server 'localhost'.
+2026-06-26 20:01:17.990 +03:00 [ERR] Failed to perform startup trip check/generation.
+System.OperationCanceledException: The operation was canceled.
+   at System.Threading.CancellationToken.ThrowOperationCanceledException()
+   at System.Threading.CancellationToken.ThrowIfCancellationRequested()
+   at MySqlConnector.MySqlConnection.OpenAsync(Nullable`1 ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlConnection.cs:line 390
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlRelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at WhereIsTheTrain.Infrastructure.Persistence.Repositories.TripRepository.GetByTrainAndDateAsync(Guid trainId, DateOnly date, CancellationToken cancellationToken) in C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.Infrastructure\Persistence\Repositories\TripRepository.cs:line 67
+   at WhereIsTheTrain.API.BackgroundServices.MidnightTripGenerationService.GenerateTripsForDateAsync(DateOnly date, CancellationToken ct) in C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.API\BackgroundServices\MidnightTripGenerationService.cs:line 103
+   at WhereIsTheTrain.API.BackgroundServices.MidnightTripGenerationService.ExecuteAsync(CancellationToken stoppingToken) in C:\Users\progk\.gemini\antigravity\scratch\where-is-the-train\backend\src\WhereIsTheTrain.API\BackgroundServices\MidnightTripGenerationService.cs:line 28
+2026-06-26 20:04:06.192 +03:00 [INF] Midnight Trip Generation Service is starting.
+2026-06-26 20:04:06.192 +03:00 [INF] TelemetryCleanupService started. Retention window: 48h.
+2026-06-26 20:04:06.220 +03:00 [INF] TelemetryCleanupService: next cleanup in 8.9h at ~02:00 UTC.
+2026-06-26 20:04:06.286 +03:00 [INF] Next midnight trip generation scheduled at "2026-06-27T00:00:00.0000000" (delay: "03:55:53.7134482").
+2026-06-26 20:04:13.311 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 connected to TripHub
+2026-06-26 20:04:16.134 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 joined trip group 6aee067d-8d22-4e79-8a88-67f73cc9b6d6
+2026-06-26 20:04:16.145 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 left trip group 6aee067d-8d22-4e79-8a88-67f73cc9b6d6
+2026-06-26 20:04:16.151 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 joined trip group 6aee067d-8d22-4e79-8a88-67f73cc9b6d6
+2026-06-26 20:04:16.246 +03:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-06-26 20:04:22.290 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 left trip group 6aee067d-8d22-4e79-8a88-67f73cc9b6d6
+2026-06-26 20:04:23.753 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 joined trip group 310ab770-a193-4789-95c6-bda754c42684
+2026-06-26 20:04:23.759 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 left trip group 310ab770-a193-4789-95c6-bda754c42684
+2026-06-26 20:04:23.764 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 joined trip group 310ab770-a193-4789-95c6-bda754c42684
+2026-06-26 20:04:44.680 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 disconnected from TripHub
+2026-06-26 20:04:45.200 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 connected to TripHub
+2026-06-26 20:04:45.221 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 joined trip group 310ab770-a193-4789-95c6-bda754c42684
+2026-06-26 20:04:45.238 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 left trip group 310ab770-a193-4789-95c6-bda754c42684
+2026-06-26 20:04:45.246 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 joined trip group 310ab770-a193-4789-95c6-bda754c42684
+2026-06-26 20:04:57.767 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 connected to TripHub
+2026-06-26 20:04:58.609 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 93712079-ab22-4cc0-a0a8-ee326d608324
+2026-06-26 20:04:58.615 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 8f76d3a5-247d-45b3-aee8-71b606e8f65d
+2026-06-26 20:04:58.619 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 10bc46f0-b1a7-44b8-8739-8c544b2c599c
+2026-06-26 20:04:58.624 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 310ab770-a193-4789-95c6-bda754c42684
+2026-06-26 20:04:58.628 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group dccdb319-bfab-4afb-9c5f-6f8114862001
+2026-06-26 20:04:58.632 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f3a8b968-08be-4e98-9831-3045b73babec
+2026-06-26 20:04:58.638 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1042deea-8e81-4488-83b4-288c3252688f
+2026-06-26 20:04:58.643 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 5cc6f41a-b608-4166-bd63-0536ee37f100
+2026-06-26 20:04:58.647 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 82234bc5-8a80-41bf-820d-23fae0d2a2bc
+2026-06-26 20:04:58.650 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group a83b436f-9eae-489f-87fb-5c06c49e6f0a
+2026-06-26 20:04:58.653 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 332cad6e-928c-4f09-a75c-1c23a2ee72d8
+2026-06-26 20:04:58.657 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group a25cac8a-4f6e-4f7b-912a-fe28c8b1dfe2
+2026-06-26 20:04:58.662 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group b0dab0c8-c5ab-4aa5-b74a-d5874230e023
+2026-06-26 20:04:58.666 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group c050a7bb-fa1d-40c0-add9-d9a64165af32
+2026-06-26 20:04:58.669 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 13daf69f-e111-4e11-8414-8177c0fbbf1a
+2026-06-26 20:04:58.672 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 468d667c-9f4e-49a6-a0e1-203b699213bf
+2026-06-26 20:04:58.677 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group fc3b46a1-75a2-4142-9fac-edafc8a6d705
+2026-06-26 20:04:58.681 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group e296abbc-8bba-4711-9a87-8cd4e4280e15
+2026-06-26 20:04:58.684 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f5218bff-0af7-4f60-897c-e71d568dcffc
+2026-06-26 20:04:58.687 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 22528bdc-af8d-47e2-9849-24a491b3f1db
+2026-06-26 20:04:58.691 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 8213ef45-b3ed-427a-aa1c-58b12676b7f3
+2026-06-26 20:04:58.695 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 7bf7664a-cc41-41bf-ac07-3169f9fd1e88
+2026-06-26 20:04:58.698 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 824a880e-0c1b-406a-906f-92722453d8b7
+2026-06-26 20:04:58.702 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 9fdbbacd-c4ea-48e2-9507-cb7ff3930125
+2026-06-26 20:04:58.705 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group c669d463-970d-47f7-b663-556ea2d63c63
+2026-06-26 20:04:58.711 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 411c7700-e18e-455e-b9a4-13c39e641b1a
+2026-06-26 20:04:58.716 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 93712079-ab22-4cc0-a0a8-ee326d608324
+2026-06-26 20:04:58.720 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 8f76d3a5-247d-45b3-aee8-71b606e8f65d
+2026-06-26 20:04:58.724 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 10bc46f0-b1a7-44b8-8739-8c544b2c599c
+2026-06-26 20:04:58.729 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 310ab770-a193-4789-95c6-bda754c42684
+2026-06-26 20:04:58.735 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group dccdb319-bfab-4afb-9c5f-6f8114862001
+2026-06-26 20:04:58.739 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f3a8b968-08be-4e98-9831-3045b73babec
+2026-06-26 20:04:58.745 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1042deea-8e81-4488-83b4-288c3252688f
+2026-06-26 20:04:58.748 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 5cc6f41a-b608-4166-bd63-0536ee37f100
+2026-06-26 20:04:58.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 82234bc5-8a80-41bf-820d-23fae0d2a2bc
+2026-06-26 20:04:58.759 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group a83b436f-9eae-489f-87fb-5c06c49e6f0a
+2026-06-26 20:04:58.764 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 332cad6e-928c-4f09-a75c-1c23a2ee72d8
+2026-06-26 20:04:58.777 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group a25cac8a-4f6e-4f7b-912a-fe28c8b1dfe2
+2026-06-26 20:04:58.781 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group b0dab0c8-c5ab-4aa5-b74a-d5874230e023
+2026-06-26 20:04:58.783 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group c050a7bb-fa1d-40c0-add9-d9a64165af32
+2026-06-26 20:04:58.786 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 13daf69f-e111-4e11-8414-8177c0fbbf1a
+2026-06-26 20:04:58.790 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 468d667c-9f4e-49a6-a0e1-203b699213bf
+2026-06-26 20:04:58.796 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group fc3b46a1-75a2-4142-9fac-edafc8a6d705
+2026-06-26 20:04:58.799 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group e296abbc-8bba-4711-9a87-8cd4e4280e15
+2026-06-26 20:04:58.804 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f5218bff-0af7-4f60-897c-e71d568dcffc
+2026-06-26 20:04:58.811 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 22528bdc-af8d-47e2-9849-24a491b3f1db
+2026-06-26 20:04:58.815 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 8213ef45-b3ed-427a-aa1c-58b12676b7f3
+2026-06-26 20:04:58.819 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 7bf7664a-cc41-41bf-ac07-3169f9fd1e88
+2026-06-26 20:04:58.823 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 824a880e-0c1b-406a-906f-92722453d8b7
+2026-06-26 20:04:58.829 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 9fdbbacd-c4ea-48e2-9507-cb7ff3930125
+2026-06-26 20:04:58.833 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group c669d463-970d-47f7-b663-556ea2d63c63
+2026-06-26 20:04:58.836 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 411c7700-e18e-455e-b9a4-13c39e641b1a
+2026-06-26 20:05:04.083 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 6aee067d-8d22-4e79-8a88-67f73cc9b6d6
+2026-06-26 20:05:04.087 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 04cf1b1f-9515-4e77-90d1-3c3a39841649
+2026-06-26 20:05:04.092 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 93712079-ab22-4cc0-a0a8-ee326d608324
+2026-06-26 20:05:04.095 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 8f76d3a5-247d-45b3-aee8-71b606e8f65d
+2026-06-26 20:05:04.101 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 10bc46f0-b1a7-44b8-8739-8c544b2c599c
+2026-06-26 20:05:04.105 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 310ab770-a193-4789-95c6-bda754c42684
+2026-06-26 20:05:04.109 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group dccdb319-bfab-4afb-9c5f-6f8114862001
+2026-06-26 20:05:04.112 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f3a8b968-08be-4e98-9831-3045b73babec
+2026-06-26 20:05:04.115 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 1042deea-8e81-4488-83b4-288c3252688f
+2026-06-26 20:05:04.118 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 5cc6f41a-b608-4166-bd63-0536ee37f100
+2026-06-26 20:05:04.121 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 82234bc5-8a80-41bf-820d-23fae0d2a2bc
+2026-06-26 20:05:04.125 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group a83b436f-9eae-489f-87fb-5c06c49e6f0a
+2026-06-26 20:05:04.129 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 332cad6e-928c-4f09-a75c-1c23a2ee72d8
+2026-06-26 20:05:04.132 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group a25cac8a-4f6e-4f7b-912a-fe28c8b1dfe2
+2026-06-26 20:05:04.136 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group b0dab0c8-c5ab-4aa5-b74a-d5874230e023
+2026-06-26 20:05:04.139 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group c050a7bb-fa1d-40c0-add9-d9a64165af32
+2026-06-26 20:05:04.145 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 13daf69f-e111-4e11-8414-8177c0fbbf1a
+2026-06-26 20:05:04.148 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 468d667c-9f4e-49a6-a0e1-203b699213bf
+2026-06-26 20:05:04.150 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group fc3b46a1-75a2-4142-9fac-edafc8a6d705
+2026-06-26 20:05:04.155 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group e296abbc-8bba-4711-9a87-8cd4e4280e15
+2026-06-26 20:05:04.160 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f5218bff-0af7-4f60-897c-e71d568dcffc
+2026-06-26 20:05:04.163 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 22528bdc-af8d-47e2-9849-24a491b3f1db
+2026-06-26 20:05:04.166 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 8213ef45-b3ed-427a-aa1c-58b12676b7f3
+2026-06-26 20:05:04.170 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 7bf7664a-cc41-41bf-ac07-3169f9fd1e88
+2026-06-26 20:05:04.175 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 824a880e-0c1b-406a-906f-92722453d8b7
+2026-06-26 20:05:04.178 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 9fdbbacd-c4ea-48e2-9507-cb7ff3930125
+2026-06-26 20:05:04.181 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group c669d463-970d-47f7-b663-556ea2d63c63
+2026-06-26 20:05:04.187 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 411c7700-e18e-455e-b9a4-13c39e641b1a
+2026-06-26 20:05:10.473 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 disconnected from TripHub
+2026-06-26 20:05:11.014 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 connected to TripHub
+2026-06-26 20:05:11.024 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 joined trip group 310ab770-a193-4789-95c6-bda754c42684
+2026-06-26 20:05:11.033 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 joined trip group 310ab770-a193-4789-95c6-bda754c42684
+2026-06-26 20:05:25.810 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 disconnected from TripHub
+2026-06-26 20:05:26.219 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 connected to TripHub
+2026-06-26 20:05:26.227 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 joined trip group 310ab770-a193-4789-95c6-bda754c42684
+2026-06-26 20:05:26.233 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 joined trip group 310ab770-a193-4789-95c6-bda754c42684
+2026-06-26 20:05:31.355 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 disconnected from TripHub
+2026-06-26 20:05:31.750 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 connected to TripHub
+2026-06-26 20:05:31.759 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 joined trip group 310ab770-a193-4789-95c6-bda754c42684
+2026-06-26 20:05:31.772 +03:00 [INF] User 00000000-0000-0000-0000-000000000002 joined trip group 310ab770-a193-4789-95c6-bda754c42684

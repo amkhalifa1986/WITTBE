@@ -13,6 +13,7 @@ public class SystemSettingDto
     /// <summary>When true, a user removal request is applied immediately (no admin review).</summary>
     public bool TripLiveUpdateRemovalAutoApprove { get; set; }
     public string AdsEnabledPages { get; set; } = "{}";
+    public bool GpsTrackingEnabled { get; set; }
 }
 
 public record GetSystemSettingsQuery() : IRequest<Result<SystemSettingDto>>;
@@ -22,7 +23,8 @@ public record UpdateSystemSettingsCommand(
     bool LostFoundCommentAutoPublish,
     bool TripLiveUpdateAutoPublish,
     bool TripLiveUpdateRemovalAutoApprove,
-    string AdsEnabledPages
+    string AdsEnabledPages,
+    bool GpsTrackingEnabled
 ) : IRequest<Result<SystemSettingDto>>;
 
 public class SystemSettingsHandlers :
@@ -44,7 +46,8 @@ public class SystemSettingsHandlers :
                 LostFoundCommentAutoPublish = true,
                 TripLiveUpdateAutoPublish = true,
                 TripLiveUpdateRemovalAutoApprove = false,
-                AdsEnabledPages = "{}"
+                AdsEnabledPages = "{}",
+                GpsTrackingEnabled = true
             });
         }
 
@@ -54,7 +57,8 @@ public class SystemSettingsHandlers :
             LostFoundCommentAutoPublish = settings.LostFoundCommentAutoPublish,
             TripLiveUpdateAutoPublish = settings.TripLiveUpdateAutoPublish,
             TripLiveUpdateRemovalAutoApprove = settings.TripLiveUpdateRemovalAutoApprove,
-            AdsEnabledPages = settings.AdsEnabledPages
+            AdsEnabledPages = settings.AdsEnabledPages,
+            GpsTrackingEnabled = settings.GpsTrackingEnabled
         });
     }
 
@@ -75,6 +79,7 @@ public class SystemSettingsHandlers :
         settings.TripLiveUpdateAutoPublish = request.TripLiveUpdateAutoPublish;
         settings.TripLiveUpdateRemovalAutoApprove = request.TripLiveUpdateRemovalAutoApprove;
         settings.AdsEnabledPages = request.AdsEnabledPages;
+        settings.GpsTrackingEnabled = request.GpsTrackingEnabled;
 
         await _unitOfWork.Repository<SystemSetting>().UpdateAsync(settings, ct);
         await _unitOfWork.SaveChangesAsync(ct);
@@ -85,7 +90,8 @@ public class SystemSettingsHandlers :
             LostFoundCommentAutoPublish = settings.LostFoundCommentAutoPublish,
             TripLiveUpdateAutoPublish = settings.TripLiveUpdateAutoPublish,
             TripLiveUpdateRemovalAutoApprove = settings.TripLiveUpdateRemovalAutoApprove,
-            AdsEnabledPages = settings.AdsEnabledPages
+            AdsEnabledPages = settings.AdsEnabledPages,
+            GpsTrackingEnabled = settings.GpsTrackingEnabled
         });
     }
 }

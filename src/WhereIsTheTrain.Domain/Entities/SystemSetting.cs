@@ -13,4 +13,5 @@ public class SystemSetting : BaseEntity
     /// </summary>
     public bool TripLiveUpdateRemovalAutoApprove { get; set; } = false;
     public string AdsEnabledPages { get; set; } = "{}";
+    public bool GpsTrackingEnabled { get; set; } = true;
 }
