@@ -1,0 +1,74 @@
+name: Deploy API
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  IMAGE: ghcr.io/amkhalifa1986/wittbe
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+          labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copy stack files to server
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: deploy/docker-compose.yml,deploy/Caddyfile,deploy/.env.example
+          target: /opt/witt
+          strip_components: 1
+      - name: Pull and restart
+        uses: appleboy/ssh-action@v1
+        env:
+          GHCR_USER: ${{ github.actor }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          envs: GHCR_USER,GHCR_TOKEN
+          script: |
+            set -e
+            cd /opt/witt
+            test -f .env || { echo "Missing /opt/witt/.env — create it from .env.example"; exit 1; }
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
+            docker compose pull api
+            docker compose up -d mysql api caddy
+            # Restart Caddy only when its config changed
+            NEW=$(sha256sum Caddyfile | cut -d' ' -f1)
+            if [ "$NEW" != "$(cat .caddyfile.sha 2>/dev/null)" ]; then
+              docker compose restart caddy && echo "$NEW" > .caddyfile.sha
+            fi
+            docker logout ghcr.io
+            docker image prune -f

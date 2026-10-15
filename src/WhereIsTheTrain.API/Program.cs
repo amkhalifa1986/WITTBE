@@ -226,8 +226,8 @@ app.MapHealthChecks("/health", new HealthCheckOptions
     }
 });
 
-// Seed database in development
-if (app.Environment.IsDevelopment())
+// Migrate + seed in development, or in production when Database:MigrateOnStartup=true
+if (app.Environment.IsDevelopment() || app.Configuration.GetValue<bool>("Database:MigrateOnStartup"))
 {
     using var scope = app.Services.CreateScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<WhereIsTheTrain.Infrastructure.Persistence.ApplicationDbContext>();

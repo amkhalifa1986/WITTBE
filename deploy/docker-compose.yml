@@ -1,0 +1,75 @@
+# Production stack for Where Is The Train — runs on the Hetzner server in /opt/witt.
+# Images are built by GitHub Actions in each repo and pushed to ghcr.io.
+# Secrets and domains come from /opt/witt/.env (copy .env.example and fill it in).
+
+services:
+  mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      TZ: Africa/Cairo
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    image: ghcr.io/amkhalifa1986/wittbe:latest
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=${MYSQL_DATABASE};User=${MYSQL_USER};Password=${MYSQL_PASSWORD};MaximumPoolSize=200;MinimumPoolSize=10;ConnectionTimeout=30;DefaultCommandTimeout=30;"
+      JwtSettings__Secret: ${JWT_SECRET}
+      EmailSettings__SmtpHost: ${SMTP_HOST}
+      EmailSettings__SmtpPort: ${SMTP_PORT}
+      EmailSettings__SmtpUser: ${SMTP_USER}
+      EmailSettings__SmtpPassword: ${SMTP_PASSWORD}
+      EmailSettings__FromEmail: ${SMTP_FROM_EMAIL}
+      EmailSettings__BaseUrl: https://${API_DOMAIN}
+      Database__MigrateOnStartup: "true"
+    volumes:
+      - api_uploads:/app/wwwroot/uploads
+      - api_appdata:/app/App_Data
+      - api_logs:/app/logs
+
+  web:
+    image: ghcr.io/amkhalifa1986/wittfe:latest
+    restart: unless-stopped
+
+  admin:
+    image: ghcr.io/amkhalifa1986/wittadmin:latest
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      WEB_DOMAIN: ${WEB_DOMAIN}
+      ADMIN_DOMAIN: ${ADMIN_DOMAIN}
+      API_DOMAIN: ${API_DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  mysql_data:
+  api_uploads:
+  api_appdata:
+  api_logs:
+  caddy_data:
+  caddy_config:
