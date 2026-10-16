@@ -8,3 +8,4 @@ public record RegisterCommand(string DisplayName, string Email, string Password)
 public record ConfirmEmailCommand(string Token) : IRequest<Result<string>>;
 public record LoginCommand(string Email, string Password, bool RememberMe = false) : IRequest<Result<AuthResponseDto>>;
 public record RefreshTokenCommand(string AccessToken, string RefreshToken) : IRequest<Result<AuthResponseDto>>;
+public record RequestPasswordResetCommand(string Email) : IRequest<Result<string>>;

@@ -68,6 +68,13 @@ public class ProfileController : ControllerBase
         var result = await _mediator.Send(new GetTripHistoryQuery(GetUserId()));
         return Ok(result);
     }
+
+    [HttpPost("change-password")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+    {
+        var result = await _mediator.Send(new ChangePasswordCommand(GetUserId(), request.OldPassword, request.NewPassword));
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
+    }
 }
 
 public class UpdateProfileRequest
@@ -75,4 +82,10 @@ public class UpdateProfileRequest
     public string? DisplayName { get; set; }
     public string? Bio { get; set; }
     public string? AvatarUrl { get; set; }
+}
+
+public class ChangePasswordRequest
+{
+    public string OldPassword { get; set; } = string.Empty;
+    public string NewPassword { get; set; } = string.Empty;
 }

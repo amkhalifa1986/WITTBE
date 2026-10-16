@@ -30,5 +30,6 @@ public class User : AuditableEntity
     public ICollection<DeviceToken> DeviceTokens { get; set; } = new List<DeviceToken>();
     public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
     public ICollection<TripLiveUpdateThanks> ThanksList { get; set; } = new List<TripLiveUpdateThanks>();
+    public ICollection<UserPointLog> PointLogs { get; set; } = new List<UserPointLog>();
 }
 

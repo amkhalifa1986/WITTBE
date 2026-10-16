@@ -71,4 +71,32 @@ public static class GeometrySnappingHelper
 
         return (bestSnapped, bestDistanceAlong, minPerpDistance);
     }
+
+    public static Coordinate GetCoordinateAtDistance(LineString polyline, double targetDistance)
+    {
+        var coords = polyline.Coordinates;
+        if (coords.Length == 0) return new Coordinate(0, 0);
+        if (targetDistance <= 0) return coords[0];
+
+        double currentDistance = 0;
+        for (int i = 0; i < coords.Length - 1; i++)
+        {
+            var A = coords[i];
+            var B = coords[i + 1];
+            double segLength = CalculateHaversine(A.Y, A.X, B.Y, B.X);
+
+            if (currentDistance + segLength >= targetDistance)
+            {
+                double remaining = targetDistance - currentDistance;
+                double t = remaining / segLength;
+                double x = A.X + t * (B.X - A.X);
+                double y = A.Y + t * (B.Y - A.Y);
+                return new Coordinate(x, y);
+            }
+
+            currentDistance += segLength;
+        }
+
+        return coords[coords.Length - 1];
+    }
 }

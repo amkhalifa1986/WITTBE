@@ -66,4 +66,51 @@ public class EmailService : IEmailService
             // In production, use a queue/retry mechanism
         }
     }
+
+    public async Task SendPasswordResetEmailAsync(string email, string displayName, string newPassword, CancellationToken cancellationToken = default)
+    {
+        var subject = "Your Password Has Been Reset - Where is the Train";
+        var body = $@"
+            <html>
+            <body style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;'>
+                <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;'>
+                    <h1 style='color: white; margin: 0;'>🚂 Where is the Train</h1>
+                </div>
+                <div style='padding: 30px; background: #f9f9f9; border-radius: 0 0 10px 10px;'>
+                    <h2>Hello, {displayName}!</h2>
+                    <p>Your account password has been reset.</p>
+                    <p>Your new temporary password is:</p>
+                    <div style='text-align: center; margin: 30px 0;'>
+                        <span style='background: #e2e8f0; color: #1a202c; padding: 14px 28px; border-radius: 8px; font-size: 20px; font-family: monospace; font-weight: bold; letter-spacing: 1px;'>{newPassword}</span>
+                    </div>
+                    <p style='color: #ef4444; font-weight: bold;'>Please log in and change your password immediately for security reasons.</p>
+                </div>
+            </body>
+            </html>";
+
+        try
+        {
+            using var client = new SmtpClient(_settings.SmtpHost, _settings.SmtpPort)
+            {
+                Credentials = new NetworkCredential(_settings.SmtpUser, _settings.SmtpPassword),
+                EnableSsl = true
+            };
+
+            var message = new MailMessage
+            {
+                From = new MailAddress(_settings.FromEmail, _settings.FromName),
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = true
+            };
+            message.To.Add(email);
+
+            await client.SendMailAsync(message, cancellationToken);
+            _logger.LogInformation("Password reset email sent to {Email}", email);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to send password reset email to {Email}", email);
+        }
+    }
 }

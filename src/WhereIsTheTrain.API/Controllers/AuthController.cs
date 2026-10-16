@@ -44,6 +44,13 @@ public class AuthController : ControllerBase
         return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> RequestPasswordReset([FromBody] ResetPasswordRequestDto dto)
+    {
+        var result = await _mediator.Send(new RequestPasswordResetCommand(dto.Email));
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
+    }
+
     [Authorize]
     [HttpGet("me")]
     public async Task<IActionResult> GetCurrentUser()

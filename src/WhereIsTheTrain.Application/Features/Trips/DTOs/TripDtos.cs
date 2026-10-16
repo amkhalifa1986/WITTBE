@@ -1,4 +1,5 @@
 using WhereIsTheTrain.Domain.Enums;
+using WhereIsTheTrain.Application.Features.Points;
 
 namespace WhereIsTheTrain.Application.Features.Trips.DTOs;
 
@@ -31,6 +32,7 @@ public class TripDto
     public string? TrainTypeNameAr { get; set; }
     public string? TrainTypeNameEn { get; set; }
     public string? MarkerPngUrl { get; set; }
+    public string? ImageUrl { get; set; }
     /// <summary>Scheduled departure of the first route stop — used for sorting today's trips by start time.</summary>
     public TimeSpan? ScheduledDeparture { get; set; }
 }
@@ -40,6 +42,7 @@ public class TripDetailDto : TripDto
     public List<RouteStopDto> RouteStops { get; set; } = new();
     public List<LiveUpdateDto> RecentUpdates { get; set; } = new();
     public List<double[]>? RoutePath { get; set; }
+    public List<LeaderboardEntryDto> TopContributors { get; set; } = new();
 }
 
 public class RouteStopDto
@@ -73,6 +76,7 @@ public class LiveUpdateDto
     public int ThanksCount { get; set; }
     public bool IsThankedByCurrentUser { get; set; }
     public bool IsRemovalRequested { get; set; }
+    public bool IsApproved { get; set; }
 }
 
 public class FollowedTripDto : TripDto
@@ -100,6 +104,7 @@ public class TrainDto
     public string? TrainTypeNameAr { get; set; }
     public string? TrainTypeNameEn { get; set; }
     public string? MarkerPngUrl { get; set; }
+    public string? ImageUrl { get; set; }
 }
 
 public class DashboardDto
@@ -111,6 +116,7 @@ public class DashboardDto
     public int RunningTripsToday { get; set; }
     public int TotalLiveUpdatesToday { get; set; }
     public List<LiveUpdateDto> RecentUpdates { get; set; } = new();
+    public List<LeaderboardEntryDto> MonthlyLeaderboard { get; set; } = new();
 }
 
 public class CreateLiveUpdateDto

@@ -172,3 +172,61 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
         });
     }
 }
+
+public class RequestPasswordResetCommandHandler : IRequestHandler<RequestPasswordResetCommand, Result<string>>
+{
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IEmailService _emailService;
+
+    public RequestPasswordResetCommandHandler(IUnitOfWork unitOfWork, IEmailService emailService)
+    {
+        _unitOfWork = unitOfWork;
+        _emailService = emailService;
+    }
+
+    public async Task<Result<string>> Handle(RequestPasswordResetCommand request, CancellationToken cancellationToken)
+    {
+        var user = await _unitOfWork.Users.GetByEmailAsync(request.Email.ToLowerInvariant(), cancellationToken);
+        if (user == null)
+            return Result<string>.Failure("No user found with this email address.", 404);
+
+        // Generate 8 character complex password
+        var newPassword = GenerateComplexPassword(8);
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
+
+        // Clear refresh tokens to force close all sessions
+        user.RefreshToken = null;
+        user.RefreshTokenExpiryTime = null;
+
+        await _unitOfWork.Users.UpdateAsync(user, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        // Send email with new password
+        await _emailService.SendPasswordResetEmailAsync(user.Email, user.DisplayName, newPassword, cancellationToken);
+
+        return Result<string>.Success("Password reset successfully. A new password has been sent to your email.");
+    }
+
+    private string GenerateComplexPassword(int length = 8)
+    {
+        const string upper = "ABCDEFGHJKLMNPQRSTUVWXYZ"; // skipped O, I
+        const string lower = "abcdefghijkmnopqrstuvwxyz"; // skipped l
+        const string digits = "23456789";
+        const string symbols = "!@#$%&*+?";
+        
+        var rand = new Random();
+        var chars = new char[length];
+        chars[0] = upper[rand.Next(upper.Length)];
+        chars[1] = lower[rand.Next(lower.Length)];
+        chars[2] = digits[rand.Next(digits.Length)];
+        chars[3] = symbols[rand.Next(symbols.Length)];
+        
+        string all = upper + lower + digits + symbols;
+        for (int i = 4; i < length; i++)
+        {
+            chars[i] = all[rand.Next(all.Length)];
+        }
+        
+        return new string(chars.OrderBy(c => rand.Next()).ToArray());
+    }
+}

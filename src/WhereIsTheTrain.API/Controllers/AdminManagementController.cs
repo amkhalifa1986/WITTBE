@@ -89,4 +89,36 @@ public class AdminManagementController : ControllerBase
         var result = await _mediator.Send(new DeleteAdminUserCommand(id));
         return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
+
+    // ==========================================
+    // 🔔 NOTIFICATIONS ENDPOINTS
+    // ==========================================
+
+    [HttpGet("notifications")]
+    public async Task<IActionResult> GetNotifications()
+    {
+        var adminIdClaim = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (adminIdClaim == null || !Guid.TryParse(adminIdClaim, out var adminId))
+            return Unauthorized();
+            
+        var result = await _mediator.Send(new WhereIsTheTrain.Application.Features.Admin.GetAdminNotificationsQuery(adminId));
+        return Ok(result);
+    }
+
+    public class MarkAdminNotificationReadRequest
+    {
+        public Guid? NotificationId { get; set; }
+        public bool MarkAll { get; set; } = false;
+    }
+
+    [HttpPut("notifications/read")]
+    public async Task<IActionResult> MarkNotificationsRead([FromBody] MarkAdminNotificationReadRequest dto)
+    {
+        var adminIdClaim = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (adminIdClaim == null || !Guid.TryParse(adminIdClaim, out var adminId))
+            return Unauthorized();
+
+        var result = await _mediator.Send(new WhereIsTheTrain.Application.Features.Admin.MarkAdminNotificationReadCommand(adminId, dto.NotificationId, dto.MarkAll));
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
+    }
 }

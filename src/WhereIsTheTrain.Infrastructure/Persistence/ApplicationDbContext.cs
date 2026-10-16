@@ -42,6 +42,13 @@ public class ApplicationDbContext : DbContext
     public DbSet<AdminUser> AdminUsers => Set<AdminUser>();
     public DbSet<AdminRole> AdminRoles => Set<AdminRole>();
     public DbSet<AdminRolePrivilege> AdminRolePrivileges => Set<AdminRolePrivilege>();
+    public DbSet<AdminNotification> AdminNotifications => Set<AdminNotification>();
+
+    public DbSet<PointAction> PointActions => Set<PointAction>();
+    public DbSet<UserPointLog> UserPointLogs => Set<UserPointLog>();
+
+    public DbSet<SudokuSession> SudokuSessions => Set<SudokuSession>();
+    public DbSet<SudokuScore> SudokuScores => Set<SudokuScore>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

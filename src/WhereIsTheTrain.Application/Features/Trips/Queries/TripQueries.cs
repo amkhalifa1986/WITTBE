@@ -1,4 +1,5 @@
 using MediatR;
+using WhereIsTheTrain.Application.Features.Points;
 using Microsoft.Extensions.Caching.Memory;
 using WhereIsTheTrain.Application.Common;
 using WhereIsTheTrain.Application.Features.Trips.DTOs;
@@ -69,6 +70,7 @@ public class GetTodayTripsQueryHandler : IRequestHandler<GetTodayTripsQuery, Res
                 TrainTypeNameAr = t.Train.TrainType?.NameAr,
                 TrainTypeNameEn = t.Train.TrainType?.NameEn,
                 MarkerPngUrl = t.Train.TrainType?.MarkerPngUrl,
+                ImageUrl = t.Train.TrainType?.ImageUrl,
                 // First stop's scheduled departure = trip start time
                 ScheduledDeparture = t.Train.RouteStops?
                     .OrderBy(rs => rs.ScheduledDeparture)
@@ -143,6 +145,7 @@ public class GetTripDetailsQueryHandler : IRequestHandler<GetTripDetailsQuery, R
             TrainTypeNameAr = trip.Train.TrainType?.NameAr,
             TrainTypeNameEn = trip.Train.TrainType?.NameEn,
             MarkerPngUrl = trip.Train.TrainType?.MarkerPngUrl,
+            ImageUrl = trip.Train.TrainType?.ImageUrl,
             RouteStops = trip.Train.RouteStops?.OrderBy(rs => rs.StopOrder).Select(rs => new RouteStopDto
             {
                 StopId = rs.Stop.Id,
@@ -157,25 +160,52 @@ public class GetTripDetailsQueryHandler : IRequestHandler<GetTripDetailsQuery, R
                 Latitude = rs.Stop.Latitude,
                 Longitude = rs.Stop.Longitude
             }).ToList() ?? new(),
-            RecentUpdates = trip.LiveUpdates?.Where(u => u.IsApproved).Select(u => new LiveUpdateDto
-            {
-                Id = u.Id,
-                TripId = u.TripId,
-                AuthorId = u.AuthorId,
-                AuthorName = u.Author != null ? u.Author.DisplayName : "System",
-                AuthorAvatarUrl = u.Author?.AvatarUrl,
-                Content = u.Content,
-                StatusTag = u.StatusTag?.ToString(),
-                CrowdState = u.CrowdState?.ToString(),
-                Latitude = u.Latitude,
-                Longitude = u.Longitude,
-                CreatedAt = u.CreatedAt,
-                ThanksCount = u.ThanksList?.Count ?? 0,
-                IsThankedByCurrentUser = request.CurrentUserId.HasValue && u.ThanksList != null && u.ThanksList.Any(t => t.UserId == request.CurrentUserId.Value),
-                IsRemovalRequested = u.IsRemovalRequested
-            }).ToList() ?? new(),
+            RecentUpdates = trip.LiveUpdates?.Where(u => u.IsApproved)
+                .OrderByDescending(u => u.CreatedAt)
+                .Select(u => new LiveUpdateDto
+                {
+                    Id = u.Id,
+                    TripId = u.TripId,
+                    AuthorId = u.AuthorId,
+                    AuthorName = u.Author != null ? u.Author.DisplayName : "System",
+                    AuthorAvatarUrl = u.Author?.AvatarUrl,
+                    Content = u.Content,
+                    StatusTag = u.StatusTag?.ToString(),
+                    CrowdState = u.CrowdState?.ToString(),
+                    Latitude = u.Latitude,
+                    Longitude = u.Longitude,
+                    CreatedAt = u.CreatedAt,
+                    ThanksCount = u.ThanksList?.Count ?? 0,
+                    IsThankedByCurrentUser = request.CurrentUserId.HasValue && u.ThanksList != null && u.ThanksList.Any(t => t.UserId == request.CurrentUserId.Value),
+                    IsRemovalRequested = u.IsRemovalRequested,
+                    IsApproved = u.IsApproved
+                }).ToList() ?? new(),
             RoutePath = routePath.Coordinates.Select(c => new double[] { c.Y, c.X }).ToList()
         };
+
+        // Populate top 3 contributors for this trip
+        var tripLogs = (await _unitOfWork.Repository<UserPointLog>().FindAsync(l => l.TripId == dto.Id, ct)).ToList();
+        var topContributors = tripLogs.GroupBy(l => l.UserId)
+            .Select(g => new { UserId = g.Key, Total = g.Sum(l => l.PointsAwarded) })
+            .OrderByDescending(x => x.Total)
+            .Take(3)
+            .ToList();
+        int contribRank = 1;
+        foreach (var entry in topContributors)
+        {
+            var contribUser = await _unitOfWork.Users.GetByIdAsync(entry.UserId, ct);
+            if (contribUser != null)
+            {
+                dto.TopContributors.Add(new LeaderboardEntryDto 
+                { 
+                    UserId = entry.UserId, 
+                    DisplayName = contribUser.DisplayName, 
+                    AvatarUrl = contribUser.AvatarUrl, 
+                    TotalPoints = entry.Total, 
+                    Rank = contribRank++ 
+                });
+            }
+        }
 
         return Result<TripDetailDto>.Success(dto);
     }
@@ -297,7 +327,8 @@ public class SearchTrainByNumberQueryHandler : IRequestHandler<SearchTrainByNumb
                 TrainTypeId = t.TrainTypeId,
                 TrainTypeNameAr = typeInfo?.NameAr,
                 TrainTypeNameEn = typeInfo?.NameEn,
-                MarkerPngUrl = typeInfo?.MarkerPngUrl
+                MarkerPngUrl = typeInfo?.MarkerPngUrl,
+                ImageUrl = typeInfo?.ImageUrl
             };
         }).ToList();
 
@@ -375,7 +406,8 @@ public class SearchTrainByStopsQueryHandler : IRequestHandler<SearchTrainByStops
                 TrainTypeId = t.TrainTypeId,
                 TrainTypeNameAr = typeInfo?.NameAr,
                 TrainTypeNameEn = typeInfo?.NameEn,
-                MarkerPngUrl = typeInfo?.MarkerPngUrl
+                MarkerPngUrl = typeInfo?.MarkerPngUrl,
+                ImageUrl = typeInfo?.ImageUrl
             };
         }).ToList();
 
@@ -454,7 +486,8 @@ public class GetTrainDetailsQueryHandler : IRequestHandler<GetTrainDetailsQuery,
             TrainTypeId = train.TrainTypeId,
             TrainTypeNameAr = trainType?.NameAr,
             TrainTypeNameEn = trainType?.NameEn,
-            MarkerPngUrl = trainType?.MarkerPngUrl
+            MarkerPngUrl = trainType?.MarkerPngUrl,
+            ImageUrl = trainType?.ImageUrl
         };
 
         return Result<TrainDto>.Success(dto);
@@ -473,11 +506,15 @@ public class GetDashboardStatsQueryHandler : IRequestHandler<GetDashboardStatsQu
     public async Task<Result<DashboardDto>> Handle(GetDashboardStatsQuery request, CancellationToken ct)
     {
         var today = WhereIsTheTrain.Domain.Common.DateHelper.GetEgyptToday();
+        var yesterday = today.AddDays(-1);
         var totalUsers = await _unitOfWork.Users.CountAsync(cancellationToken: ct);
         var totalTrains = await _unitOfWork.Trains.CountAsync(t => t.IsActive, ct);
-        var activeTripsToday = await _unitOfWork.Trips.CountAsync(t => t.TripDate == today, ct);
-        var pendingTripsToday = await _unitOfWork.Trips.CountAsync(t => t.TripDate == today && t.StatusId == TripStatuses.Scheduled, ct);
-        var runningTripsToday = await _unitOfWork.Trips.CountAsync(t => t.TripDate == today && (t.StatusId == TripStatuses.Departed || t.StatusId == TripStatuses.InTransit || t.StatusId == TripStatuses.Delayed), ct);
+        var activeTripsToday = await _unitOfWork.Trips.CountAsync(t => t.TripDate == today || 
+            (t.TripDate == yesterday && t.StatusId != TripStatuses.Arrived && t.StatusId != TripStatuses.Cancelled), ct);
+        var pendingTripsToday = await _unitOfWork.Trips.CountAsync(t => (t.TripDate == today && t.StatusId == TripStatuses.Scheduled) || 
+            (t.TripDate == yesterday && t.StatusId == TripStatuses.Scheduled), ct);
+        var runningTripsToday = await _unitOfWork.Trips.CountAsync(t => (t.TripDate == today && (t.StatusId == TripStatuses.Departed || t.StatusId == TripStatuses.InTransit || t.StatusId == TripStatuses.Delayed)) || 
+            (t.TripDate == yesterday && (t.StatusId == TripStatuses.Departed || t.StatusId == TripStatuses.InTransit || t.StatusId == TripStatuses.Delayed)), ct);
         var todayStart = DateTime.UtcNow.Date;
         var totalUpdatesToday = await _unitOfWork.Repository<Domain.Entities.TripLiveUpdate>()
             .CountAsync(u => u.CreatedAt >= todayStart && u.IsApproved, ct);
@@ -517,9 +554,38 @@ public class GetDashboardStatsQueryHandler : IRequestHandler<GetDashboardStatsQu
                 CreatedAt = u.CreatedAt,
                 ThanksCount = u.ThanksList?.Count ?? 0,
                 IsThankedByCurrentUser = false,
-                IsRemovalRequested = u.IsRemovalRequested
+                IsRemovalRequested = u.IsRemovalRequested,
+                IsApproved = u.IsApproved
             };
         }).ToList();
+
+        // Top 3 monthly leaderboard
+        var monthStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
+        var monthEnd = monthStart.AddMonths(1);
+        var monthLogs = (await _unitOfWork.Repository<UserPointLog>().FindAsync(
+            l => l.CreatedAt >= monthStart && l.CreatedAt < monthEnd, ct)).ToList();
+        var monthGrouped = monthLogs.GroupBy(l => l.UserId)
+            .Select(g => new { UserId = g.Key, Total = g.Sum(l => l.PointsAwarded) })
+            .OrderByDescending(x => x.Total)
+            .Take(3)
+            .ToList();
+        var monthlyLeaderboard = new List<LeaderboardEntryDto>();
+        int mlRank = 1;
+        foreach (var entry in monthGrouped)
+        {
+            var mlUser = await _unitOfWork.Users.GetByIdAsync(entry.UserId, ct);
+            if (mlUser != null)
+            {
+                monthlyLeaderboard.Add(new LeaderboardEntryDto 
+                { 
+                    UserId = entry.UserId, 
+                    DisplayName = mlUser.DisplayName, 
+                    AvatarUrl = mlUser.AvatarUrl, 
+                    TotalPoints = entry.Total, 
+                    Rank = mlRank++ 
+                });
+            }
+        }
 
         return Result<DashboardDto>.Success(new DashboardDto
         {
@@ -529,7 +595,8 @@ public class GetDashboardStatsQueryHandler : IRequestHandler<GetDashboardStatsQu
             PendingTripsToday = pendingTripsToday,
             RunningTripsToday = runningTripsToday,
             TotalLiveUpdatesToday = totalUpdatesToday,
-            RecentUpdates = recentUpdates
+            RecentUpdates = recentUpdates,
+            MonthlyLeaderboard = monthlyLeaderboard
         });
     }
 }
@@ -571,7 +638,8 @@ public class GetTrainTripsQueryHandler : IRequestHandler<GetTrainTripsQuery, Res
             TrainTypeId = t.Train.TrainTypeId,
             TrainTypeNameAr = t.Train.TrainType?.NameAr,
             TrainTypeNameEn = t.Train.TrainType?.NameEn,
-            MarkerPngUrl = t.Train.TrainType?.MarkerPngUrl
+            MarkerPngUrl = t.Train.TrainType?.MarkerPngUrl,
+            ImageUrl = t.Train.TrainType?.ImageUrl
         }).ToList();
 
         return Result<List<TripDto>>.Success(dtos);

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "TvkQdIH1AIB4baBhsJKGgYRAl78cEu/cEoSddpVQQFKksEF5/PT1N7wZ6RhXB2xaNW+lC99Pr0CjsC/yWVhJ7Q==",
+  "dgSpecHash": "PFv+UIWuE/4iDjXfWnSyhGtNr79vIrCxdfY+6KCBpPHGl6VQS9jOfcWgVUntUMU/uEDzwN8S32Ww8rG/VCGcZQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\progk\\.gemini\\antigravity\\scratch\\where-is-the-train\\backend\\src\\WhereIsTheTrain.API\\WhereIsTheTrain.API.csproj",
   "expectedPackageFiles": [
@@ -21,6 +21,7 @@
     "C:\\Users\\progk\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\8.0.13\\microsoft.entityframeworkcore.abstractions.8.0.13.nupkg.sha512",
     "C:\\Users\\progk\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\8.0.13\\microsoft.entityframeworkcore.analyzers.8.0.13.nupkg.sha512",
     "C:\\Users\\progk\\.nuget\\packages\\microsoft.entityframeworkcore.design\\8.0.12\\microsoft.entityframeworkcore.design.8.0.12.nupkg.sha512",
+    "C:\\Users\\progk\\.nuget\\packages\\microsoft.entityframeworkcore.inmemory\\8.0.11\\microsoft.entityframeworkcore.inmemory.8.0.11.nupkg.sha512",
     "C:\\Users\\progk\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\8.0.13\\microsoft.entityframeworkcore.relational.8.0.13.nupkg.sha512",
     "C:\\Users\\progk\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "C:\\Users\\progk\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\10.0.9\\microsoft.extensions.caching.abstractions.10.0.9.nupkg.sha512",

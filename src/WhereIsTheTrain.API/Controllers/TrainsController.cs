@@ -17,6 +17,7 @@ public class TrainsController : ControllerBase
     public TrainsController(IMediator mediator) => _mediator = mediator;
 
     [HttpGet("search")]
+    [AllowAnonymous]
     public async Task<IActionResult> Search([FromQuery] string? number, [FromQuery] string? from, [FromQuery] string? to)
     {
         if (!string.IsNullOrWhiteSpace(number))
@@ -31,10 +32,35 @@ public class TrainsController : ControllerBase
             return Ok(result);
         }
 
-        return BadRequest(new { IsSuccess = false, Error = "Provide 'number' or both 'from' and 'to' query parameters." });
+        // If no filter parameters (or partial), return all trains in the database
+        var allTrainsResult = await _mediator.Send(new WhereIsTheTrain.Application.Features.Admin.GetAllTrainsQuery());
+        if (allTrainsResult.IsSuccess && allTrainsResult.Data != null)
+        {
+            var trains = allTrainsResult.Data;
+            if (!string.IsNullOrWhiteSpace(from))
+            {
+                trains = trains.Where(t => t.RouteStops.Any(rs => 
+                    (rs.StopNameAr != null && rs.StopNameAr.Contains(from, StringComparison.OrdinalIgnoreCase)) ||
+                    (rs.StopNameEn != null && rs.StopNameEn.Contains(from, StringComparison.OrdinalIgnoreCase)) ||
+                    (rs.StopCode != null && rs.StopCode.Contains(from, StringComparison.OrdinalIgnoreCase))
+                )).ToList();
+            }
+            if (!string.IsNullOrWhiteSpace(to))
+            {
+                trains = trains.Where(t => t.RouteStops.Any(rs => 
+                    (rs.StopNameAr != null && rs.StopNameAr.Contains(to, StringComparison.OrdinalIgnoreCase)) ||
+                    (rs.StopNameEn != null && rs.StopNameEn.Contains(to, StringComparison.OrdinalIgnoreCase)) ||
+                    (rs.StopCode != null && rs.StopCode.Contains(to, StringComparison.OrdinalIgnoreCase))
+                )).ToList();
+            }
+            return Ok(WhereIsTheTrain.Application.Common.Result<List<WhereIsTheTrain.Application.Features.Trips.DTOs.TrainDto>>.Success(trains));
+        }
+
+        return Ok(allTrainsResult);
     }
 
     [HttpGet("{id:guid}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetById(Guid id)
     {
         var result = await _mediator.Send(new GetTrainDetailsQuery(id));
@@ -42,6 +68,7 @@ public class TrainsController : ControllerBase
     }
 
     [HttpGet("stops")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetAllStops()
     {
         var result = await _mediator.Send(new WhereIsTheTrain.Application.Features.Admin.GetAllStopsQuery());

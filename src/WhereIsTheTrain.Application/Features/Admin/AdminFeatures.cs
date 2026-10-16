@@ -1,4 +1,5 @@
 using MediatR;
+using WhereIsTheTrain.Application.Features.Points;
 using WhereIsTheTrain.Application.Common;
 using WhereIsTheTrain.Application.Features.Trips.DTOs;
 using WhereIsTheTrain.Domain.Entities;
@@ -110,7 +111,8 @@ public class StopsAdminHandlers :
             Longitude = request.Longitude,
             CityId = request.CityId,
             DescriptionAr = request.DescriptionAr,
-            DescriptionEn = request.DescriptionEn
+            DescriptionEn = request.DescriptionEn,
+            Location = new NetTopologySuite.Geometries.Point(request.Longitude, request.Latitude) { SRID = 4326 }
         };
 
         if (request.RailwayPathIds != null && request.RailwayPathIds.Any())
@@ -156,27 +158,24 @@ public class StopsAdminHandlers :
         stop.CityId = request.CityId;
         stop.DescriptionAr = request.DescriptionAr;
         stop.DescriptionEn = request.DescriptionEn;
-
-        // Clear existing railway paths and add the new ones
-        stop.RailwayPaths.Clear();
-        if (request.RailwayPathIds != null && request.RailwayPathIds.Any())
-        {
-            var paths = await _unitOfWork.RailwayPaths.FindAsync(rp => request.RailwayPathIds.Contains(rp.Id), ct);
-            foreach (var path in paths)
-            {
-                stop.RailwayPaths.Add(path);
-            }
-        }
+        stop.Location = new NetTopologySuite.Geometries.Point(request.Longitude, request.Latitude) { SRID = 4326 };
 
         await _unitOfWork.Repository<Stop>().UpdateAsync(stop, ct);
         await _unitOfWork.SaveChangesAsync(ct);
 
-        var dto = MapToDto(stop);
+        // Directly manage the RailwayPathStops join table via dedicated repository method
+        // (EF Core's shadow join table change tracking is unreliable across separate queries)
+        await _unitOfWork.Stops.SetRailwayPathsAsync(request.Id, request.RailwayPathIds ?? new(), ct);
+
+        // Re-fetch the stop to build the DTO with the actual persisted state
+        var updatedStop = await _unitOfWork.Stops.GetWithRailwayPathsByIdAsync(request.Id, ct);
+        var dto = MapToDto(updatedStop!);
         dto.CityAr = city.NameAr;
         dto.CityEn = city.NameEn;
 
         return Result<StopDto>.Success(dto);
     }
+
 
     public async Task<Result<bool>> Handle(DeleteStopCommand request, CancellationToken ct)
     {
@@ -522,13 +521,15 @@ public class TrainsAdminHandlers :
             if (!stopExists)
                 return Result<TrainDto>.Failure($"Stop with ID '{input.StopId}' does not exist.", 400);
 
-            train.RouteStops.Add(new TrainRouteStop
+            var routeStop = new TrainRouteStop
             {
+                TrainId = train.Id,
                 StopId = input.StopId,
                 StopOrder = input.StopOrder,
                 ScheduledArrival = input.ScheduledArrival,
                 ScheduledDeparture = input.ScheduledDeparture
-            });
+            };
+            await _unitOfWork.Repository<TrainRouteStop>().AddAsync(routeStop, ct);
         }
 
         await _unitOfWork.Trains.UpdateAsync(train, ct);
@@ -713,12 +714,18 @@ public record DeleteTripCommand(Guid Id) : IRequest<Result<bool>>;
 
 public record GetAllTripsQuery() : IRequest<Result<List<TripDto>>>;
 
+public record GenerateTodayTripsCommand() : IRequest<Result<bool>>;
+
+public record GetMissingTripsCountQuery() : IRequest<Result<int>>;
+
 // Handlers for Trips
 public class TripsAdminHandlers :
     IRequestHandler<CreateTripCommand, Result<TripDto>>,
     IRequestHandler<UpdateTripStatusCommand, Result<TripDto>>,
     IRequestHandler<DeleteTripCommand, Result<bool>>,
-    IRequestHandler<GetAllTripsQuery, Result<List<TripDto>>>
+    IRequestHandler<GetAllTripsQuery, Result<List<TripDto>>>,
+    IRequestHandler<GenerateTodayTripsCommand, Result<bool>>,
+    IRequestHandler<GetMissingTripsCountQuery, Result<int>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly TripNotificationHelper _notificationHelper;
@@ -950,6 +957,69 @@ public class TripsAdminHandlers :
 
         return Result<List<TripDto>>.Success(dtos.OrderByDescending(t => t.TripDate).ThenBy(t => t.TrainNumber).ToList());
     }
+
+    public async Task<Result<bool>> Handle(GenerateTodayTripsCommand request, CancellationToken ct)
+    {
+        var date = WhereIsTheTrain.Domain.Common.DateHelper.GetEgyptToday();
+        var activeTrains = await _unitOfWork.Trains.FindAsync(t => t.IsActive, ct);
+        var dayOfWeek = (int)date.DayOfWeek;
+
+        foreach (var train in activeTrains)
+        {
+            var existingTrip = await _unitOfWork.Trips.GetByTrainAndDateAsync(train.Id, date, ct);
+            if (existingTrip == null)
+            {
+                var trip = new Trip
+                {
+                    Id = Guid.NewGuid(),
+                    TrainId = train.Id,
+                    TripDate = date,
+                    StatusId = TripStatuses.Scheduled
+                };
+                
+                await _unitOfWork.Trips.AddAsync(trip, ct);
+
+                // Fetch follow plans for this train on this day of week
+                var followPlans = await _unitOfWork.Repository<TrainFollowPlan>()
+                    .FindAsync(p => p.TrainId == train.Id && p.DayOfWeek == dayOfWeek, ct);
+
+                foreach (var plan in followPlans)
+                {
+                    var follower = new TripFollower
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = plan.UserId,
+                        TripId = trip.Id,
+                        PersonalStatus = plan.RoleType == TrainFollowRole.Passenger ? PersonalTripStatus.Started : PersonalTripStatus.Following,
+                        SourcePlanId = plan.Id
+                    };
+                    
+                    await _unitOfWork.Repository<TripFollower>().AddAsync(follower, ct);
+                }
+            }
+        }
+
+        await _unitOfWork.SaveChangesAsync(ct);
+        return Result<bool>.Success(true);
+    }
+
+    public async Task<Result<int>> Handle(GetMissingTripsCountQuery request, CancellationToken ct)
+    {
+        var date = WhereIsTheTrain.Domain.Common.DateHelper.GetEgyptToday();
+        var activeTrains = await _unitOfWork.Trains.FindAsync(t => t.IsActive, ct);
+        int missingCount = 0;
+
+        foreach (var train in activeTrains)
+        {
+            var existingTrip = await _unitOfWork.Trips.GetByTrainAndDateAsync(train.Id, date, ct);
+            if (existingTrip == null)
+            {
+                missingCount++;
+            }
+        }
+
+        return Result<int>.Success(missingCount);
+    }
 }
 
 // ==========================================
@@ -996,8 +1066,13 @@ public class SuggestionsAdminHandlers :
     IRequestHandler<ReviewStopSuggestionCommand, Result<StopSuggestionDto>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMediator _mediator;
 
-    public SuggestionsAdminHandlers(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+    public SuggestionsAdminHandlers(IUnitOfWork unitOfWork, IMediator mediator)
+    {
+        _unitOfWork = unitOfWork;
+        _mediator = mediator;
+    }
 
     public async Task<Result<List<TrainSuggestionDto>>> Handle(GetPendingTrainSuggestionsQuery request, CancellationToken ct)
     {
@@ -1144,6 +1219,11 @@ public class SuggestionsAdminHandlers :
         await _unitOfWork.Repository<TrainSuggestion>().UpdateAsync(suggestion, ct);
         await _unitOfWork.SaveChangesAsync(ct);
 
+        if (request.Status == SuggestionStatus.Approved)
+        {
+            await _mediator.Send(new AwardPointsCommand(suggestion.SuggestedById, "AcceptedTrainSuggestion", null), ct);
+        }
+
         var user = await _unitOfWork.Users.GetByIdAsync(suggestion.SuggestedById, ct);
         return Result<TrainSuggestionDto>.Success(new TrainSuggestionDto
         {
@@ -1255,6 +1335,11 @@ public class SuggestionsAdminHandlers :
 
         await _unitOfWork.Repository<StopSuggestion>().UpdateAsync(suggestion, ct);
         await _unitOfWork.SaveChangesAsync(ct);
+
+        if (request.Status == SuggestionStatus.Approved)
+        {
+            await _mediator.Send(new AwardPointsCommand(suggestion.SuggestedById, "AcceptedStopSuggestion", null), ct);
+        }
 
         var user = await _unitOfWork.Users.GetByIdAsync(suggestion.SuggestedById, ct);
         var govObj = suggestion.NewCityGovernorateId.HasValue 
@@ -1647,3 +1732,81 @@ public class LiveUpdateModerationHandlers :
     }
 }
 
+// ==========================================
+// 🔔 ADMIN NOTIFICATIONS
+// ==========================================
+
+public class AdminNotificationDto
+{
+    public Guid Id { get; set; }
+    public Guid AdminUserId { get; set; }
+    public string Message { get; set; } = string.Empty;
+    public string MessageAr { get; set; } = string.Empty;
+    public string? Link { get; set; }
+    public bool IsRead { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
+
+public record GetAdminNotificationsQuery(Guid AdminUserId) : IRequest<Result<List<AdminNotificationDto>>>;
+
+public record MarkAdminNotificationReadCommand(Guid AdminUserId, Guid? NotificationId, bool MarkAll = false) : IRequest<Result<bool>>;
+
+public class AdminNotificationHandlers :
+    IRequestHandler<GetAdminNotificationsQuery, Result<List<AdminNotificationDto>>>,
+    IRequestHandler<MarkAdminNotificationReadCommand, Result<bool>>
+{
+    private readonly IUnitOfWork _unitOfWork;
+
+    public AdminNotificationHandlers(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+
+    public async Task<Result<List<AdminNotificationDto>>> Handle(GetAdminNotificationsQuery request, CancellationToken ct)
+    {
+        var notifications = await _unitOfWork.Repository<AdminNotification>()
+            .FindAsync(n => n.AdminUserId == request.AdminUserId, ct);
+
+        var dtos = notifications
+            .OrderByDescending(n => n.CreatedAt)
+            .Take(50)
+            .Select(n => new AdminNotificationDto
+            {
+                Id = n.Id,
+                AdminUserId = n.AdminUserId,
+                Message = n.Message,
+                MessageAr = n.MessageAr,
+                Link = n.Link,
+                IsRead = n.IsRead,
+                CreatedAt = n.CreatedAt
+            }).ToList();
+
+        return Result<List<AdminNotificationDto>>.Success(dtos);
+    }
+
+    public async Task<Result<bool>> Handle(MarkAdminNotificationReadCommand request, CancellationToken ct)
+    {
+        if (request.MarkAll)
+        {
+            var unread = await _unitOfWork.Repository<AdminNotification>()
+                .FindAsync(n => n.AdminUserId == request.AdminUserId && !n.IsRead, ct);
+            foreach (var n in unread)
+            {
+                n.IsRead = true;
+                await _unitOfWork.Repository<AdminNotification>().UpdateAsync(n, ct);
+            }
+        }
+        else
+        {
+            if (!request.NotificationId.HasValue)
+                return Result<bool>.Failure("Notification ID is required.", 400);
+
+            var n = await _unitOfWork.Repository<AdminNotification>().GetByIdAsync(request.NotificationId.Value, ct);
+            if (n == null || n.AdminUserId != request.AdminUserId)
+                return Result<bool>.Failure("Notification not found.", 404);
+
+            n.IsRead = true;
+            await _unitOfWork.Repository<AdminNotification>().UpdateAsync(n, ct);
+        }
+
+        await _unitOfWork.SaveChangesAsync(ct);
+        return Result<bool>.Success(true);
+    }
+}

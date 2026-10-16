@@ -1,6 +1,8 @@
+using System.IO;
 using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WhereIsTheTrain.Application.Features.LostFound;
 using WhereIsTheTrain.Domain.Enums;
@@ -71,6 +73,33 @@ public class LostFoundController : ControllerBase
     {
         var result = await _mediator.Send(new DeleteLostFoundCommentCommand(id, GetUserId()));
         return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
+    }
+
+    [HttpPost("upload-image")]
+    public async Task<IActionResult> UploadImage(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest("No file uploaded.");
+
+        var extension = Path.GetExtension(file.FileName).ToLower();
+        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+        if (!allowedExtensions.Contains(extension))
+            return BadRequest("Only image files are allowed.");
+
+        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "lostfound");
+        if (!Directory.Exists(uploadsFolder))
+            Directory.CreateDirectory(uploadsFolder);
+
+        var fileName = $"{Guid.NewGuid()}{extension}";
+        var filePath = Path.Combine(uploadsFolder, fileName);
+
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await file.CopyToAsync(stream);
+        }
+
+        var fileUrl = $"/uploads/lostfound/{fileName}";
+        return Ok(new { isSuccess = true, data = fileUrl });
     }
 }
 

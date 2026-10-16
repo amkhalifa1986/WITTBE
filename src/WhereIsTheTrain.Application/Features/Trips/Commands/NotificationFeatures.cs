@@ -1,4 +1,5 @@
 using MediatR;
+using WhereIsTheTrain.Application.Features.Points;
 using WhereIsTheTrain.Application.Common;
 using WhereIsTheTrain.Application.Features.Trips.DTOs;
 using WhereIsTheTrain.Application.Interfaces;
@@ -46,11 +47,13 @@ public class ToggleReportThanksCommandHandler : IRequestHandler<ToggleReportThan
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly INotificationHubService _hubService;
+    private readonly IMediator _mediator;
 
-    public ToggleReportThanksCommandHandler(IUnitOfWork unitOfWork, INotificationHubService hubService)
+    public ToggleReportThanksCommandHandler(IUnitOfWork unitOfWork, INotificationHubService hubService, IMediator mediator)
     {
         _unitOfWork = unitOfWork;
         _hubService = hubService;
+        _mediator = mediator;
     }
 
     public async Task<Result<ThanksResponseDto>> Handle(ToggleReportThanksCommand request, CancellationToken ct)
@@ -81,6 +84,15 @@ public class ToggleReportThanksCommandHandler : IRequestHandler<ToggleReportThan
         }
 
         await _unitOfWork.SaveChangesAsync(ct);
+
+        if (isThanked)
+        {
+            await _mediator.Send(new AwardPointsCommand(request.UserId, "ThankReport", update.TripId), ct);
+        }
+        else
+        {
+            await _mediator.Send(new RevokePointsCommand(request.UserId, "ThankReport", update.TripId), ct);
+        }
 
         // Calculate new count
         var totalThanksList = await _unitOfWork.Repository<TripLiveUpdateThanks>()

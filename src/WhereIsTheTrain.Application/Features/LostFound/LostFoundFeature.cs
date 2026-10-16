@@ -46,8 +46,8 @@ public class GetLostFoundListQueryHandler : IRequestHandler<GetLostFoundListQuer
     public async Task<Result<List<LostFoundPostDto>>> Handle(GetLostFoundListQuery request, CancellationToken ct)
     {
         var posts = request.TypeFilter.HasValue
-            ? await _unitOfWork.Repository<LostFoundPost>().FindAsync(p => p.Type == request.TypeFilter.Value && p.Status == LostFoundStatus.Published, ct)
-            : await _unitOfWork.Repository<LostFoundPost>().FindAsync(p => p.Status == LostFoundStatus.Published, ct);
+            ? await _unitOfWork.Repository<LostFoundPost>().FindAsync(p => p.Type == request.TypeFilter.Value && (p.Status == LostFoundStatus.Published || p.Status == LostFoundStatus.Closed), ct)
+            : await _unitOfWork.Repository<LostFoundPost>().FindAsync(p => (p.Status == LostFoundStatus.Published || p.Status == LostFoundStatus.Closed), ct);
 
         // We need author info, so we load users
         var authorIds = posts.Select(p => p.AuthorId).Distinct().ToList();
@@ -86,7 +86,7 @@ public class GetLostFoundDetailsQueryHandler : IRequestHandler<GetLostFoundDetai
     public async Task<Result<LostFoundPostDto>> Handle(GetLostFoundDetailsQuery request, CancellationToken ct)
     {
         var post = await _unitOfWork.Repository<LostFoundPost>().GetByIdAsync(request.PostId, ct);
-        if (post == null || post.Status != LostFoundStatus.Published)
+        if (post == null || (post.Status != LostFoundStatus.Published && post.Status != LostFoundStatus.Closed))
             return Result<LostFoundPostDto>.Failure("Post not found.", 404);
 
         var author = await _unitOfWork.Users.GetByIdAsync(post.AuthorId, ct);
@@ -136,8 +136,13 @@ public record CreateLostFoundPostCommand(
 public class CreateLostFoundPostCommandHandler : IRequestHandler<CreateLostFoundPostCommand, Result<LostFoundPostDto>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly AdminNotificationHelper _adminNotificationHelper;
 
-    public CreateLostFoundPostCommandHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+    public CreateLostFoundPostCommandHandler(IUnitOfWork unitOfWork, AdminNotificationHelper adminNotificationHelper)
+    {
+        _unitOfWork = unitOfWork;
+        _adminNotificationHelper = adminNotificationHelper;
+    }
 
     public async Task<Result<LostFoundPostDto>> Handle(CreateLostFoundPostCommand request, CancellationToken ct)
     {
@@ -160,6 +165,25 @@ public class CreateLostFoundPostCommandHandler : IRequestHandler<CreateLostFound
 
         await _unitOfWork.Repository<LostFoundPost>().AddAsync(post, ct);
         await _unitOfWork.SaveChangesAsync(ct);
+
+        if (post.Status == LostFoundStatus.New)
+        {
+            await _adminNotificationHelper.NotifyAdminsAsync(
+                "A new lost & found post requires approval.",
+                "يوجد إعلان مفقودات جديد بانتظار المراجعة.",
+                "/?tab=lost-found",
+                ct
+            );
+        }
+        else
+        {
+            await _adminNotificationHelper.NotifyAdminsAsync(
+                "A new lost & found post has been published.",
+                "تم نشر إعلان مفقودات جديد.",
+                "/?tab=lost-found",
+                ct
+            );
+        }
 
         return Result<LostFoundPostDto>.Success(new LostFoundPostDto
         {

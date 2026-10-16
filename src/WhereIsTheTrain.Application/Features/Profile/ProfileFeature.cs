@@ -98,3 +98,45 @@ public class GetTripHistoryQueryHandler : IRequestHandler<GetTripHistoryQuery, R
         return Result<List<TripDto>>.Success(dtos);
     }
 }
+
+public record ChangePasswordCommand(Guid UserId, string OldPassword, string NewPassword) : IRequest<Result<bool>>;
+
+public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand, Result<bool>>
+{
+    private readonly IUnitOfWork _unitOfWork;
+
+    public ChangePasswordCommandHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+
+    public async Task<Result<bool>> Handle(ChangePasswordCommand request, CancellationToken ct)
+    {
+        var user = await _unitOfWork.Users.GetByIdAsync(request.UserId, ct);
+        if (user == null)
+        {
+            var adminUser = await _unitOfWork.AdminUsers.GetByIdAsync(request.UserId, ct);
+            if (adminUser == null)
+                return Result<bool>.Failure("User not found.", 404);
+
+            if (!BCrypt.Net.BCrypt.Verify(request.OldPassword, adminUser.PasswordHash))
+                return Result<bool>.Failure("Incorrect old password.", 400);
+
+            adminUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+            await _unitOfWork.AdminUsers.UpdateAsync(adminUser, ct);
+            await _unitOfWork.SaveChangesAsync(ct);
+            return Result<bool>.Success(true);
+        }
+
+        if (!BCrypt.Net.BCrypt.Verify(request.OldPassword, user.PasswordHash))
+            return Result<bool>.Failure("Incorrect old password.", 400);
+
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+        
+        // Invalidate other active sessions
+        user.RefreshToken = null;
+        user.RefreshTokenExpiryTime = null;
+
+        await _unitOfWork.Users.UpdateAsync(user, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
+
+        return Result<bool>.Success(true);
+    }
+}
