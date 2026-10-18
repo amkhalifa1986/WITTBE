@@ -12,6 +12,7 @@ public class TripRepository : GenericRepository<Trip>, ITripRepository
     public async Task<IReadOnlyList<Trip>> GetTodayTripsAsync(CancellationToken cancellationToken = default)
     {
         var today = WhereIsTheTrain.Domain.Common.DateHelper.GetEgyptToday();
+        var yesterday = today.AddDays(-1);
         return await _dbSet
             .Include(t => t.Status)
             .Include(t => t.Train)
@@ -19,7 +20,7 @@ public class TripRepository : GenericRepository<Trip>, ITripRepository
             .Include(t => t.Train)
                 .ThenInclude(tr => tr.RouteStops.OrderBy(rs => rs.StopOrder))
                     .ThenInclude(rs => rs.Stop)
-            .Where(t => t.TripDate == today)
+            .Where(t => t.TripDate == today || t.TripDate == yesterday)
             .OrderBy(t => t.Train.RouteStops
                 .OrderBy(rs => rs.StopOrder)
                 .Select(rs => rs.ScheduledDeparture)

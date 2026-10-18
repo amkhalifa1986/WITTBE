@@ -40,3 +40,8 @@ public class UserProfileDto
     public string Role { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
 }
+
+public class ResetPasswordRequestDto
+{
+    public string Email { get; set; } = string.Empty;
+}

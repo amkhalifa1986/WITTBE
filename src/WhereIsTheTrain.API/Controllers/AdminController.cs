@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WhereIsTheTrain.Application.Features.Admin;
 using WhereIsTheTrain.Application.Features.LostFound;
+using WhereIsTheTrain.Application.Features.Points;
 using WhereIsTheTrain.Domain.Enums;
 using WhereIsTheTrain.API.Filters;
 
@@ -151,7 +152,7 @@ public class AdminController : ControllerBase
     [AdminPermission("Lookups", "Edit")]
     public async Task<IActionResult> UpdateTrainType(Guid id, [FromBody] UpdateTrainTypeRequest request)
     {
-        var result = await _mediator.Send(new UpdateTrainTypeCommand(id, request.NameAr, request.NameEn, request.MarkerPngUrl));
+        var result = await _mediator.Send(new UpdateTrainTypeCommand(id, request.NameAr, request.NameEn, request.MarkerPngUrl, request.ImageUrl));
         return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 
@@ -191,6 +192,34 @@ public class AdminController : ControllerBase
         return Ok(new { isSuccess = true, data = fileUrl });
     }
 
+    [HttpPost("train-types/upload-image")]
+    [AdminPermission("Lookups", "Edit")]
+    public async Task<IActionResult> UploadTrainTypeImage(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest("No file uploaded.");
+
+        var extension = Path.GetExtension(file.FileName).ToLower();
+        var allowedExtensions = new[] { ".png", ".jpg", ".jpeg", ".webp" };
+        if (!allowedExtensions.Contains(extension))
+            return BadRequest("Only image files (.png, .jpg, .jpeg, .webp) are allowed.");
+
+        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "traintypes");
+        if (!Directory.Exists(uploadsFolder))
+            Directory.CreateDirectory(uploadsFolder);
+
+        var fileName = $"{Guid.NewGuid()}{extension}";
+        var filePath = Path.Combine(uploadsFolder, fileName);
+
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await file.CopyToAsync(stream);
+        }
+
+        var fileUrl = $"/uploads/traintypes/{fileName}";
+        return Ok(new { isSuccess = true, data = fileUrl });
+    }
+
     // ==========================================
     // ⚙️ SYSTEM SETTINGS & MODERATION ENDPOINTS
     // ==========================================
@@ -208,6 +237,34 @@ public class AdminController : ControllerBase
     public async Task<IActionResult> UpdateSystemSettings([FromBody] UpdateSystemSettingsCommand command)
     {
         var result = await _mediator.Send(command);
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
+    }
+
+    // ==========================================
+    // 🏆 POINTS SYSTEM ENDPOINTS
+    // ==========================================
+
+    [HttpGet("points/actions")]
+    [AdminPermission("Settings", "View")]
+    public async Task<IActionResult> GetPointActions()
+    {
+        var result = await _mediator.Send(new GetPointActionsQuery());
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
+    }
+
+    [HttpPut("points/actions/{actionId:guid}")]
+    [AdminPermission("Settings", "Edit")]
+    public async Task<IActionResult> UpdatePointAction(Guid actionId, [FromBody] AdminUpdatePointActionRequest request)
+    {
+        var result = await _mediator.Send(new AdminUpdatePointActionCommand(actionId, request.Points));
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
+    }
+
+    [HttpGet("users/{userId:guid}/points")]
+    [AdminPermission("Settings", "View")]
+    public async Task<IActionResult> GetUserPoints(Guid userId, [FromQuery] int? year, [FromQuery] int? month)
+    {
+        var result = await _mediator.Send(new GetUserPointsQuery(userId, year, month));
         return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 
@@ -349,6 +406,22 @@ public class AdminController : ControllerBase
         return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 
+    [HttpPost("trips/generate-today")]
+    [AdminPermission("Trips", "Add")]
+    public async Task<IActionResult> GenerateTodayTrips()
+    {
+        var result = await _mediator.Send(new GenerateTodayTripsCommand());
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
+    }
+
+    [HttpGet("trips/generate-today/count")]
+    [AdminPermission("Trips", "View")]
+    public async Task<IActionResult> GetMissingTripsCount()
+    {
+        var result = await _mediator.Send(new GetMissingTripsCountQuery());
+        return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
+    }
+
     // ==========================================
     // 📩 SUGGESTIONS ENDPOINTS
     // ==========================================
@@ -482,22 +555,6 @@ public class AdminController : ControllerBase
     public async Task<IActionResult> GetUsers()
     {
         var result = await _mediator.Send(new GetUsersQuery());
-        return Ok(result);
-    }
-
-    [HttpGet("users/analytics/registrations")]
-    [AdminPermission("Users", "View")]
-    public async Task<IActionResult> GetRegistrationAnalytics([FromQuery] string timeframe = "Day", [FromQuery] string genderFilter = "All")
-    {
-        var result = await _mediator.Send(new GetRegistrationAnalyticsQuery(timeframe, genderFilter));
-        return Ok(result);
-    }
-
-    [HttpGet("users/analytics/engagement")]
-    [AdminPermission("Users", "View")]
-    public async Task<IActionResult> GetEngagementAnalytics([FromQuery] string timeframe = "Day", [FromQuery] DateTime? dateContext = null)
-    {
-        var result = await _mediator.Send(new GetEngagementAnalyticsQuery(timeframe, dateContext ?? DateTime.UtcNow));
         return Ok(result);
     }
 
@@ -832,4 +889,10 @@ public class UpdateTrainTypeRequest
     public string NameAr { get; set; } = string.Empty;
     public string NameEn { get; set; } = string.Empty;
     public string? MarkerPngUrl { get; set; }
+    public string? ImageUrl { get; set; }
+}
+
+public class AdminUpdatePointActionRequest
+{
+    public int Points { get; set; }
 }

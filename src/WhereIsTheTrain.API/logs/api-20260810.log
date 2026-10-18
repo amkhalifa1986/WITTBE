@@ -1,0 +1,79 @@
+2026-08-10 00:00:00.024 +03:00 [INF] Executing midnight trip generation for "2026-08-10" (Attempt 1).
+2026-08-10 00:00:02.151 +03:00 [INF] Midnight trip generation for "2026-08-10" completed successfully.
+2026-08-10 00:00:02.151 +03:00 [INF] Next midnight trip generation scheduled at "2026-08-11T00:00:00.0000000" (delay: "23:59:57.8487743").
+2026-08-10 00:24:06.844 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 disconnected from TripHub
+2026-08-10 00:24:10.045 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 connected to TripHub
+2026-08-10 00:28:24.914 +03:00 [INF] Midnight Trip Generation Service is starting.
+2026-08-10 00:28:27.360 +03:00 [INF] Next midnight trip generation scheduled at "2026-08-11T00:00:00.0000000" (delay: "23:31:32.6407286").
+2026-08-10 00:29:28.417 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 connected to TripHub
+2026-08-10 00:32:09.470 +03:00 [INF] Midnight Trip Generation Service is starting.
+2026-08-10 00:32:11.808 +03:00 [INF] Next midnight trip generation scheduled at "2026-08-11T00:00:00.0000000" (delay: "23:27:48.1925851").
+2026-08-10 00:32:16.114 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 connected to TripHub
+2026-08-10 00:34:07.993 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 disconnected from TripHub
+2026-08-10 00:34:10.876 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 connected to TripHub
+2026-08-10 00:35:41.068 +03:00 [INF] Midnight Trip Generation Service is starting.
+2026-08-10 00:35:43.418 +03:00 [INF] Next midnight trip generation scheduled at "2026-08-11T00:00:00.0000000" (delay: "23:24:16.5826082").
+2026-08-10 00:35:45.983 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 connected to TripHub
+2026-08-10 00:36:27.583 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 disconnected from TripHub
+2026-08-10 00:36:30.421 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 connected to TripHub
+2026-08-10 00:39:10.763 +03:00 [INF] Confirmation email sent to amkhalifa1986@gmail.com
+2026-08-10 00:39:20.692 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 connected to TripHub
+2026-08-10 00:41:26.053 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 connected to TripHub
+2026-08-10 00:43:17.965 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 disconnected from TripHub
+2026-08-10 00:43:17.965 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 disconnected from TripHub
+2026-08-10 00:43:20.471 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 connected to TripHub
+2026-08-10 00:43:45.234 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 joined trip group ded98432-6e23-4568-afff-f80766103a80
+2026-08-10 00:43:45.240 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 left trip group ded98432-6e23-4568-afff-f80766103a80
+2026-08-10 00:43:45.240 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 joined trip group ded98432-6e23-4568-afff-f80766103a80
+2026-08-10 00:43:47.385 +03:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-08-10 00:43:59.499 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 left trip group ded98432-6e23-4568-afff-f80766103a80
+2026-08-10 00:44:07.485 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 joined trip group 4b5db634-0bf3-4ce2-a508-a522d273947e
+2026-08-10 00:44:07.485 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 left trip group 4b5db634-0bf3-4ce2-a508-a522d273947e
+2026-08-10 00:44:07.486 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 joined trip group 4b5db634-0bf3-4ce2-a508-a522d273947e
+2026-08-10 00:44:15.504 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 left trip group 4b5db634-0bf3-4ce2-a508-a522d273947e
+2026-08-10 00:44:23.365 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 joined trip group 2b8f4440-6622-45a7-9655-34a3265a9b3c
+2026-08-10 00:44:23.365 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 left trip group 2b8f4440-6622-45a7-9655-34a3265a9b3c
+2026-08-10 00:44:23.365 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 joined trip group 2b8f4440-6622-45a7-9655-34a3265a9b3c
+2026-08-10 00:44:31.887 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 disconnected from TripHub
+2026-08-10 00:44:34.354 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 connected to TripHub
+2026-08-10 00:44:34.357 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 joined trip group 2b8f4440-6622-45a7-9655-34a3265a9b3c
+2026-08-10 00:44:34.357 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 joined trip group 2b8f4440-6622-45a7-9655-34a3265a9b3c
+2026-08-10 00:44:41.812 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 left trip group 2b8f4440-6622-45a7-9655-34a3265a9b3c
+2026-08-10 00:44:55.103 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 joined trip group 1973e483-6960-41ef-ad64-edea60ea1c3f
+2026-08-10 00:44:55.104 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 left trip group 1973e483-6960-41ef-ad64-edea60ea1c3f
+2026-08-10 00:44:55.104 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 joined trip group 1973e483-6960-41ef-ad64-edea60ea1c3f
+2026-08-10 00:45:31.242 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 left trip group 1973e483-6960-41ef-ad64-edea60ea1c3f
+2026-08-10 02:01:40.863 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 disconnected from TripHub
+2026-08-10 02:01:43.769 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 connected to TripHub
+2026-08-10 02:12:29.261 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 disconnected from TripHub
+2026-08-10 02:12:32.069 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 connected to TripHub
+2026-08-10 02:13:10.588 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 disconnected from TripHub
+2026-08-10 02:13:13.058 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 connected to TripHub
+2026-08-10 02:13:16.428 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 disconnected from TripHub
+2026-08-10 02:13:19.681 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 connected to TripHub
+2026-08-10 02:13:59.119 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 disconnected from TripHub
+2026-08-10 02:14:02.055 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 connected to TripHub
+2026-08-10 02:16:02.479 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 disconnected from TripHub
+2026-08-10 02:16:07.335 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 connected to TripHub
+2026-08-10 02:16:21.076 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 disconnected from TripHub
+2026-08-10 02:16:23.536 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 connected to TripHub
+2026-08-10 02:17:05.689 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 joined trip group ded98432-6e23-4568-afff-f80766103a80
+2026-08-10 02:17:05.691 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 left trip group ded98432-6e23-4568-afff-f80766103a80
+2026-08-10 02:17:05.691 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 joined trip group ded98432-6e23-4568-afff-f80766103a80
+2026-08-10 02:17:10.663 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 disconnected from TripHub
+2026-08-10 02:17:13.134 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 connected to TripHub
+2026-08-10 02:17:13.136 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 joined trip group ded98432-6e23-4568-afff-f80766103a80
+2026-08-10 02:17:13.136 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 joined trip group ded98432-6e23-4568-afff-f80766103a80
+2026-08-10 02:17:34.196 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 left trip group ded98432-6e23-4568-afff-f80766103a80
+2026-08-10 02:21:26.527 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 disconnected from TripHub
+2026-08-10 02:21:29.349 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 connected to TripHub
+2026-08-10 02:21:45.234 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 disconnected from TripHub
+2026-08-10 02:21:47.703 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 connected to TripHub
+2026-08-10 02:22:56.404 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 disconnected from TripHub
+2026-08-10 02:22:58.864 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 connected to TripHub
+2026-08-10 04:40:01.481 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 disconnected from TripHub
+2026-08-10 04:40:01.481 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 disconnected from TripHub
+2026-08-10 13:22:07.777 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 connected to TripHub
+2026-08-10 13:33:43.612 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 disconnected from TripHub
+2026-08-10 13:33:46.473 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 connected to TripHub
+2026-08-10 14:16:44.838 +03:00 [INF] User 1e006d8b-03cf-4752-b0b3-8733f25d00d0 disconnected from TripHub

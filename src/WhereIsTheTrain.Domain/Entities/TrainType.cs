@@ -9,6 +9,7 @@ public class TrainType : AuditableEntity
     public string NameAr { get; set; } = string.Empty;
     public string NameEn { get; set; } = string.Empty;
     public string? MarkerPngUrl { get; set; }
+    public string? ImageUrl { get; set; }
 
     // Navigation properties
     public ICollection<Train> Trains { get; set; } = new List<Train>();

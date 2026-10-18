@@ -30,8 +30,15 @@ public record SuggestTrainCommand(
 public class SuggestTrainCommandHandler : IRequestHandler<SuggestTrainCommand, Result<TrainSuggestionDto>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly AdminNotificationHelper _adminNotificationHelper;
+    private readonly IMediator _mediator;
 
-    public SuggestTrainCommandHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+    public SuggestTrainCommandHandler(IUnitOfWork unitOfWork, AdminNotificationHelper adminNotificationHelper, IMediator mediator)
+    {
+        _unitOfWork = unitOfWork;
+        _adminNotificationHelper = adminNotificationHelper;
+        _mediator = mediator;
+    }
 
     public async Task<Result<TrainSuggestionDto>> Handle(SuggestTrainCommand request, CancellationToken ct)
     {
@@ -53,6 +60,13 @@ public class SuggestTrainCommandHandler : IRequestHandler<SuggestTrainCommand, R
 
         await _unitOfWork.Repository<TrainSuggestion>().AddAsync(suggestion, ct);
         await _unitOfWork.SaveChangesAsync(ct);
+
+        await _adminNotificationHelper.NotifyAdminsAsync(
+            "A new train has been suggested.",
+            "تم اقتراح قطار جديد.",
+            "/?tab=suggestions",
+            ct
+        );
 
         return Result<TrainSuggestionDto>.Success(new TrainSuggestionDto
         {

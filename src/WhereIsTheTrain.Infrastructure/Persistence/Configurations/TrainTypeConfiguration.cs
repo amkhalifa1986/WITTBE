@@ -23,5 +23,8 @@ public class TrainTypeConfiguration : IEntityTypeConfiguration<TrainType>
 
         builder.Property(x => x.MarkerPngUrl)
             .HasMaxLength(255);
+
+        builder.Property(x => x.ImageUrl)
+            .HasMaxLength(255);
     }
 }

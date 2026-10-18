@@ -1,5 +1,6 @@
 using MediatR;
 using WhereIsTheTrain.Application.Common;
+using WhereIsTheTrain.Application.Features.Points;
 using WhereIsTheTrain.Application.Features.Trips.DTOs;
 using WhereIsTheTrain.Domain.Entities;
 using WhereIsTheTrain.Domain.Enums;
@@ -82,8 +83,13 @@ public record MarkPersonalTripStatusCommand(Guid TripId, Guid UserId, PersonalTr
 public class MarkPersonalTripStatusCommandHandler : IRequestHandler<MarkPersonalTripStatusCommand, Result<string>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMediator _mediator;
 
-    public MarkPersonalTripStatusCommandHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+    public MarkPersonalTripStatusCommandHandler(IUnitOfWork unitOfWork, IMediator mediator)
+    {
+        _unitOfWork = unitOfWork;
+        _mediator = mediator;
+    }
 
     public async Task<Result<string>> Handle(MarkPersonalTripStatusCommand request, CancellationToken ct)
     {
@@ -105,6 +111,15 @@ public class MarkPersonalTripStatusCommandHandler : IRequestHandler<MarkPersonal
         await _unitOfWork.Repository<TripFollower>().UpdateAsync(follower, ct);
         await _unitOfWork.SaveChangesAsync(ct);
 
+        if (request.Status == PersonalTripStatus.Started)
+        {
+            await _mediator.Send(new AwardPointsCommand(request.UserId, "StartTrip", request.TripId), ct);
+        }
+        else if (request.Status == PersonalTripStatus.Ended)
+        {
+            await _mediator.Send(new AwardPointsCommand(request.UserId, "EndTrip", request.TripId), ct);
+        }
+
         return Result<string>.Success($"Trip status updated to {request.Status}.");
     }
 }
@@ -124,11 +139,15 @@ public class CreateLiveUpdateCommandHandler : IRequestHandler<CreateLiveUpdateCo
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly TripNotificationHelper _notificationHelper;
+    private readonly AdminNotificationHelper _adminNotificationHelper;
+    private readonly IMediator _mediator;
 
-    public CreateLiveUpdateCommandHandler(IUnitOfWork unitOfWork, TripNotificationHelper notificationHelper)
+    public CreateLiveUpdateCommandHandler(IUnitOfWork unitOfWork, TripNotificationHelper notificationHelper, AdminNotificationHelper adminNotificationHelper, IMediator mediator)
     {
         _unitOfWork = unitOfWork;
         _notificationHelper = notificationHelper;
+        _adminNotificationHelper = adminNotificationHelper;
+        _mediator = mediator;
     }
 
     public async Task<Result<LiveUpdateDto>> Handle(CreateLiveUpdateCommand request, CancellationToken ct)
@@ -145,6 +164,8 @@ public class CreateLiveUpdateCommandHandler : IRequestHandler<CreateLiveUpdateCo
             return Result<LiveUpdateDto>.Failure("User not found.", 404);
 
         var settings = (await _unitOfWork.Repository<SystemSetting>().GetAllAsync(ct)).FirstOrDefault() ?? new SystemSetting();
+        var autoApprove = settings.TripLiveUpdateAutoPublish;
+
         var update = new TripLiveUpdate
         {
             TripId = request.TripId,
@@ -154,16 +175,42 @@ public class CreateLiveUpdateCommandHandler : IRequestHandler<CreateLiveUpdateCo
             CrowdState = request.CrowdState,
             Latitude = request.Latitude,
             Longitude = request.Longitude,
-            IsApproved = settings.TripLiveUpdateAutoPublish
+            IsApproved = autoApprove
         };
 
         await _unitOfWork.Repository<TripLiveUpdate>().AddAsync(update, ct);
         await _unitOfWork.SaveChangesAsync(ct);
 
+        bool isStartOrEndStatus = string.Equals(request.StatusTag, "InTransit", StringComparison.OrdinalIgnoreCase) ||
+                                  string.Equals(request.StatusTag, "Departed", StringComparison.OrdinalIgnoreCase) ||
+                                  string.Equals(request.StatusTag, "Arrived", StringComparison.OrdinalIgnoreCase);
+
+        // Check if this update is part of starting or ending the trip (user got StartTrip/EndTrip points in the last 2 minutes)
+        bool isPartofStartOrEndTrip = false;
+        var startEndLogs = await _unitOfWork.Repository<UserPointLog>().FindAsync(
+            l => l.UserId == request.AuthorId && l.TripId == request.TripId && (l.Action.Code == "StartTrip" || l.Action.Code == "EndTrip"), ct);
+        var latestStartEnd = startEndLogs.OrderByDescending(l => l.CreatedAt).FirstOrDefault();
+        if (latestStartEnd != null && (DateTime.UtcNow - latestStartEnd.CreatedAt).TotalMinutes <= 2)
+        {
+            isPartofStartOrEndTrip = true;
+        }
+
+        if (!isStartOrEndStatus && !isPartofStartOrEndTrip)
+        {
+            await _mediator.Send(new AwardPointsCommand(request.AuthorId, "PostUpdate", request.TripId), ct);
+        }
+
         if (update.IsApproved)
         {
             await _notificationHelper.NotifyFollowersOfNewReportAsync(update.TripId, update, ct);
         }
+
+        await _adminNotificationHelper.NotifyAdminsAsync(
+            update.IsApproved ? "A new trip update has been posted." : "A new trip update requires approval.",
+            update.IsApproved ? "تم نشر تحديث رحلة جديد." : "يوجد تحديث رحلة جديد بانتظار المراجعة.",
+            "/?tab=updates",
+            ct
+        );
 
         return Result<LiveUpdateDto>.Success(new LiveUpdateDto
         {
@@ -173,8 +220,8 @@ public class CreateLiveUpdateCommandHandler : IRequestHandler<CreateLiveUpdateCo
             AuthorName = author.DisplayName,
             AuthorAvatarUrl = author.AvatarUrl,
             Content = update.Content,
-            StatusTag = update.StatusTag,
-            CrowdState = update.CrowdState,
+            StatusTag = request.StatusTag,
+            CrowdState = request.CrowdState,
             Latitude = update.Latitude,
             Longitude = update.Longitude,
             CreatedAt = update.CreatedAt
@@ -188,8 +235,13 @@ public record RequestLiveUpdateRemovalCommand(Guid UpdateId, Guid UserId) : IReq
 public class RequestLiveUpdateRemovalCommandHandler : IRequestHandler<RequestLiveUpdateRemovalCommand, Result<bool>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly AdminNotificationHelper _adminNotificationHelper;
 
-    public RequestLiveUpdateRemovalCommandHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+    public RequestLiveUpdateRemovalCommandHandler(IUnitOfWork unitOfWork, AdminNotificationHelper adminNotificationHelper)
+    {
+        _unitOfWork = unitOfWork;
+        _adminNotificationHelper = adminNotificationHelper;
+    }
 
     public async Task<Result<bool>> Handle(RequestLiveUpdateRemovalCommand request, CancellationToken ct)
     {
@@ -202,7 +254,9 @@ public class RequestLiveUpdateRemovalCommandHandler : IRequestHandler<RequestLiv
 
         // Check system setting: if auto-approve is enabled, delete immediately
         var settings = (await _unitOfWork.Repository<SystemSetting>().GetAllAsync(ct)).FirstOrDefault() ?? new SystemSetting();
-        if (settings.TripLiveUpdateRemovalAutoApprove)
+        var autoApprove = settings.TripLiveUpdateRemovalAutoApprove;
+
+        if (autoApprove)
         {
             await _unitOfWork.Repository<TripLiveUpdate>().DeleteAsync(update, ct);
             await _unitOfWork.SaveChangesAsync(ct);
@@ -214,7 +268,13 @@ public class RequestLiveUpdateRemovalCommandHandler : IRequestHandler<RequestLiv
         await _unitOfWork.Repository<TripLiveUpdate>().UpdateAsync(update, ct);
         await _unitOfWork.SaveChangesAsync(ct);
 
+        await _adminNotificationHelper.NotifyAdminsAsync(
+            "A user has requested removal of a live update.",
+            "طلب مستخدم إزالة تحديث رحلة.",
+            "/?tab=updates",
+            ct
+        );
+
         return Result<bool>.Success(true);
     }
 }
-

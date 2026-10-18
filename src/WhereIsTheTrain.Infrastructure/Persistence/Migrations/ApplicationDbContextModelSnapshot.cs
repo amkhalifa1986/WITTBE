@@ -118,6 +118,39 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
                     b.ToTable("AdImpressions", (string)null);
                 });
 
+            modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.AdminNotification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("AdminUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("MessageAr")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdminUserId");
+
+                    b.ToTable("AdminNotifications");
+                });
+
             modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.AdminRole", b =>
                 {
                     b.Property<Guid>("Id")
@@ -505,6 +538,32 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
                     b.ToTable("Notifications", (string)null);
                 });
 
+            modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.PointAction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PointActions");
+                });
+
             modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.RailwayPath", b =>
                 {
                     b.Property<Guid>("Id")
@@ -749,6 +808,83 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
                     b.HasIndex("SuggestedById");
 
                     b.ToTable("StopSuggestions", (string)null);
+                });
+
+            modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.SudokuScore", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Difficulty")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<bool>("IsPersonalBest")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("TimeSeconds")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Difficulty", "TimeSeconds");
+
+                    b.HasIndex("UserId", "Difficulty");
+
+                    b.ToTable("SudokuScores", (string)null);
+                });
+
+            modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.SudokuSession", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("CellState")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Difficulty")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<int>("ElapsedSeconds")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsDiscarded")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("PuzzleIndex")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId", "IsCompleted", "IsDiscarded");
+
+                    b.ToTable("SudokuSessions", (string)null);
                 });
 
             modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.SystemLog", b =>
@@ -1020,6 +1156,10 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("MarkerPngUrl")
                         .HasMaxLength(255)
@@ -1345,6 +1485,41 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
+            modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.UserPointLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("PointActionId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("PointsAwarded")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("TripId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PointActionId");
+
+                    b.HasIndex("TripId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserPointLogs");
+                });
+
             modelBuilder.Entity("RailwayPathStop", b =>
                 {
                     b.HasOne("WhereIsTheTrain.Domain.Entities.RailwayPath", null)
@@ -1378,6 +1553,17 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.AdminNotification", b =>
+                {
+                    b.HasOne("WhereIsTheTrain.Domain.Entities.AdminUser", "AdminUser")
+                        .WithMany("AdminNotifications")
+                        .HasForeignKey("AdminUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AdminUser");
                 });
 
             modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.AdminRolePrivilege", b =>
@@ -1517,6 +1703,28 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
                     b.Navigation("NewCityGovernorate");
 
                     b.Navigation("SuggestedBy");
+                });
+
+            modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.SudokuScore", b =>
+                {
+                    b.HasOne("WhereIsTheTrain.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.SudokuSession", b =>
+                {
+                    b.HasOne("WhereIsTheTrain.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.Train", b =>
@@ -1703,11 +1911,41 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
                     b.Navigation("Gender");
                 });
 
+            modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.UserPointLog", b =>
+                {
+                    b.HasOne("WhereIsTheTrain.Domain.Entities.PointAction", "Action")
+                        .WithMany("PointLogs")
+                        .HasForeignKey("PointActionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WhereIsTheTrain.Domain.Entities.Trip", "Trip")
+                        .WithMany()
+                        .HasForeignKey("TripId");
+
+                    b.HasOne("WhereIsTheTrain.Domain.Entities.User", "User")
+                        .WithMany("PointLogs")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Action");
+
+                    b.Navigation("Trip");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.AdminRole", b =>
                 {
                     b.Navigation("AdminUsers");
 
                     b.Navigation("Privileges");
+                });
+
+            modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.AdminUser", b =>
+                {
+                    b.Navigation("AdminNotifications");
                 });
 
             modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.City", b =>
@@ -1723,6 +1961,11 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.LostFoundPost", b =>
                 {
                     b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.PointAction", b =>
+                {
+                    b.Navigation("PointLogs");
                 });
 
             modelBuilder.Entity("WhereIsTheTrain.Domain.Entities.Stop", b =>
@@ -1769,6 +2012,8 @@ namespace WhereIsTheTrain.Infrastructure.Persistence.Migrations
                     b.Navigation("LostFoundPosts");
 
                     b.Navigation("Notifications");
+
+                    b.Navigation("PointLogs");
 
                     b.Navigation("StopSuggestions");
 

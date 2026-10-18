@@ -96,50 +96,154 @@ public class GetTripTrackingQueryHandler : IRequestHandler<GetTripTrackingQuery,
         double currentDistance = 0;
         double velocity       = 16.67; // Default 60 km/h in m/s
 
-        if (latestTelemetry != null)
+        var settings = (await _unitOfWork.Repository<SystemSetting>().GetAllAsync(ct)).FirstOrDefault() ?? new SystemSetting();
+        if (!settings.GpsTrackingEnabled)
         {
-            snappedLat = latestTelemetry.SnappedLatitude;
-            snappedLon = latestTelemetry.SnappedLongitude;
-            currentSpeed = latestTelemetry.Speed;
-            currentDistance = latestTelemetry.DistanceAlongRoute;
+            var nowEgypt = WhereIsTheTrain.Domain.Common.DateHelper.GetEgyptNow();
+            var currentTime = nowEgypt.TimeOfDay;
+            var stops = trip.Train.RouteStops.OrderBy(rs => rs.StopOrder).ToList();
+
+            if (stops.Count > 0)
+            {
+                var firstStop = stops.First();
+                var lastStop = stops.Last();
+
+                var dep0 = firstStop.ScheduledDeparture ?? firstStop.ScheduledArrival ?? TimeSpan.Zero;
+                double startSec = dep0.TotalSeconds;
+
+                var scheduledStart = trip.TripDate.ToDateTime(TimeOnly.FromTimeSpan(dep0));
+                double elapsedSec = (nowEgypt - scheduledStart).TotalSeconds;
+
+                double GetStopOffsetSec(WhereIsTheTrain.Domain.Entities.TrainRouteStop stop, double baseSec, bool isArrival)
+                {
+                    var time = isArrival ? (stop.ScheduledArrival ?? stop.ScheduledDeparture ?? TimeSpan.Zero)
+                                         : (stop.ScheduledDeparture ?? stop.ScheduledArrival ?? TimeSpan.Zero);
+                    double sec = time.TotalSeconds;
+                    if (sec < baseSec)
+                    {
+                        sec += 24 * 3600;
+                    }
+                    return sec - baseSec;
+                }
+
+                double lastStopOffset = GetStopOffsetSec(lastStop, startSec, true);
+
+                if (elapsedSec < 0)
+                {
+                    snappedLat = firstStop.Stop.Latitude;
+                    snappedLon = firstStop.Stop.Longitude;
+                    currentSpeed = 0;
+                    currentDistance = firstStop.DistanceAlongRoute;
+                    velocity = 0;
+                }
+                else if (elapsedSec >= lastStopOffset)
+                {
+                    snappedLat = lastStop.Stop.Latitude;
+                    snappedLon = lastStop.Stop.Longitude;
+                    currentSpeed = 0;
+                    currentDistance = lastStop.DistanceAlongRoute;
+                    velocity = 0;
+                }
+                else
+                {
+                    // Find active segment
+                    for (int i = 0; i < stops.Count - 1; i++)
+                    {
+                        var sCurrent = stops[i];
+                        var sNext = stops[i + 1];
+
+                        double arrI = GetStopOffsetSec(sCurrent, startSec, true);
+                        double depI = GetStopOffsetSec(sCurrent, startSec, false);
+                        double arrI1 = GetStopOffsetSec(sNext, startSec, true);
+
+                        // Check if train is stopped at station i
+                        if (arrI <= elapsedSec && elapsedSec <= depI)
+                        {
+                            snappedLat = sCurrent.Stop.Latitude;
+                            snappedLon = sCurrent.Stop.Longitude;
+                            currentSpeed = 0;
+                            currentDistance = sCurrent.DistanceAlongRoute;
+                            velocity = 0;
+                            break;
+                        }
+
+                        // Check if train is in transit between i and i+1
+                        if (depI <= elapsedSec && elapsedSec < arrI1)
+                        {
+                            double segmentDurationSec = arrI1 - depI;
+                            if (segmentDurationSec > 0)
+                            {
+                                double segmentElapsedSec = elapsedSec - depI;
+                                double fraction = Math.Clamp(segmentElapsedSec / segmentDurationSec, 0.0, 1.0);
+                                currentDistance = sCurrent.DistanceAlongRoute + fraction * (sNext.DistanceAlongRoute - sCurrent.DistanceAlongRoute);
+                                velocity = (sNext.DistanceAlongRoute - sCurrent.DistanceAlongRoute) / segmentDurationSec;
+                                currentSpeed = velocity; // in m/s
+
+                                if (hasRoutePath)
+                                {
+                                    var coord = GeometrySnappingHelper.GetCoordinateAtDistance(routePath, currentDistance);
+                                    snappedLat = coord.Y;
+                                    snappedLon = coord.X;
+                                }
+                                else
+                                {
+                                    snappedLat = sCurrent.Stop.Latitude + fraction * (sNext.Stop.Latitude - sCurrent.Stop.Latitude);
+                                    snappedLon = sCurrent.Stop.Longitude + fraction * (sNext.Stop.Longitude - sCurrent.Stop.Longitude);
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
         }
         else
         {
-            // Fallback to train's first route stop coordinates
-            var firstStop = trip.Train.RouteStops.OrderBy(rs => rs.StopOrder).FirstOrDefault();
-            if (firstStop != null)
+            if (latestTelemetry != null)
             {
-                snappedLat = firstStop.Stop.Latitude;
-                snappedLon = firstStop.Stop.Longitude;
+                snappedLat = latestTelemetry.SnappedLatitude;
+                snappedLon = latestTelemetry.SnappedLongitude;
+                currentSpeed = latestTelemetry.Speed;
+                currentDistance = latestTelemetry.DistanceAlongRoute;
             }
-        }
-
-        // Calculate average velocity over the delta of the sliding 10-minute window
-        if (telemetries.Count >= 2)
-        {
-            var sorted = telemetries.OrderBy(t => t.Timestamp).ToList();
-            var first = sorted.First();
-            var last = sorted.Last();
-
-            double deltaD = last.DistanceAlongRoute - first.DistanceAlongRoute;
-            double deltaT = (last.Timestamp - first.Timestamp).TotalSeconds;
-
-            if (deltaT > 0 && deltaD > 0)
+            else
             {
-                velocity = deltaD / deltaT;
+                // Fallback to train's first route stop coordinates
+                var firstStop = trip.Train.RouteStops.OrderBy(rs => rs.StopOrder).FirstOrDefault();
+                if (firstStop != null)
+                {
+                    snappedLat = firstStop.Stop.Latitude;
+                    snappedLon = firstStop.Stop.Longitude;
+                }
+            }
+
+            // Calculate average velocity over the delta of the sliding 10-minute window
+            if (telemetries.Count >= 2)
+            {
+                var sorted = telemetries.OrderBy(t => t.Timestamp).ToList();
+                var first = sorted.First();
+                var last = sorted.Last();
+
+                double deltaD = last.DistanceAlongRoute - first.DistanceAlongRoute;
+                double deltaT = (last.Timestamp - first.Timestamp).TotalSeconds;
+
+                if (deltaT > 0 && deltaD > 0)
+                {
+                    velocity = deltaD / deltaT;
+                }
+                else if (latestTelemetry != null && latestTelemetry.Speed > 2.0)
+                {
+                    velocity = latestTelemetry.Speed;
+                }
             }
             else if (latestTelemetry != null && latestTelemetry.Speed > 2.0)
             {
                 velocity = latestTelemetry.Speed;
             }
-        }
-        else if (latestTelemetry != null && latestTelemetry.Speed > 2.0)
-        {
-            velocity = latestTelemetry.Speed;
-        }
 
-        // Keep velocity within reasonable bounds (min 5 m/s = 18 km/h, max 45 m/s = 162 km/h) to avoid extreme ETAs
-        velocity = Math.Clamp(velocity, 5.0, 45.0);
+            // Keep velocity within reasonable bounds (min 5 m/s = 18 km/h, max 45 m/s = 162 km/h) to avoid extreme ETAs
+            velocity = Math.Clamp(velocity, 5.0, 45.0);
+        }
 
         var remainingStops = new List<StopTrackingDto>();
         if (hasRoutePath)
@@ -151,12 +255,39 @@ public class GetTripTrackingQueryHandler : IRequestHandler<GetTripTrackingQuery,
 
                 double remainingDistance = Math.Max(0.0, stopDistance - currentDistance);
 
-                // If remaining distance is > 0, it means it's an upcoming stop (or if it is the last stop and we haven't arrived)
+                // If remaining distance is > 0, it means it's an upcoming stop
                 if (remainingDistance > 0)
                 {
-                    double etaSeconds = remainingDistance / velocity;
-                    var etaTime = DateTime.UtcNow.AddSeconds(etaSeconds);
-                    double etaMins = Math.Round(etaSeconds / 60.0, 1);
+                    double etaSeconds = 0;
+                    DateTime etaTime = DateTime.UtcNow;
+                    double etaMins = 0;
+
+                    if (!settings.GpsTrackingEnabled)
+                    {
+                        var egyptToday = WhereIsTheTrain.Domain.Common.DateHelper.GetEgyptToday();
+                        var scheduledArrival = rs.ScheduledArrival ?? rs.ScheduledDeparture ?? TimeSpan.Zero;
+                        
+                        TimeZoneInfo egyptZone;
+                        try
+                        {
+                            egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
+                        }
+                        catch
+                        {
+                            egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time");
+                        }
+                        DateTime localDateTime = new DateTime(egyptToday.Year, egyptToday.Month, egyptToday.Day, 
+                            scheduledArrival.Hours, scheduledArrival.Minutes, scheduledArrival.Seconds);
+                        etaTime = TimeZoneInfo.ConvertTimeToUtc(localDateTime, egyptZone);
+                        etaSeconds = Math.Max(0.0, (etaTime - DateTime.UtcNow).TotalSeconds);
+                        etaMins = Math.Round(etaSeconds / 60.0, 1);
+                    }
+                    else
+                    {
+                        etaSeconds = remainingDistance / velocity;
+                        etaTime = DateTime.UtcNow.AddSeconds(etaSeconds);
+                        etaMins = Math.Round(etaSeconds / 60.0, 1);
+                    }
 
                     remainingStops.Add(new StopTrackingDto
                     {
@@ -176,19 +307,50 @@ public class GetTripTrackingQueryHandler : IRequestHandler<GetTripTrackingQuery,
         }
         else
         {
-            // Without route path, return all stops without distance/ETA calculations
+            // Without route path, return stops remaining based on stops sequence
             foreach (var rs in trip.Train.RouteStops.OrderBy(rs => rs.StopOrder))
             {
-                remainingStops.Add(new StopTrackingDto
+                double remainingDistance = Math.Max(0.0, rs.DistanceAlongRoute - currentDistance);
+                if (remainingDistance > 0 || !settings.GpsTrackingEnabled)
                 {
-                    StopId = rs.StopId,
-                    StopCode = rs.Stop.Code,
-                    StopNameAr = rs.Stop.NameAr,
-                    StopNameEn = rs.Stop.NameEn,
-                    StopOrder = rs.StopOrder,
-                    Latitude = rs.Stop.Latitude,
-                    Longitude = rs.Stop.Longitude
-                });
+                    DateTime? etaTime = null;
+                    double etaMins = 0;
+
+                    if (!settings.GpsTrackingEnabled)
+                    {
+                        var egyptToday = WhereIsTheTrain.Domain.Common.DateHelper.GetEgyptToday();
+                        var scheduledArrival = rs.ScheduledArrival ?? rs.ScheduledDeparture ?? TimeSpan.Zero;
+                        
+                        TimeZoneInfo egyptZone;
+                        try
+                        {
+                            egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
+                        }
+                        catch
+                        {
+                            egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time");
+                        }
+                        DateTime localDateTime = new DateTime(egyptToday.Year, egyptToday.Month, egyptToday.Day, 
+                            scheduledArrival.Hours, scheduledArrival.Minutes, scheduledArrival.Seconds);
+                        etaTime = TimeZoneInfo.ConvertTimeToUtc(localDateTime, egyptZone);
+                        double etaSeconds = Math.Max(0.0, (etaTime.Value - DateTime.UtcNow).TotalSeconds);
+                        etaMins = Math.Round(etaSeconds / 60.0, 1);
+                    }
+
+                    remainingStops.Add(new StopTrackingDto
+                    {
+                        StopId = rs.StopId,
+                        StopCode = rs.Stop.Code,
+                        StopNameAr = rs.Stop.NameAr,
+                        StopNameEn = rs.Stop.NameEn,
+                        StopOrder = rs.StopOrder,
+                        DistanceRemaining = Math.Round(remainingDistance, 1),
+                        EstimatedTimeOfArrival = etaTime,
+                        EtaMinutes = etaMins,
+                        Latitude = rs.Stop.Latitude,
+                        Longitude = rs.Stop.Longitude
+                    });
+                }
             }
         }
 

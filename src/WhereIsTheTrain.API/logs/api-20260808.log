@@ -1,0 +1,734 @@
+2026-08-08 03:01:29.757 +03:00 [INF] User d18a2a2e-54cd-47d1-b60f-c6b03b986d29 connected to TripHub
+2026-08-08 03:01:33.130 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 connected to TripHub
+2026-08-08 03:01:34.636 +03:00 [INF] User d18a2a2e-54cd-47d1-b60f-c6b03b986d29 disconnected from TripHub
+2026-08-08 03:01:39.471 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 disconnected from TripHub
+2026-08-08 03:01:52.494 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 connected to TripHub
+2026-08-08 03:18:12.501 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 disconnected from TripHub
+2026-08-08 16:32:18.071 +03:00 [ERR] Failed executing DbCommand (86ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (Size = 100), @p2='?' (Size = 100), @p3='?' (DbType = Guid), @p4='?' (Size = 100), @p5='?' (Size = 100), @p6='?' (DbType = Guid), @p7='?' (Size = 100), @p8='?' (Size = 100), @p9='?' (DbType = Guid), @p10='?' (Size = 100), @p11='?' (Size = 100), @p12='?' (DbType = Guid), @p13='?' (Size = 100), @p14='?' (Size = 100), @p15='?' (DbType = Guid), @p16='?' (Size = 100), @p17='?' (Size = 100), @p18='?' (DbType = Guid), @p19='?' (Size = 100), @p20='?' (Size = 100), @p21='?' (DbType = Guid), @p22='?' (Size = 100), @p23='?' (Size = 100), @p24='?' (DbType = Guid), @p25='?' (Size = 100), @p26='?' (Size = 100), @p27='?' (DbType = Guid), @p28='?' (Size = 100), @p29='?' (Size = 100), @p30='?' (DbType = Guid), @p31='?' (Size = 100), @p32='?' (Size = 100), @p33='?' (DbType = Guid), @p34='?' (Size = 100), @p35='?' (Size = 100), @p36='?' (DbType = Guid), @p37='?' (Size = 100), @p38='?' (Size = 100), @p39='?' (DbType = Guid), @p40='?' (Size = 100), @p41='?' (Size = 100), @p42='?' (DbType = Guid), @p43='?' (Size = 100), @p44='?' (Size = 100), @p45='?' (DbType = Guid), @p46='?' (Size = 100), @p47='?' (Size = 100), @p48='?' (DbType = Guid), @p49='?' (Size = 100), @p50='?' (Size = 100), @p51='?' (DbType = Guid), @p52='?' (Size = 100), @p53='?' (Size = 100), @p54='?' (DbType = Guid), @p55='?' (Size = 100), @p56='?' (Size = 100), @p57='?' (DbType = Guid), @p58='?' (Size = 100), @p59='?' (Size = 100), @p60='?' (DbType = Guid), @p61='?' (Size = 100), @p62='?' (Size = 100), @p63='?' (DbType = Guid), @p64='?' (Size = 100), @p65='?' (Size = 100), @p66='?' (DbType = Guid), @p67='?' (Size = 100), @p68='?' (Size = 100), @p69='?' (DbType = Guid), @p70='?' (Size = 100), @p71='?' (Size = 100), @p72='?' (DbType = Guid), @p73='?' (Size = 100), @p74='?' (Size = 100), @p75='?' (DbType = Guid), @p76='?' (Size = 100), @p77='?' (Size = 100), @p78='?' (DbType = Guid), @p79='?' (Size = 100), @p80='?' (Size = 100), @p81='?' (DbType = Guid), @p82='?' (Size = 500), @p83='?' (Size = 500), @p84='?' (DbType = DateTime), @p85='?' (Size = 100), @p86='?' (Size = 255), @p87='?' (Size = 500), @p88='?' (DbType = Boolean), @p89='?' (DbType = Guid), @p90='?' (DbType = Boolean), @p91='?' (Size = 255), @p92='?' (Size = 500), @p93='?' (DbType = DateTime), @p94='?' (DbType = Int32), @p95='?' (DbType = DateTime), @p96='?' (DbType = Guid), @p97='?' (Size = 500), @p98='?' (Size = 500), @p99='?' (DbType = DateTime), @p100='?' (Size = 100), @p101='?' (Size = 255), @p102='?' (Size = 500), @p103='?' (DbType = Boolean), @p104='?' (DbType = Guid), @p105='?' (DbType = Boolean), @p106='?' (Size = 255), @p107='?' (Size = 500), @p108='?' (DbType = DateTime), @p109='?' (DbType = Int32), @p110='?' (DbType = DateTime), @p111='?' (DbType = Guid), @p112='?' (DbType = Guid), @p113='?' (Size = 100), @p114='?' (Size = 100), @p115='?' (DbType = Guid), @p116='?' (DbType = Guid), @p117='?' (Size = 100), @p118='?' (Size = 100), @p119='?' (DbType = Guid), @p120='?' (DbType = Guid), @p121='?' (Size = 100), @p122='?' (Size = 100), @p123='?' (DbType = Guid), @p124='?' (DbType = Guid), @p125='?' (Size = 100), @p126='?' (Size = 100), @p127='?' (DbType = Guid), @p128='?' (DbType = Guid), @p129='?' (Size = 100), @p130='?' (Size = 100), @p131='?' (DbType = Guid), @p132='?' (DbType = Guid), @p133='?' (Size = 100), @p134='?' (Size = 100), @p135='?' (DbType = Guid), @p136='?' (DbType = Guid), @p137='?' (Size = 100), @p138='?' (Size = 100), @p139='?' (DbType = Guid), @p140='?' (DbType = Guid), @p141='?' (Size = 100), @p142='?' (Size = 100), @p143='?' (DbType = Guid), @p144='?' (DbType = Guid), @p145='?' (Size = 100), @p146='?' (Size = 100), @p147='?' (DbType = Guid), @p148='?' (DbType = Guid), @p149='?' (Size = 100), @p150='?' (Size = 100), @p151='?' (DbType = Guid), @p152='?' (DbType = Guid), @p153='?' (Size = 100), @p154='?' (Size = 100), @p155='?' (DbType = Guid), @p156='?' (DbType = Guid), @p157='?' (Size = 100), @p158='?' (Size = 100), @p159='?' (DbType = Guid), @p160='?' (DbType = Guid), @p161='?' (Size = 100), @p162='?' (Size = 100)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO `Governorates` (`Id`, `NameAr`, `NameEn`)
+VALUES (@p0, @p1, @p2),
+(@p3, @p4, @p5),
+(@p6, @p7, @p8),
+(@p9, @p10, @p11),
+(@p12, @p13, @p14),
+(@p15, @p16, @p17),
+(@p18, @p19, @p20),
+(@p21, @p22, @p23),
+(@p24, @p25, @p26),
+(@p27, @p28, @p29),
+(@p30, @p31, @p32),
+(@p33, @p34, @p35),
+(@p36, @p37, @p38),
+(@p39, @p40, @p41),
+(@p42, @p43, @p44),
+(@p45, @p46, @p47),
+(@p48, @p49, @p50),
+(@p51, @p52, @p53),
+(@p54, @p55, @p56),
+(@p57, @p58, @p59),
+(@p60, @p61, @p62),
+(@p63, @p64, @p65),
+(@p66, @p67, @p68),
+(@p69, @p70, @p71),
+(@p72, @p73, @p74),
+(@p75, @p76, @p77),
+(@p78, @p79, @p80);
+INSERT INTO `Users` (`Id`, `AvatarUrl`, `Bio`, `CreatedAt`, `DisplayName`, `Email`, `EmailConfirmationToken`, `EmailConfirmed`, `GenderId`, `IsSuspended`, `PasswordHash`, `RefreshToken`, `RefreshTokenExpiryTime`, `Role`, `UpdatedAt`)
+VALUES (@p81, @p82, @p83, @p84, @p85, @p86, @p87, @p88, @p89, @p90, @p91, @p92, @p93, @p94, @p95),
+(@p96, @p97, @p98, @p99, @p100, @p101, @p102, @p103, @p104, @p105, @p106, @p107, @p108, @p109, @p110);
+INSERT INTO `Cities` (`Id`, `GovernorateId`, `NameAr`, `NameEn`)
+VALUES (@p111, @p112, @p113, @p114),
+(@p115, @p116, @p117, @p118),
+(@p119, @p120, @p121, @p122),
+(@p123, @p124, @p125, @p126),
+(@p127, @p128, @p129, @p130),
+(@p131, @p132, @p133, @p134),
+(@p135, @p136, @p137, @p138),
+(@p139, @p140, @p141, @p142),
+(@p143, @p144, @p145, @p146),
+(@p147, @p148, @p149, @p150),
+(@p151, @p152, @p153, @p154),
+(@p155, @p156, @p157, @p158),
+(@p159, @p160, @p161, @p162);
+2026-08-08 16:32:18.268 +03:00 [ERR] An exception occurred in the database while saving changes for context type 'WhereIsTheTrain.Infrastructure.Persistence.ApplicationDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> MySqlConnector.MySqlException (0x80004005): Duplicate entry '00000000-0000-0000-0000-000000000201' for key 'Governorates.PRIMARY'
+   at MySqlConnector.Core.ServerSession.ReceiveReplyAsync(IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/ServerSession.cs:line 894
+   at MySqlConnector.Core.ResultSet.ReadResultSetHeaderAsync(IOBehavior ioBehavior) in /_/src/MySqlConnector/Core/ResultSet.cs:line 37
+   at MySqlConnector.MySqlDataReader.ActivateResultSet(CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 130
+   at MySqlConnector.MySqlDataReader.InitAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, IDictionary`2 cachedProcedures, IMySqlCommand command, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 483
+   at MySqlConnector.Core.CommandExecutor.ExecuteReaderAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/CommandExecutor.cs:line 56
+   at MySqlConnector.MySqlCommand.ExecuteReaderAsync(CommandBehavior behavior, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 357
+   at MySqlConnector.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 350
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> MySqlConnector.MySqlException (0x80004005): Duplicate entry '00000000-0000-0000-0000-000000000201' for key 'Governorates.PRIMARY'
+   at MySqlConnector.Core.ServerSession.ReceiveReplyAsync(IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/ServerSession.cs:line 894
+   at MySqlConnector.Core.ResultSet.ReadResultSetHeaderAsync(IOBehavior ioBehavior) in /_/src/MySqlConnector/Core/ResultSet.cs:line 37
+   at MySqlConnector.MySqlDataReader.ActivateResultSet(CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 130
+   at MySqlConnector.MySqlDataReader.InitAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, IDictionary`2 cachedProcedures, IMySqlCommand command, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 483
+   at MySqlConnector.Core.CommandExecutor.ExecuteReaderAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/CommandExecutor.cs:line 56
+   at MySqlConnector.MySqlCommand.ExecuteReaderAsync(CommandBehavior behavior, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 357
+   at MySqlConnector.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 350
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2026-08-08 16:33:52.905 +03:00 [ERR] Failed executing DbCommand (38ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (Size = 100), @p2='?' (Size = 100), @p3='?' (DbType = Guid), @p4='?' (Size = 100), @p5='?' (Size = 100), @p6='?' (DbType = Guid), @p7='?' (Size = 100), @p8='?' (Size = 100), @p9='?' (DbType = Guid), @p10='?' (Size = 100), @p11='?' (Size = 100), @p12='?' (DbType = Guid), @p13='?' (Size = 100), @p14='?' (Size = 100), @p15='?' (DbType = Guid), @p16='?' (Size = 100), @p17='?' (Size = 100), @p18='?' (DbType = Guid), @p19='?' (Size = 100), @p20='?' (Size = 100), @p21='?' (DbType = Guid), @p22='?' (Size = 100), @p23='?' (Size = 100), @p24='?' (DbType = Guid), @p25='?' (Size = 100), @p26='?' (Size = 100), @p27='?' (DbType = Guid), @p28='?' (Size = 100), @p29='?' (Size = 100), @p30='?' (DbType = Guid), @p31='?' (Size = 100), @p32='?' (Size = 100), @p33='?' (DbType = Guid), @p34='?' (Size = 100), @p35='?' (Size = 100), @p36='?' (DbType = Guid), @p37='?' (Size = 100), @p38='?' (Size = 100), @p39='?' (DbType = Guid), @p40='?' (Size = 100), @p41='?' (Size = 100), @p42='?' (DbType = Guid), @p43='?' (Size = 100), @p44='?' (Size = 100), @p45='?' (DbType = Guid), @p46='?' (Size = 100), @p47='?' (Size = 100), @p48='?' (DbType = Guid), @p49='?' (Size = 100), @p50='?' (Size = 100), @p51='?' (DbType = Guid), @p52='?' (Size = 100), @p53='?' (Size = 100), @p54='?' (DbType = Guid), @p55='?' (Size = 100), @p56='?' (Size = 100), @p57='?' (DbType = Guid), @p58='?' (Size = 100), @p59='?' (Size = 100), @p60='?' (DbType = Guid), @p61='?' (Size = 100), @p62='?' (Size = 100), @p63='?' (DbType = Guid), @p64='?' (Size = 100), @p65='?' (Size = 100), @p66='?' (DbType = Guid), @p67='?' (Size = 100), @p68='?' (Size = 100), @p69='?' (DbType = Guid), @p70='?' (Size = 100), @p71='?' (Size = 100), @p72='?' (DbType = Guid), @p73='?' (Size = 100), @p74='?' (Size = 100), @p75='?' (DbType = Guid), @p76='?' (Size = 100), @p77='?' (Size = 100), @p78='?' (DbType = Guid), @p79='?' (Size = 100), @p80='?' (Size = 100), @p81='?' (DbType = Guid), @p82='?' (Size = 500), @p83='?' (Size = 500), @p84='?' (DbType = DateTime), @p85='?' (Size = 100), @p86='?' (Size = 255), @p87='?' (Size = 500), @p88='?' (DbType = Boolean), @p89='?' (DbType = Guid), @p90='?' (DbType = Boolean), @p91='?' (Size = 255), @p92='?' (Size = 500), @p93='?' (DbType = DateTime), @p94='?' (DbType = Int32), @p95='?' (DbType = DateTime), @p96='?' (DbType = Guid), @p97='?' (Size = 500), @p98='?' (Size = 500), @p99='?' (DbType = DateTime), @p100='?' (Size = 100), @p101='?' (Size = 255), @p102='?' (Size = 500), @p103='?' (DbType = Boolean), @p104='?' (DbType = Guid), @p105='?' (DbType = Boolean), @p106='?' (Size = 255), @p107='?' (Size = 500), @p108='?' (DbType = DateTime), @p109='?' (DbType = Int32), @p110='?' (DbType = DateTime), @p111='?' (DbType = Guid), @p112='?' (DbType = Guid), @p113='?' (Size = 100), @p114='?' (Size = 100), @p115='?' (DbType = Guid), @p116='?' (DbType = Guid), @p117='?' (Size = 100), @p118='?' (Size = 100), @p119='?' (DbType = Guid), @p120='?' (DbType = Guid), @p121='?' (Size = 100), @p122='?' (Size = 100), @p123='?' (DbType = Guid), @p124='?' (DbType = Guid), @p125='?' (Size = 100), @p126='?' (Size = 100), @p127='?' (DbType = Guid), @p128='?' (DbType = Guid), @p129='?' (Size = 100), @p130='?' (Size = 100), @p131='?' (DbType = Guid), @p132='?' (DbType = Guid), @p133='?' (Size = 100), @p134='?' (Size = 100), @p135='?' (DbType = Guid), @p136='?' (DbType = Guid), @p137='?' (Size = 100), @p138='?' (Size = 100), @p139='?' (DbType = Guid), @p140='?' (DbType = Guid), @p141='?' (Size = 100), @p142='?' (Size = 100), @p143='?' (DbType = Guid), @p144='?' (DbType = Guid), @p145='?' (Size = 100), @p146='?' (Size = 100), @p147='?' (DbType = Guid), @p148='?' (DbType = Guid), @p149='?' (Size = 100), @p150='?' (Size = 100), @p151='?' (DbType = Guid), @p152='?' (DbType = Guid), @p153='?' (Size = 100), @p154='?' (Size = 100), @p155='?' (DbType = Guid), @p156='?' (DbType = Guid), @p157='?' (Size = 100), @p158='?' (Size = 100), @p159='?' (DbType = Guid), @p160='?' (DbType = Guid), @p161='?' (Size = 100), @p162='?' (Size = 100)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO `Governorates` (`Id`, `NameAr`, `NameEn`)
+VALUES (@p0, @p1, @p2),
+(@p3, @p4, @p5),
+(@p6, @p7, @p8),
+(@p9, @p10, @p11),
+(@p12, @p13, @p14),
+(@p15, @p16, @p17),
+(@p18, @p19, @p20),
+(@p21, @p22, @p23),
+(@p24, @p25, @p26),
+(@p27, @p28, @p29),
+(@p30, @p31, @p32),
+(@p33, @p34, @p35),
+(@p36, @p37, @p38),
+(@p39, @p40, @p41),
+(@p42, @p43, @p44),
+(@p45, @p46, @p47),
+(@p48, @p49, @p50),
+(@p51, @p52, @p53),
+(@p54, @p55, @p56),
+(@p57, @p58, @p59),
+(@p60, @p61, @p62),
+(@p63, @p64, @p65),
+(@p66, @p67, @p68),
+(@p69, @p70, @p71),
+(@p72, @p73, @p74),
+(@p75, @p76, @p77),
+(@p78, @p79, @p80);
+INSERT INTO `Users` (`Id`, `AvatarUrl`, `Bio`, `CreatedAt`, `DisplayName`, `Email`, `EmailConfirmationToken`, `EmailConfirmed`, `GenderId`, `IsSuspended`, `PasswordHash`, `RefreshToken`, `RefreshTokenExpiryTime`, `Role`, `UpdatedAt`)
+VALUES (@p81, @p82, @p83, @p84, @p85, @p86, @p87, @p88, @p89, @p90, @p91, @p92, @p93, @p94, @p95),
+(@p96, @p97, @p98, @p99, @p100, @p101, @p102, @p103, @p104, @p105, @p106, @p107, @p108, @p109, @p110);
+INSERT INTO `Cities` (`Id`, `GovernorateId`, `NameAr`, `NameEn`)
+VALUES (@p111, @p112, @p113, @p114),
+(@p115, @p116, @p117, @p118),
+(@p119, @p120, @p121, @p122),
+(@p123, @p124, @p125, @p126),
+(@p127, @p128, @p129, @p130),
+(@p131, @p132, @p133, @p134),
+(@p135, @p136, @p137, @p138),
+(@p139, @p140, @p141, @p142),
+(@p143, @p144, @p145, @p146),
+(@p147, @p148, @p149, @p150),
+(@p151, @p152, @p153, @p154),
+(@p155, @p156, @p157, @p158),
+(@p159, @p160, @p161, @p162);
+2026-08-08 16:33:52.962 +03:00 [ERR] An exception occurred in the database while saving changes for context type 'WhereIsTheTrain.Infrastructure.Persistence.ApplicationDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> MySqlConnector.MySqlException (0x80004005): Duplicate entry '00000000-0000-0000-0000-000000000001' for key 'Users.PRIMARY'
+   at MySqlConnector.Core.ServerSession.ReceiveReplyAsync(IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/ServerSession.cs:line 894
+   at MySqlConnector.Core.ResultSet.ReadResultSetHeaderAsync(IOBehavior ioBehavior) in /_/src/MySqlConnector/Core/ResultSet.cs:line 37
+   at MySqlConnector.MySqlDataReader.ActivateResultSet(CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 130
+   at MySqlConnector.MySqlDataReader.InitAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, IDictionary`2 cachedProcedures, IMySqlCommand command, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 483
+   at MySqlConnector.Core.CommandExecutor.ExecuteReaderAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/CommandExecutor.cs:line 56
+   at MySqlConnector.MySqlCommand.ExecuteReaderAsync(CommandBehavior behavior, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 357
+   at MySqlConnector.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 350
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> MySqlConnector.MySqlException (0x80004005): Duplicate entry '00000000-0000-0000-0000-000000000001' for key 'Users.PRIMARY'
+   at MySqlConnector.Core.ServerSession.ReceiveReplyAsync(IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/ServerSession.cs:line 894
+   at MySqlConnector.Core.ResultSet.ReadResultSetHeaderAsync(IOBehavior ioBehavior) in /_/src/MySqlConnector/Core/ResultSet.cs:line 37
+   at MySqlConnector.MySqlDataReader.ActivateResultSet(CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 130
+   at MySqlConnector.MySqlDataReader.InitAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, IDictionary`2 cachedProcedures, IMySqlCommand command, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 483
+   at MySqlConnector.Core.CommandExecutor.ExecuteReaderAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/CommandExecutor.cs:line 56
+   at MySqlConnector.MySqlCommand.ExecuteReaderAsync(CommandBehavior behavior, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 357
+   at MySqlConnector.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 350
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2026-08-08 16:36:03.621 +03:00 [INF] Midnight Trip Generation Service is starting.
+2026-08-08 16:36:05.868 +03:00 [INF] Next midnight trip generation scheduled at "2026-08-09T00:00:00.0000000" (delay: "07:23:54.1319598").
+2026-08-08 16:48:56.381 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 connected to TripHub
+2026-08-08 16:49:02.444 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group ce7c3bb7-ec7b-4eca-8e2b-9e98331176eb
+2026-08-08 16:49:02.449 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 1d3712bc-b7f9-4b2e-80f4-258440009d51
+2026-08-08 16:49:02.450 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 0751a041-8def-4fa0-a796-6eae88a72cee
+2026-08-08 16:49:02.450 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 364fed75-2b59-4f30-bee1-f027e8b8dbca
+2026-08-08 16:49:02.451 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group eff8bfa4-dc8f-4255-8bbd-e3a07fdec091
+2026-08-08 16:49:02.451 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 1479dfbb-bc04-4862-ac5c-8211f228a35e
+2026-08-08 16:49:02.451 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000001
+2026-08-08 16:49:02.452 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000002
+2026-08-08 16:49:02.452 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 14cee2cd-3b09-4fbe-bc90-d1e0d05b8629
+2026-08-08 16:49:02.452 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group d4230701-557d-4128-9654-93637d9e70c1
+2026-08-08 16:49:02.453 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 54c78d52-c988-46c2-8927-2e6abcbc873b
+2026-08-08 16:49:02.454 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group a4aa9635-5786-42b1-b271-5720ce446652
+2026-08-08 16:49:02.454 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group c1ea9808-ed55-4c1a-bfd1-c007527cbe04
+2026-08-08 16:49:02.455 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group ec7583e3-f5a3-4aae-ae63-9aa217df62ad
+2026-08-08 16:49:02.455 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f9152ddf-db75-4d71-9c92-c46084f93a9f
+2026-08-08 16:49:02.455 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 0bf5c741-aaaf-476d-abe5-b4627c14410c
+2026-08-08 16:49:02.456 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f933ea61-7177-47bc-9a4a-6532e9833728
+2026-08-08 16:49:02.456 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group bb83b797-669e-49bd-b749-dcd333af348c
+2026-08-08 16:49:02.456 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 7b86b8dd-d9c7-474d-ae76-cad219458257
+2026-08-08 16:49:02.457 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 61aab04d-826d-4487-9f68-25efde4bf6dd
+2026-08-08 16:49:02.457 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group e5d21642-e2bb-4e0d-8356-d6349fea72d1
+2026-08-08 16:49:02.458 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 3de0d6fc-df39-41da-9b79-bd77ea8728ca
+2026-08-08 16:49:02.458 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group bfa3cf3e-4ad9-4f66-aad6-4d1854e00c73
+2026-08-08 16:49:02.458 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group d842457c-23bf-4ddc-8766-145b1298ccff
+2026-08-08 16:49:02.459 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 46f2ff31-2550-424c-ac8a-425331752d80
+2026-08-08 16:49:02.459 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000003
+2026-08-08 16:49:02.459 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 50034e9a-69d4-46fb-9648-42cca2904a07
+2026-08-08 16:49:02.460 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 3cec7c84-76d1-41bf-97a0-9d0a18b7cb88
+2026-08-08 16:49:02.542 +03:00 [WRN] Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2026-08-08 16:49:58.539 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ce7c3bb7-ec7b-4eca-8e2b-9e98331176eb
+2026-08-08 16:49:58.540 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1d3712bc-b7f9-4b2e-80f4-258440009d51
+2026-08-08 16:49:58.541 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0751a041-8def-4fa0-a796-6eae88a72cee
+2026-08-08 16:49:58.541 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 364fed75-2b59-4f30-bee1-f027e8b8dbca
+2026-08-08 16:49:58.542 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group eff8bfa4-dc8f-4255-8bbd-e3a07fdec091
+2026-08-08 16:49:58.542 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1479dfbb-bc04-4862-ac5c-8211f228a35e
+2026-08-08 16:49:58.542 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000001
+2026-08-08 16:49:58.543 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000002
+2026-08-08 16:49:58.543 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 14cee2cd-3b09-4fbe-bc90-d1e0d05b8629
+2026-08-08 16:49:58.544 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d4230701-557d-4128-9654-93637d9e70c1
+2026-08-08 16:49:58.544 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 54c78d52-c988-46c2-8927-2e6abcbc873b
+2026-08-08 16:49:58.545 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group a4aa9635-5786-42b1-b271-5720ce446652
+2026-08-08 16:49:58.545 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group c1ea9808-ed55-4c1a-bfd1-c007527cbe04
+2026-08-08 16:49:58.545 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ec7583e3-f5a3-4aae-ae63-9aa217df62ad
+2026-08-08 16:49:58.545 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f9152ddf-db75-4d71-9c92-c46084f93a9f
+2026-08-08 16:49:58.546 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0bf5c741-aaaf-476d-abe5-b4627c14410c
+2026-08-08 16:49:58.546 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f933ea61-7177-47bc-9a4a-6532e9833728
+2026-08-08 16:49:58.547 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bb83b797-669e-49bd-b749-dcd333af348c
+2026-08-08 16:49:58.547 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 7b86b8dd-d9c7-474d-ae76-cad219458257
+2026-08-08 16:49:58.554 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 61aab04d-826d-4487-9f68-25efde4bf6dd
+2026-08-08 16:49:58.554 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group e5d21642-e2bb-4e0d-8356-d6349fea72d1
+2026-08-08 16:49:58.554 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3de0d6fc-df39-41da-9b79-bd77ea8728ca
+2026-08-08 16:49:58.554 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bfa3cf3e-4ad9-4f66-aad6-4d1854e00c73
+2026-08-08 16:49:58.554 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d842457c-23bf-4ddc-8766-145b1298ccff
+2026-08-08 16:49:58.555 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 46f2ff31-2550-424c-ac8a-425331752d80
+2026-08-08 16:49:58.555 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000003
+2026-08-08 16:49:58.556 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 50034e9a-69d4-46fb-9648-42cca2904a07
+2026-08-08 16:49:58.556 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3cec7c84-76d1-41bf-97a0-9d0a18b7cb88
+2026-08-08 16:50:02.353 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ce7c3bb7-ec7b-4eca-8e2b-9e98331176eb
+2026-08-08 16:50:02.354 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1d3712bc-b7f9-4b2e-80f4-258440009d51
+2026-08-08 16:50:02.354 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0751a041-8def-4fa0-a796-6eae88a72cee
+2026-08-08 16:50:02.354 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 364fed75-2b59-4f30-bee1-f027e8b8dbca
+2026-08-08 16:50:02.354 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group eff8bfa4-dc8f-4255-8bbd-e3a07fdec091
+2026-08-08 16:50:02.355 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1479dfbb-bc04-4862-ac5c-8211f228a35e
+2026-08-08 16:50:02.355 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000001
+2026-08-08 16:50:02.355 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000002
+2026-08-08 16:50:02.356 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 14cee2cd-3b09-4fbe-bc90-d1e0d05b8629
+2026-08-08 16:50:02.356 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d4230701-557d-4128-9654-93637d9e70c1
+2026-08-08 16:50:02.356 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 54c78d52-c988-46c2-8927-2e6abcbc873b
+2026-08-08 16:50:02.356 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group a4aa9635-5786-42b1-b271-5720ce446652
+2026-08-08 16:50:02.357 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group c1ea9808-ed55-4c1a-bfd1-c007527cbe04
+2026-08-08 16:50:02.357 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ec7583e3-f5a3-4aae-ae63-9aa217df62ad
+2026-08-08 16:50:02.358 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f9152ddf-db75-4d71-9c92-c46084f93a9f
+2026-08-08 16:50:02.358 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0bf5c741-aaaf-476d-abe5-b4627c14410c
+2026-08-08 16:50:02.358 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f933ea61-7177-47bc-9a4a-6532e9833728
+2026-08-08 16:50:02.358 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bb83b797-669e-49bd-b749-dcd333af348c
+2026-08-08 16:50:02.359 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 7b86b8dd-d9c7-474d-ae76-cad219458257
+2026-08-08 16:50:02.359 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 61aab04d-826d-4487-9f68-25efde4bf6dd
+2026-08-08 16:50:02.359 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group e5d21642-e2bb-4e0d-8356-d6349fea72d1
+2026-08-08 16:50:02.360 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3de0d6fc-df39-41da-9b79-bd77ea8728ca
+2026-08-08 16:50:02.360 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bfa3cf3e-4ad9-4f66-aad6-4d1854e00c73
+2026-08-08 16:50:02.360 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d842457c-23bf-4ddc-8766-145b1298ccff
+2026-08-08 16:50:02.360 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 46f2ff31-2550-424c-ac8a-425331752d80
+2026-08-08 16:50:02.361 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000003
+2026-08-08 16:50:02.361 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 50034e9a-69d4-46fb-9648-42cca2904a07
+2026-08-08 16:50:02.361 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3cec7c84-76d1-41bf-97a0-9d0a18b7cb88
+2026-08-08 16:52:19.057 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group ce7c3bb7-ec7b-4eca-8e2b-9e98331176eb
+2026-08-08 16:52:19.057 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 1d3712bc-b7f9-4b2e-80f4-258440009d51
+2026-08-08 16:52:19.058 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 0751a041-8def-4fa0-a796-6eae88a72cee
+2026-08-08 16:52:19.058 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 364fed75-2b59-4f30-bee1-f027e8b8dbca
+2026-08-08 16:52:19.058 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group eff8bfa4-dc8f-4255-8bbd-e3a07fdec091
+2026-08-08 16:52:19.058 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 1479dfbb-bc04-4862-ac5c-8211f228a35e
+2026-08-08 16:52:19.058 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000001
+2026-08-08 16:52:19.058 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000002
+2026-08-08 16:52:19.059 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 14cee2cd-3b09-4fbe-bc90-d1e0d05b8629
+2026-08-08 16:52:19.059 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group d4230701-557d-4128-9654-93637d9e70c1
+2026-08-08 16:52:19.059 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 54c78d52-c988-46c2-8927-2e6abcbc873b
+2026-08-08 16:52:19.059 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group a4aa9635-5786-42b1-b271-5720ce446652
+2026-08-08 16:52:19.059 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group c1ea9808-ed55-4c1a-bfd1-c007527cbe04
+2026-08-08 16:52:19.060 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group ec7583e3-f5a3-4aae-ae63-9aa217df62ad
+2026-08-08 16:52:19.060 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f9152ddf-db75-4d71-9c92-c46084f93a9f
+2026-08-08 16:52:19.060 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 0bf5c741-aaaf-476d-abe5-b4627c14410c
+2026-08-08 16:52:19.060 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f933ea61-7177-47bc-9a4a-6532e9833728
+2026-08-08 16:52:19.060 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group bb83b797-669e-49bd-b749-dcd333af348c
+2026-08-08 16:52:19.060 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 7b86b8dd-d9c7-474d-ae76-cad219458257
+2026-08-08 16:52:19.069 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 61aab04d-826d-4487-9f68-25efde4bf6dd
+2026-08-08 16:52:19.069 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group e5d21642-e2bb-4e0d-8356-d6349fea72d1
+2026-08-08 16:52:19.069 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 3de0d6fc-df39-41da-9b79-bd77ea8728ca
+2026-08-08 16:52:19.069 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group bfa3cf3e-4ad9-4f66-aad6-4d1854e00c73
+2026-08-08 16:52:19.070 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group d842457c-23bf-4ddc-8766-145b1298ccff
+2026-08-08 16:52:19.070 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 46f2ff31-2550-424c-ac8a-425331752d80
+2026-08-08 16:52:19.070 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000003
+2026-08-08 16:52:19.070 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 50034e9a-69d4-46fb-9648-42cca2904a07
+2026-08-08 16:52:19.071 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 3cec7c84-76d1-41bf-97a0-9d0a18b7cb88
+2026-08-08 16:56:52.573 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group ce7c3bb7-ec7b-4eca-8e2b-9e98331176eb
+2026-08-08 16:56:52.574 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 1d3712bc-b7f9-4b2e-80f4-258440009d51
+2026-08-08 16:56:52.574 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 0751a041-8def-4fa0-a796-6eae88a72cee
+2026-08-08 16:56:52.574 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 364fed75-2b59-4f30-bee1-f027e8b8dbca
+2026-08-08 16:56:52.574 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group eff8bfa4-dc8f-4255-8bbd-e3a07fdec091
+2026-08-08 16:56:52.574 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 1479dfbb-bc04-4862-ac5c-8211f228a35e
+2026-08-08 16:56:52.574 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000001
+2026-08-08 16:56:52.574 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000002
+2026-08-08 16:56:52.574 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 14cee2cd-3b09-4fbe-bc90-d1e0d05b8629
+2026-08-08 16:56:52.574 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group d4230701-557d-4128-9654-93637d9e70c1
+2026-08-08 16:56:52.574 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 54c78d52-c988-46c2-8927-2e6abcbc873b
+2026-08-08 16:56:52.574 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group a4aa9635-5786-42b1-b271-5720ce446652
+2026-08-08 16:56:52.574 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group c1ea9808-ed55-4c1a-bfd1-c007527cbe04
+2026-08-08 16:56:52.574 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group ec7583e3-f5a3-4aae-ae63-9aa217df62ad
+2026-08-08 16:56:52.574 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f9152ddf-db75-4d71-9c92-c46084f93a9f
+2026-08-08 16:56:52.574 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 0bf5c741-aaaf-476d-abe5-b4627c14410c
+2026-08-08 16:56:52.574 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f933ea61-7177-47bc-9a4a-6532e9833728
+2026-08-08 16:56:52.574 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group bb83b797-669e-49bd-b749-dcd333af348c
+2026-08-08 16:56:52.574 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 7b86b8dd-d9c7-474d-ae76-cad219458257
+2026-08-08 16:56:52.581 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 61aab04d-826d-4487-9f68-25efde4bf6dd
+2026-08-08 16:56:52.581 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group e5d21642-e2bb-4e0d-8356-d6349fea72d1
+2026-08-08 16:56:52.581 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 3de0d6fc-df39-41da-9b79-bd77ea8728ca
+2026-08-08 16:56:52.581 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group bfa3cf3e-4ad9-4f66-aad6-4d1854e00c73
+2026-08-08 16:56:52.581 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group d842457c-23bf-4ddc-8766-145b1298ccff
+2026-08-08 16:56:52.581 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 46f2ff31-2550-424c-ac8a-425331752d80
+2026-08-08 16:56:52.581 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000003
+2026-08-08 16:56:52.581 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 50034e9a-69d4-46fb-9648-42cca2904a07
+2026-08-08 16:56:52.581 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 3cec7c84-76d1-41bf-97a0-9d0a18b7cb88
+2026-08-08 16:56:56.733 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group ce7c3bb7-ec7b-4eca-8e2b-9e98331176eb
+2026-08-08 16:56:56.733 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 1d3712bc-b7f9-4b2e-80f4-258440009d51
+2026-08-08 16:56:56.733 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 0751a041-8def-4fa0-a796-6eae88a72cee
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 364fed75-2b59-4f30-bee1-f027e8b8dbca
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group eff8bfa4-dc8f-4255-8bbd-e3a07fdec091
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 1479dfbb-bc04-4862-ac5c-8211f228a35e
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000001
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000002
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 14cee2cd-3b09-4fbe-bc90-d1e0d05b8629
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group d4230701-557d-4128-9654-93637d9e70c1
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 54c78d52-c988-46c2-8927-2e6abcbc873b
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group a4aa9635-5786-42b1-b271-5720ce446652
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group c1ea9808-ed55-4c1a-bfd1-c007527cbe04
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group ec7583e3-f5a3-4aae-ae63-9aa217df62ad
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f9152ddf-db75-4d71-9c92-c46084f93a9f
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 0bf5c741-aaaf-476d-abe5-b4627c14410c
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f933ea61-7177-47bc-9a4a-6532e9833728
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group bb83b797-669e-49bd-b749-dcd333af348c
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 7b86b8dd-d9c7-474d-ae76-cad219458257
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 61aab04d-826d-4487-9f68-25efde4bf6dd
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group e5d21642-e2bb-4e0d-8356-d6349fea72d1
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 3de0d6fc-df39-41da-9b79-bd77ea8728ca
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group bfa3cf3e-4ad9-4f66-aad6-4d1854e00c73
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group d842457c-23bf-4ddc-8766-145b1298ccff
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 46f2ff31-2550-424c-ac8a-425331752d80
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000003
+2026-08-08 16:56:56.734 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 50034e9a-69d4-46fb-9648-42cca2904a07
+2026-08-08 16:56:56.735 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 3cec7c84-76d1-41bf-97a0-9d0a18b7cb88
+2026-08-08 16:57:00.893 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group ce7c3bb7-ec7b-4eca-8e2b-9e98331176eb
+2026-08-08 16:57:00.893 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 1d3712bc-b7f9-4b2e-80f4-258440009d51
+2026-08-08 16:57:00.893 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 0751a041-8def-4fa0-a796-6eae88a72cee
+2026-08-08 16:57:00.893 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 364fed75-2b59-4f30-bee1-f027e8b8dbca
+2026-08-08 16:57:00.893 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group eff8bfa4-dc8f-4255-8bbd-e3a07fdec091
+2026-08-08 16:57:00.893 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 1479dfbb-bc04-4862-ac5c-8211f228a35e
+2026-08-08 16:57:00.893 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000001
+2026-08-08 16:57:00.893 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000002
+2026-08-08 16:57:00.893 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 14cee2cd-3b09-4fbe-bc90-d1e0d05b8629
+2026-08-08 16:57:00.893 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group d4230701-557d-4128-9654-93637d9e70c1
+2026-08-08 16:57:00.893 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 54c78d52-c988-46c2-8927-2e6abcbc873b
+2026-08-08 16:57:00.893 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group a4aa9635-5786-42b1-b271-5720ce446652
+2026-08-08 16:57:00.893 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group c1ea9808-ed55-4c1a-bfd1-c007527cbe04
+2026-08-08 16:57:00.893 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group ec7583e3-f5a3-4aae-ae63-9aa217df62ad
+2026-08-08 16:57:00.893 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f9152ddf-db75-4d71-9c92-c46084f93a9f
+2026-08-08 16:57:00.893 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 0bf5c741-aaaf-476d-abe5-b4627c14410c
+2026-08-08 16:57:00.893 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f933ea61-7177-47bc-9a4a-6532e9833728
+2026-08-08 16:57:00.893 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group bb83b797-669e-49bd-b749-dcd333af348c
+2026-08-08 16:57:00.893 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 7b86b8dd-d9c7-474d-ae76-cad219458257
+2026-08-08 16:57:00.894 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 61aab04d-826d-4487-9f68-25efde4bf6dd
+2026-08-08 16:57:00.894 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group e5d21642-e2bb-4e0d-8356-d6349fea72d1
+2026-08-08 16:57:00.894 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 3de0d6fc-df39-41da-9b79-bd77ea8728ca
+2026-08-08 16:57:00.894 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group bfa3cf3e-4ad9-4f66-aad6-4d1854e00c73
+2026-08-08 16:57:00.894 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group d842457c-23bf-4ddc-8766-145b1298ccff
+2026-08-08 16:57:00.894 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 46f2ff31-2550-424c-ac8a-425331752d80
+2026-08-08 16:57:00.894 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000003
+2026-08-08 16:57:00.894 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 50034e9a-69d4-46fb-9648-42cca2904a07
+2026-08-08 16:57:00.894 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 3cec7c84-76d1-41bf-97a0-9d0a18b7cb88
+2026-08-08 16:57:10.144 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group ce7c3bb7-ec7b-4eca-8e2b-9e98331176eb
+2026-08-08 16:57:10.145 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 1d3712bc-b7f9-4b2e-80f4-258440009d51
+2026-08-08 16:57:10.145 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 0751a041-8def-4fa0-a796-6eae88a72cee
+2026-08-08 16:57:10.145 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 364fed75-2b59-4f30-bee1-f027e8b8dbca
+2026-08-08 16:57:10.145 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group eff8bfa4-dc8f-4255-8bbd-e3a07fdec091
+2026-08-08 16:57:10.145 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 1479dfbb-bc04-4862-ac5c-8211f228a35e
+2026-08-08 16:57:10.145 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000001
+2026-08-08 16:57:10.145 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000002
+2026-08-08 16:57:10.145 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 14cee2cd-3b09-4fbe-bc90-d1e0d05b8629
+2026-08-08 16:57:10.145 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group d4230701-557d-4128-9654-93637d9e70c1
+2026-08-08 16:57:10.145 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 54c78d52-c988-46c2-8927-2e6abcbc873b
+2026-08-08 16:57:10.145 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group a4aa9635-5786-42b1-b271-5720ce446652
+2026-08-08 16:57:10.145 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group c1ea9808-ed55-4c1a-bfd1-c007527cbe04
+2026-08-08 16:57:10.145 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group ec7583e3-f5a3-4aae-ae63-9aa217df62ad
+2026-08-08 16:57:10.145 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f9152ddf-db75-4d71-9c92-c46084f93a9f
+2026-08-08 16:57:10.145 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 0bf5c741-aaaf-476d-abe5-b4627c14410c
+2026-08-08 16:57:10.145 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f933ea61-7177-47bc-9a4a-6532e9833728
+2026-08-08 16:57:10.146 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group bb83b797-669e-49bd-b749-dcd333af348c
+2026-08-08 16:57:10.146 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 7b86b8dd-d9c7-474d-ae76-cad219458257
+2026-08-08 16:57:10.146 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 61aab04d-826d-4487-9f68-25efde4bf6dd
+2026-08-08 16:57:10.146 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group e5d21642-e2bb-4e0d-8356-d6349fea72d1
+2026-08-08 16:57:10.146 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 3de0d6fc-df39-41da-9b79-bd77ea8728ca
+2026-08-08 16:57:10.147 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group bfa3cf3e-4ad9-4f66-aad6-4d1854e00c73
+2026-08-08 16:57:10.147 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group d842457c-23bf-4ddc-8766-145b1298ccff
+2026-08-08 16:57:10.147 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 46f2ff31-2550-424c-ac8a-425331752d80
+2026-08-08 16:57:10.147 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000003
+2026-08-08 16:57:10.147 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 50034e9a-69d4-46fb-9648-42cca2904a07
+2026-08-08 16:57:10.147 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 3cec7c84-76d1-41bf-97a0-9d0a18b7cb88
+2026-08-08 16:57:48.492 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ce7c3bb7-ec7b-4eca-8e2b-9e98331176eb
+2026-08-08 16:57:48.492 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1d3712bc-b7f9-4b2e-80f4-258440009d51
+2026-08-08 16:57:48.492 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0751a041-8def-4fa0-a796-6eae88a72cee
+2026-08-08 16:57:48.492 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 364fed75-2b59-4f30-bee1-f027e8b8dbca
+2026-08-08 16:57:48.492 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group eff8bfa4-dc8f-4255-8bbd-e3a07fdec091
+2026-08-08 16:57:48.492 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1479dfbb-bc04-4862-ac5c-8211f228a35e
+2026-08-08 16:57:48.492 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000001
+2026-08-08 16:57:48.492 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000002
+2026-08-08 16:57:48.492 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 14cee2cd-3b09-4fbe-bc90-d1e0d05b8629
+2026-08-08 16:57:48.493 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d4230701-557d-4128-9654-93637d9e70c1
+2026-08-08 16:57:48.493 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 54c78d52-c988-46c2-8927-2e6abcbc873b
+2026-08-08 16:57:48.493 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group a4aa9635-5786-42b1-b271-5720ce446652
+2026-08-08 16:57:48.493 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group c1ea9808-ed55-4c1a-bfd1-c007527cbe04
+2026-08-08 16:57:48.493 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ec7583e3-f5a3-4aae-ae63-9aa217df62ad
+2026-08-08 16:57:48.493 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f9152ddf-db75-4d71-9c92-c46084f93a9f
+2026-08-08 16:57:48.493 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0bf5c741-aaaf-476d-abe5-b4627c14410c
+2026-08-08 16:57:48.493 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f933ea61-7177-47bc-9a4a-6532e9833728
+2026-08-08 16:57:48.493 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bb83b797-669e-49bd-b749-dcd333af348c
+2026-08-08 16:57:48.493 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 7b86b8dd-d9c7-474d-ae76-cad219458257
+2026-08-08 16:57:48.503 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 61aab04d-826d-4487-9f68-25efde4bf6dd
+2026-08-08 16:57:48.503 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group e5d21642-e2bb-4e0d-8356-d6349fea72d1
+2026-08-08 16:57:48.503 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3de0d6fc-df39-41da-9b79-bd77ea8728ca
+2026-08-08 16:57:48.503 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bfa3cf3e-4ad9-4f66-aad6-4d1854e00c73
+2026-08-08 16:57:48.504 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d842457c-23bf-4ddc-8766-145b1298ccff
+2026-08-08 16:57:48.504 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 46f2ff31-2550-424c-ac8a-425331752d80
+2026-08-08 16:57:48.504 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000003
+2026-08-08 16:57:48.504 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 50034e9a-69d4-46fb-9648-42cca2904a07
+2026-08-08 16:57:48.504 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3cec7c84-76d1-41bf-97a0-9d0a18b7cb88
+2026-08-08 16:57:52.646 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ce7c3bb7-ec7b-4eca-8e2b-9e98331176eb
+2026-08-08 16:57:52.646 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1d3712bc-b7f9-4b2e-80f4-258440009d51
+2026-08-08 16:57:52.647 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0751a041-8def-4fa0-a796-6eae88a72cee
+2026-08-08 16:57:52.647 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 364fed75-2b59-4f30-bee1-f027e8b8dbca
+2026-08-08 16:57:52.647 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group eff8bfa4-dc8f-4255-8bbd-e3a07fdec091
+2026-08-08 16:57:52.647 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1479dfbb-bc04-4862-ac5c-8211f228a35e
+2026-08-08 16:57:52.647 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000001
+2026-08-08 16:57:52.647 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000002
+2026-08-08 16:57:52.647 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 14cee2cd-3b09-4fbe-bc90-d1e0d05b8629
+2026-08-08 16:57:52.647 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d4230701-557d-4128-9654-93637d9e70c1
+2026-08-08 16:57:52.647 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 54c78d52-c988-46c2-8927-2e6abcbc873b
+2026-08-08 16:57:52.647 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group a4aa9635-5786-42b1-b271-5720ce446652
+2026-08-08 16:57:52.647 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group c1ea9808-ed55-4c1a-bfd1-c007527cbe04
+2026-08-08 16:57:52.647 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ec7583e3-f5a3-4aae-ae63-9aa217df62ad
+2026-08-08 16:57:52.647 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f9152ddf-db75-4d71-9c92-c46084f93a9f
+2026-08-08 16:57:52.647 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0bf5c741-aaaf-476d-abe5-b4627c14410c
+2026-08-08 16:57:52.647 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f933ea61-7177-47bc-9a4a-6532e9833728
+2026-08-08 16:57:52.647 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bb83b797-669e-49bd-b749-dcd333af348c
+2026-08-08 16:57:52.647 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 7b86b8dd-d9c7-474d-ae76-cad219458257
+2026-08-08 16:57:52.647 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 61aab04d-826d-4487-9f68-25efde4bf6dd
+2026-08-08 16:57:52.648 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group e5d21642-e2bb-4e0d-8356-d6349fea72d1
+2026-08-08 16:57:52.648 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3de0d6fc-df39-41da-9b79-bd77ea8728ca
+2026-08-08 16:57:52.648 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bfa3cf3e-4ad9-4f66-aad6-4d1854e00c73
+2026-08-08 16:57:52.648 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d842457c-23bf-4ddc-8766-145b1298ccff
+2026-08-08 16:57:52.648 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 46f2ff31-2550-424c-ac8a-425331752d80
+2026-08-08 16:57:52.648 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000003
+2026-08-08 16:57:52.648 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 50034e9a-69d4-46fb-9648-42cca2904a07
+2026-08-08 16:57:52.648 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3cec7c84-76d1-41bf-97a0-9d0a18b7cb88
+2026-08-08 16:57:57.762 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ce7c3bb7-ec7b-4eca-8e2b-9e98331176eb
+2026-08-08 16:57:57.763 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1d3712bc-b7f9-4b2e-80f4-258440009d51
+2026-08-08 16:57:57.763 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0751a041-8def-4fa0-a796-6eae88a72cee
+2026-08-08 16:57:57.763 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 364fed75-2b59-4f30-bee1-f027e8b8dbca
+2026-08-08 16:57:57.763 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group eff8bfa4-dc8f-4255-8bbd-e3a07fdec091
+2026-08-08 16:57:57.763 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1479dfbb-bc04-4862-ac5c-8211f228a35e
+2026-08-08 16:57:57.763 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000001
+2026-08-08 16:57:57.763 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000002
+2026-08-08 16:57:57.763 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 14cee2cd-3b09-4fbe-bc90-d1e0d05b8629
+2026-08-08 16:57:57.763 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d4230701-557d-4128-9654-93637d9e70c1
+2026-08-08 16:57:57.763 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 54c78d52-c988-46c2-8927-2e6abcbc873b
+2026-08-08 16:57:57.763 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group a4aa9635-5786-42b1-b271-5720ce446652
+2026-08-08 16:57:57.763 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group c1ea9808-ed55-4c1a-bfd1-c007527cbe04
+2026-08-08 16:57:57.763 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ec7583e3-f5a3-4aae-ae63-9aa217df62ad
+2026-08-08 16:57:57.763 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f9152ddf-db75-4d71-9c92-c46084f93a9f
+2026-08-08 16:57:57.763 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0bf5c741-aaaf-476d-abe5-b4627c14410c
+2026-08-08 16:57:57.763 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f933ea61-7177-47bc-9a4a-6532e9833728
+2026-08-08 16:57:57.764 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bb83b797-669e-49bd-b749-dcd333af348c
+2026-08-08 16:57:57.764 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 7b86b8dd-d9c7-474d-ae76-cad219458257
+2026-08-08 16:57:57.764 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 61aab04d-826d-4487-9f68-25efde4bf6dd
+2026-08-08 16:57:57.764 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group e5d21642-e2bb-4e0d-8356-d6349fea72d1
+2026-08-08 16:57:57.764 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3de0d6fc-df39-41da-9b79-bd77ea8728ca
+2026-08-08 16:57:57.765 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bfa3cf3e-4ad9-4f66-aad6-4d1854e00c73
+2026-08-08 16:57:57.765 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d842457c-23bf-4ddc-8766-145b1298ccff
+2026-08-08 16:57:57.765 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 46f2ff31-2550-424c-ac8a-425331752d80
+2026-08-08 16:57:57.765 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000003
+2026-08-08 16:57:57.765 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 50034e9a-69d4-46fb-9648-42cca2904a07
+2026-08-08 16:57:57.765 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3cec7c84-76d1-41bf-97a0-9d0a18b7cb88
+2026-08-08 16:58:00.906 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ce7c3bb7-ec7b-4eca-8e2b-9e98331176eb
+2026-08-08 16:58:00.907 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1d3712bc-b7f9-4b2e-80f4-258440009d51
+2026-08-08 16:58:00.907 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0751a041-8def-4fa0-a796-6eae88a72cee
+2026-08-08 16:58:00.907 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 364fed75-2b59-4f30-bee1-f027e8b8dbca
+2026-08-08 16:58:00.907 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group eff8bfa4-dc8f-4255-8bbd-e3a07fdec091
+2026-08-08 16:58:00.907 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1479dfbb-bc04-4862-ac5c-8211f228a35e
+2026-08-08 16:58:00.907 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000001
+2026-08-08 16:58:00.907 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000002
+2026-08-08 16:58:00.907 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 14cee2cd-3b09-4fbe-bc90-d1e0d05b8629
+2026-08-08 16:58:00.907 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d4230701-557d-4128-9654-93637d9e70c1
+2026-08-08 16:58:00.907 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 54c78d52-c988-46c2-8927-2e6abcbc873b
+2026-08-08 16:58:00.907 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group a4aa9635-5786-42b1-b271-5720ce446652
+2026-08-08 16:58:00.907 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group c1ea9808-ed55-4c1a-bfd1-c007527cbe04
+2026-08-08 16:58:00.907 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ec7583e3-f5a3-4aae-ae63-9aa217df62ad
+2026-08-08 16:58:00.907 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f9152ddf-db75-4d71-9c92-c46084f93a9f
+2026-08-08 16:58:00.907 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0bf5c741-aaaf-476d-abe5-b4627c14410c
+2026-08-08 16:58:00.907 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f933ea61-7177-47bc-9a4a-6532e9833728
+2026-08-08 16:58:00.907 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bb83b797-669e-49bd-b749-dcd333af348c
+2026-08-08 16:58:00.907 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 7b86b8dd-d9c7-474d-ae76-cad219458257
+2026-08-08 16:58:00.908 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 61aab04d-826d-4487-9f68-25efde4bf6dd
+2026-08-08 16:58:00.908 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group e5d21642-e2bb-4e0d-8356-d6349fea72d1
+2026-08-08 16:58:00.908 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3de0d6fc-df39-41da-9b79-bd77ea8728ca
+2026-08-08 16:58:00.908 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bfa3cf3e-4ad9-4f66-aad6-4d1854e00c73
+2026-08-08 16:58:00.908 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d842457c-23bf-4ddc-8766-145b1298ccff
+2026-08-08 16:58:00.908 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 46f2ff31-2550-424c-ac8a-425331752d80
+2026-08-08 16:58:00.908 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000003
+2026-08-08 16:58:00.909 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 50034e9a-69d4-46fb-9648-42cca2904a07
+2026-08-08 16:58:00.909 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3cec7c84-76d1-41bf-97a0-9d0a18b7cb88
+2026-08-08 16:58:35.102 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group ce7c3bb7-ec7b-4eca-8e2b-9e98331176eb
+2026-08-08 16:58:35.103 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 1d3712bc-b7f9-4b2e-80f4-258440009d51
+2026-08-08 16:58:35.103 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 0751a041-8def-4fa0-a796-6eae88a72cee
+2026-08-08 16:58:35.103 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 364fed75-2b59-4f30-bee1-f027e8b8dbca
+2026-08-08 16:58:35.103 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group eff8bfa4-dc8f-4255-8bbd-e3a07fdec091
+2026-08-08 16:58:35.103 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 1479dfbb-bc04-4862-ac5c-8211f228a35e
+2026-08-08 16:58:35.103 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000001
+2026-08-08 16:58:35.103 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000002
+2026-08-08 16:58:35.103 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 14cee2cd-3b09-4fbe-bc90-d1e0d05b8629
+2026-08-08 16:58:35.103 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group d4230701-557d-4128-9654-93637d9e70c1
+2026-08-08 16:58:35.103 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 54c78d52-c988-46c2-8927-2e6abcbc873b
+2026-08-08 16:58:35.103 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group a4aa9635-5786-42b1-b271-5720ce446652
+2026-08-08 16:58:35.103 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group c1ea9808-ed55-4c1a-bfd1-c007527cbe04
+2026-08-08 16:58:35.103 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group ec7583e3-f5a3-4aae-ae63-9aa217df62ad
+2026-08-08 16:58:35.103 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f9152ddf-db75-4d71-9c92-c46084f93a9f
+2026-08-08 16:58:35.103 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 0bf5c741-aaaf-476d-abe5-b4627c14410c
+2026-08-08 16:58:35.103 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f933ea61-7177-47bc-9a4a-6532e9833728
+2026-08-08 16:58:35.103 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group bb83b797-669e-49bd-b749-dcd333af348c
+2026-08-08 16:58:35.103 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 7b86b8dd-d9c7-474d-ae76-cad219458257
+2026-08-08 16:58:35.107 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 61aab04d-826d-4487-9f68-25efde4bf6dd
+2026-08-08 16:58:35.108 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group e5d21642-e2bb-4e0d-8356-d6349fea72d1
+2026-08-08 16:58:35.108 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 3de0d6fc-df39-41da-9b79-bd77ea8728ca
+2026-08-08 16:58:35.108 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group bfa3cf3e-4ad9-4f66-aad6-4d1854e00c73
+2026-08-08 16:58:35.108 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group d842457c-23bf-4ddc-8766-145b1298ccff
+2026-08-08 16:58:35.108 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 46f2ff31-2550-424c-ac8a-425331752d80
+2026-08-08 16:58:35.108 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000003
+2026-08-08 16:58:35.108 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 50034e9a-69d4-46fb-9648-42cca2904a07
+2026-08-08 16:58:35.108 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 3cec7c84-76d1-41bf-97a0-9d0a18b7cb88
+2026-08-08 16:58:40.629 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group ce7c3bb7-ec7b-4eca-8e2b-9e98331176eb
+2026-08-08 16:58:40.629 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 1d3712bc-b7f9-4b2e-80f4-258440009d51
+2026-08-08 16:58:40.629 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 0751a041-8def-4fa0-a796-6eae88a72cee
+2026-08-08 16:58:40.629 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 364fed75-2b59-4f30-bee1-f027e8b8dbca
+2026-08-08 16:58:40.629 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group eff8bfa4-dc8f-4255-8bbd-e3a07fdec091
+2026-08-08 16:58:40.629 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 1479dfbb-bc04-4862-ac5c-8211f228a35e
+2026-08-08 16:58:40.630 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000001
+2026-08-08 16:58:40.630 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000002
+2026-08-08 16:58:40.630 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 14cee2cd-3b09-4fbe-bc90-d1e0d05b8629
+2026-08-08 16:58:40.630 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group d4230701-557d-4128-9654-93637d9e70c1
+2026-08-08 16:58:40.630 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 54c78d52-c988-46c2-8927-2e6abcbc873b
+2026-08-08 16:58:40.630 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group a4aa9635-5786-42b1-b271-5720ce446652
+2026-08-08 16:58:40.630 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group c1ea9808-ed55-4c1a-bfd1-c007527cbe04
+2026-08-08 16:58:40.630 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group ec7583e3-f5a3-4aae-ae63-9aa217df62ad
+2026-08-08 16:58:40.630 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f9152ddf-db75-4d71-9c92-c46084f93a9f
+2026-08-08 16:58:40.630 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 0bf5c741-aaaf-476d-abe5-b4627c14410c
+2026-08-08 16:58:40.630 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f933ea61-7177-47bc-9a4a-6532e9833728
+2026-08-08 16:58:40.630 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group bb83b797-669e-49bd-b749-dcd333af348c
+2026-08-08 16:58:40.630 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 7b86b8dd-d9c7-474d-ae76-cad219458257
+2026-08-08 16:58:40.631 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 61aab04d-826d-4487-9f68-25efde4bf6dd
+2026-08-08 16:58:40.632 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group e5d21642-e2bb-4e0d-8356-d6349fea72d1
+2026-08-08 16:58:40.632 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 3de0d6fc-df39-41da-9b79-bd77ea8728ca
+2026-08-08 16:58:40.632 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group bfa3cf3e-4ad9-4f66-aad6-4d1854e00c73
+2026-08-08 16:58:40.632 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group d842457c-23bf-4ddc-8766-145b1298ccff
+2026-08-08 16:58:40.632 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 46f2ff31-2550-424c-ac8a-425331752d80
+2026-08-08 16:58:40.632 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000003
+2026-08-08 16:58:40.632 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 50034e9a-69d4-46fb-9648-42cca2904a07
+2026-08-08 16:58:40.632 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 3cec7c84-76d1-41bf-97a0-9d0a18b7cb88
+2026-08-08 16:59:05.194 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group ce7c3bb7-ec7b-4eca-8e2b-9e98331176eb
+2026-08-08 16:59:05.194 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 1d3712bc-b7f9-4b2e-80f4-258440009d51
+2026-08-08 16:59:05.194 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 0751a041-8def-4fa0-a796-6eae88a72cee
+2026-08-08 16:59:05.194 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 364fed75-2b59-4f30-bee1-f027e8b8dbca
+2026-08-08 16:59:05.194 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group eff8bfa4-dc8f-4255-8bbd-e3a07fdec091
+2026-08-08 16:59:05.194 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 1479dfbb-bc04-4862-ac5c-8211f228a35e
+2026-08-08 16:59:05.194 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000001
+2026-08-08 16:59:05.194 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000002
+2026-08-08 16:59:05.194 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 14cee2cd-3b09-4fbe-bc90-d1e0d05b8629
+2026-08-08 16:59:05.194 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group d4230701-557d-4128-9654-93637d9e70c1
+2026-08-08 16:59:05.194 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 54c78d52-c988-46c2-8927-2e6abcbc873b
+2026-08-08 16:59:05.194 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group a4aa9635-5786-42b1-b271-5720ce446652
+2026-08-08 16:59:05.195 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group c1ea9808-ed55-4c1a-bfd1-c007527cbe04
+2026-08-08 16:59:05.195 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group ec7583e3-f5a3-4aae-ae63-9aa217df62ad
+2026-08-08 16:59:05.195 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f9152ddf-db75-4d71-9c92-c46084f93a9f
+2026-08-08 16:59:05.195 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 0bf5c741-aaaf-476d-abe5-b4627c14410c
+2026-08-08 16:59:05.195 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group f933ea61-7177-47bc-9a4a-6532e9833728
+2026-08-08 16:59:05.195 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group bb83b797-669e-49bd-b749-dcd333af348c
+2026-08-08 16:59:05.195 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 7b86b8dd-d9c7-474d-ae76-cad219458257
+2026-08-08 16:59:05.195 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 61aab04d-826d-4487-9f68-25efde4bf6dd
+2026-08-08 16:59:05.195 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group e5d21642-e2bb-4e0d-8356-d6349fea72d1
+2026-08-08 16:59:05.195 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 3de0d6fc-df39-41da-9b79-bd77ea8728ca
+2026-08-08 16:59:05.196 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group bfa3cf3e-4ad9-4f66-aad6-4d1854e00c73
+2026-08-08 16:59:05.196 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group d842457c-23bf-4ddc-8766-145b1298ccff
+2026-08-08 16:59:05.196 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 46f2ff31-2550-424c-ac8a-425331752d80
+2026-08-08 16:59:05.196 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 30000000-0000-0000-0000-000000000003
+2026-08-08 16:59:05.196 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 50034e9a-69d4-46fb-9648-42cca2904a07
+2026-08-08 16:59:05.196 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 left trip group 3cec7c84-76d1-41bf-97a0-9d0a18b7cb88
+2026-08-08 16:59:30.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ce7c3bb7-ec7b-4eca-8e2b-9e98331176eb
+2026-08-08 16:59:30.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1d3712bc-b7f9-4b2e-80f4-258440009d51
+2026-08-08 16:59:30.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0751a041-8def-4fa0-a796-6eae88a72cee
+2026-08-08 16:59:30.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 364fed75-2b59-4f30-bee1-f027e8b8dbca
+2026-08-08 16:59:30.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group eff8bfa4-dc8f-4255-8bbd-e3a07fdec091
+2026-08-08 16:59:30.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1479dfbb-bc04-4862-ac5c-8211f228a35e
+2026-08-08 16:59:30.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000001
+2026-08-08 16:59:30.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000002
+2026-08-08 16:59:30.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 14cee2cd-3b09-4fbe-bc90-d1e0d05b8629
+2026-08-08 16:59:30.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d4230701-557d-4128-9654-93637d9e70c1
+2026-08-08 16:59:30.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 54c78d52-c988-46c2-8927-2e6abcbc873b
+2026-08-08 16:59:30.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group a4aa9635-5786-42b1-b271-5720ce446652
+2026-08-08 16:59:30.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group c1ea9808-ed55-4c1a-bfd1-c007527cbe04
+2026-08-08 16:59:30.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ec7583e3-f5a3-4aae-ae63-9aa217df62ad
+2026-08-08 16:59:30.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f9152ddf-db75-4d71-9c92-c46084f93a9f
+2026-08-08 16:59:30.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0bf5c741-aaaf-476d-abe5-b4627c14410c
+2026-08-08 16:59:30.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f933ea61-7177-47bc-9a4a-6532e9833728
+2026-08-08 16:59:30.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bb83b797-669e-49bd-b749-dcd333af348c
+2026-08-08 16:59:30.752 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 7b86b8dd-d9c7-474d-ae76-cad219458257
+2026-08-08 16:59:30.753 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 61aab04d-826d-4487-9f68-25efde4bf6dd
+2026-08-08 16:59:30.753 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group e5d21642-e2bb-4e0d-8356-d6349fea72d1
+2026-08-08 16:59:30.753 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3de0d6fc-df39-41da-9b79-bd77ea8728ca
+2026-08-08 16:59:30.753 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bfa3cf3e-4ad9-4f66-aad6-4d1854e00c73
+2026-08-08 16:59:30.753 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d842457c-23bf-4ddc-8766-145b1298ccff
+2026-08-08 16:59:30.753 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 46f2ff31-2550-424c-ac8a-425331752d80
+2026-08-08 16:59:30.753 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000003
+2026-08-08 16:59:30.753 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 50034e9a-69d4-46fb-9648-42cca2904a07
+2026-08-08 16:59:30.753 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3cec7c84-76d1-41bf-97a0-9d0a18b7cb88
+2026-08-08 16:59:34.849 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ce7c3bb7-ec7b-4eca-8e2b-9e98331176eb
+2026-08-08 16:59:34.849 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1d3712bc-b7f9-4b2e-80f4-258440009d51
+2026-08-08 16:59:34.849 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0751a041-8def-4fa0-a796-6eae88a72cee
+2026-08-08 16:59:34.849 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 364fed75-2b59-4f30-bee1-f027e8b8dbca
+2026-08-08 16:59:34.849 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group eff8bfa4-dc8f-4255-8bbd-e3a07fdec091
+2026-08-08 16:59:34.849 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1479dfbb-bc04-4862-ac5c-8211f228a35e
+2026-08-08 16:59:34.849 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000001
+2026-08-08 16:59:34.849 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000002
+2026-08-08 16:59:34.849 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 14cee2cd-3b09-4fbe-bc90-d1e0d05b8629
+2026-08-08 16:59:34.849 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d4230701-557d-4128-9654-93637d9e70c1
+2026-08-08 16:59:34.849 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 54c78d52-c988-46c2-8927-2e6abcbc873b
+2026-08-08 16:59:34.849 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group a4aa9635-5786-42b1-b271-5720ce446652
+2026-08-08 16:59:34.849 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group c1ea9808-ed55-4c1a-bfd1-c007527cbe04
+2026-08-08 16:59:34.849 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ec7583e3-f5a3-4aae-ae63-9aa217df62ad
+2026-08-08 16:59:34.849 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f9152ddf-db75-4d71-9c92-c46084f93a9f
+2026-08-08 16:59:34.849 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0bf5c741-aaaf-476d-abe5-b4627c14410c
+2026-08-08 16:59:34.849 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f933ea61-7177-47bc-9a4a-6532e9833728
+2026-08-08 16:59:34.849 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bb83b797-669e-49bd-b749-dcd333af348c
+2026-08-08 16:59:34.850 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 7b86b8dd-d9c7-474d-ae76-cad219458257
+2026-08-08 16:59:34.850 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 61aab04d-826d-4487-9f68-25efde4bf6dd
+2026-08-08 16:59:34.850 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group e5d21642-e2bb-4e0d-8356-d6349fea72d1
+2026-08-08 16:59:34.850 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3de0d6fc-df39-41da-9b79-bd77ea8728ca
+2026-08-08 16:59:34.850 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bfa3cf3e-4ad9-4f66-aad6-4d1854e00c73
+2026-08-08 16:59:34.850 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d842457c-23bf-4ddc-8766-145b1298ccff
+2026-08-08 16:59:34.850 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 46f2ff31-2550-424c-ac8a-425331752d80
+2026-08-08 16:59:34.850 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000003
+2026-08-08 16:59:34.850 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 50034e9a-69d4-46fb-9648-42cca2904a07
+2026-08-08 16:59:34.850 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3cec7c84-76d1-41bf-97a0-9d0a18b7cb88
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ce7c3bb7-ec7b-4eca-8e2b-9e98331176eb
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1d3712bc-b7f9-4b2e-80f4-258440009d51
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0751a041-8def-4fa0-a796-6eae88a72cee
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 364fed75-2b59-4f30-bee1-f027e8b8dbca
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group eff8bfa4-dc8f-4255-8bbd-e3a07fdec091
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1479dfbb-bc04-4862-ac5c-8211f228a35e
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000001
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000002
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 14cee2cd-3b09-4fbe-bc90-d1e0d05b8629
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d4230701-557d-4128-9654-93637d9e70c1
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 54c78d52-c988-46c2-8927-2e6abcbc873b
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group a4aa9635-5786-42b1-b271-5720ce446652
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group c1ea9808-ed55-4c1a-bfd1-c007527cbe04
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ec7583e3-f5a3-4aae-ae63-9aa217df62ad
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f9152ddf-db75-4d71-9c92-c46084f93a9f
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0bf5c741-aaaf-476d-abe5-b4627c14410c
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f933ea61-7177-47bc-9a4a-6532e9833728
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bb83b797-669e-49bd-b749-dcd333af348c
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 7b86b8dd-d9c7-474d-ae76-cad219458257
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 61aab04d-826d-4487-9f68-25efde4bf6dd
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group e5d21642-e2bb-4e0d-8356-d6349fea72d1
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3de0d6fc-df39-41da-9b79-bd77ea8728ca
+2026-08-08 17:00:00.831 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bfa3cf3e-4ad9-4f66-aad6-4d1854e00c73
+2026-08-08 17:00:00.832 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d842457c-23bf-4ddc-8766-145b1298ccff
+2026-08-08 17:00:00.832 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 46f2ff31-2550-424c-ac8a-425331752d80
+2026-08-08 17:00:00.832 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000003
+2026-08-08 17:00:00.832 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 50034e9a-69d4-46fb-9648-42cca2904a07
+2026-08-08 17:00:00.832 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3cec7c84-76d1-41bf-97a0-9d0a18b7cb88
+2026-08-08 17:00:04.982 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ce7c3bb7-ec7b-4eca-8e2b-9e98331176eb
+2026-08-08 17:00:04.982 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1d3712bc-b7f9-4b2e-80f4-258440009d51
+2026-08-08 17:00:04.982 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0751a041-8def-4fa0-a796-6eae88a72cee
+2026-08-08 17:00:04.982 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 364fed75-2b59-4f30-bee1-f027e8b8dbca
+2026-08-08 17:00:04.982 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group eff8bfa4-dc8f-4255-8bbd-e3a07fdec091
+2026-08-08 17:00:04.982 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 1479dfbb-bc04-4862-ac5c-8211f228a35e
+2026-08-08 17:00:04.982 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000001
+2026-08-08 17:00:04.982 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000002
+2026-08-08 17:00:04.982 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 14cee2cd-3b09-4fbe-bc90-d1e0d05b8629
+2026-08-08 17:00:04.982 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d4230701-557d-4128-9654-93637d9e70c1
+2026-08-08 17:00:04.982 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 54c78d52-c988-46c2-8927-2e6abcbc873b
+2026-08-08 17:00:04.982 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group a4aa9635-5786-42b1-b271-5720ce446652
+2026-08-08 17:00:04.982 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group c1ea9808-ed55-4c1a-bfd1-c007527cbe04
+2026-08-08 17:00:04.982 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group ec7583e3-f5a3-4aae-ae63-9aa217df62ad
+2026-08-08 17:00:04.982 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f9152ddf-db75-4d71-9c92-c46084f93a9f
+2026-08-08 17:00:04.982 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 0bf5c741-aaaf-476d-abe5-b4627c14410c
+2026-08-08 17:00:04.982 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group f933ea61-7177-47bc-9a4a-6532e9833728
+2026-08-08 17:00:04.982 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bb83b797-669e-49bd-b749-dcd333af348c
+2026-08-08 17:00:04.982 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 7b86b8dd-d9c7-474d-ae76-cad219458257
+2026-08-08 17:00:04.983 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 61aab04d-826d-4487-9f68-25efde4bf6dd
+2026-08-08 17:00:04.983 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group e5d21642-e2bb-4e0d-8356-d6349fea72d1
+2026-08-08 17:00:04.983 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3de0d6fc-df39-41da-9b79-bd77ea8728ca
+2026-08-08 17:00:04.983 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group bfa3cf3e-4ad9-4f66-aad6-4d1854e00c73
+2026-08-08 17:00:04.983 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group d842457c-23bf-4ddc-8766-145b1298ccff
+2026-08-08 17:00:04.983 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 46f2ff31-2550-424c-ac8a-425331752d80
+2026-08-08 17:00:04.983 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 30000000-0000-0000-0000-000000000003
+2026-08-08 17:00:04.983 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 50034e9a-69d4-46fb-9648-42cca2904a07
+2026-08-08 17:00:04.983 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 joined trip group 3cec7c84-76d1-41bf-97a0-9d0a18b7cb88
+2026-08-08 17:01:34.257 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 disconnected from TripHub
+2026-08-08 17:01:37.364 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 connected to TripHub
+2026-08-08 17:08:23.310 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 disconnected from TripHub
+2026-08-08 17:08:26.387 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 connected to TripHub
+2026-08-08 18:50:42.441 +03:00 [INF] Midnight Trip Generation Service is starting.
+2026-08-08 18:50:44.726 +03:00 [INF] Next midnight trip generation scheduled at "2026-08-09T00:00:00.0000000" (delay: "05:09:15.2750495").
+2026-08-08 18:50:52.729 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 connected to TripHub
+2026-08-08 20:18:18.035 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 disconnected from TripHub
+2026-08-08 20:18:21.140 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 connected to TripHub
+2026-08-08 20:18:39.667 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 disconnected from TripHub
+2026-08-08 20:18:42.118 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 connected to TripHub
+2026-08-08 22:26:15.907 +03:00 [INF] Midnight Trip Generation Service is starting.
+2026-08-08 22:26:18.105 +03:00 [INF] Next midnight trip generation scheduled at "2026-08-09T00:00:00.0000000" (delay: "01:33:41.8946437").
+2026-08-08 22:26:26.188 +03:00 [INF] User 00000000-0000-0000-0000-000000009002 connected to TripHub

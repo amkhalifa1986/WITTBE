@@ -1,6 +1,7 @@
 using MediatR;
 using System.Linq.Expressions;
 using WhereIsTheTrain.Application.Common;
+using WhereIsTheTrain.Application.Interfaces;
 using WhereIsTheTrain.Domain.Entities;
 using WhereIsTheTrain.Domain.Enums;
 using WhereIsTheTrain.Domain.Interfaces;
@@ -16,6 +17,7 @@ public class UserDto
     public UserRole Role { get; set; }
     public bool IsSuspended { get; set; }
     public DateTime CreatedAt { get; set; }
+    public int TotalPoints { get; set; }
 }
 
 public class ServiceDisruptionDto
@@ -36,6 +38,7 @@ public class ServiceDisruptionDto
 public record GetUsersQuery() : IRequest<Result<List<UserDto>>>;
 public record ToggleUserSuspensionCommand(Guid UserId, bool IsSuspended) : IRequest<Result<bool>>;
 public record ChangeUserRoleCommand(Guid UserId, UserRole Role) : IRequest<Result<bool>>;
+public record ResetUserPasswordCommand(Guid UserId, string NewPassword) : IRequest<Result<bool>>;
 
 // CSV Bulk Import
 public record ImportStopsCommand(string CsvContent, bool IgnoreDuplicates = false) : IRequest<Result<int>>;
@@ -53,6 +56,7 @@ public class AdminHandlers :
     IRequestHandler<GetUsersQuery, Result<List<UserDto>>>,
     IRequestHandler<ToggleUserSuspensionCommand, Result<bool>>,
     IRequestHandler<ChangeUserRoleCommand, Result<bool>>,
+    IRequestHandler<ResetUserPasswordCommand, Result<bool>>,
     IRequestHandler<ImportStopsCommand, Result<int>>,
     IRequestHandler<ImportTrainsCommand, Result<int>>,
     IRequestHandler<GetDisruptionsQuery, Result<List<ServiceDisruptionDto>>>,
@@ -60,24 +64,36 @@ public class AdminHandlers :
     IRequestHandler<DeactivateDisruptionCommand, Result<bool>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IEmailService _emailService;
 
-    public AdminHandlers(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+    public AdminHandlers(IUnitOfWork unitOfWork, IEmailService emailService)
+    {
+        _unitOfWork = unitOfWork;
+        _emailService = emailService;
+    }
 
     // User Management
     public async Task<Result<List<UserDto>>> Handle(GetUsersQuery request, CancellationToken ct)
     {
         var users = await _unitOfWork.Users.GetAllAsync(ct);
+        var logs = await _unitOfWork.Repository<UserPointLog>().GetAllAsync(ct);
+        var pointsDict = logs.GroupBy(l => l.UserId).ToDictionary(g => g.Key, g => g.Sum(l => l.PointsAwarded));
+
         var dtos = users
             .Where(u => u.Role != UserRole.Admin) // Filter out admins from standard users list
             .OrderByDescending(u => u.CreatedAt)
-            .Select(u => new UserDto
-            {
-                Id = u.Id,
-                DisplayName = u.DisplayName,
-                Email = u.Email,
-                Role = u.Role,
-                IsSuspended = u.IsSuspended,
-                CreatedAt = u.CreatedAt
+            .Select(u => {
+                pointsDict.TryGetValue(u.Id, out var pts);
+                return new UserDto
+                {
+                    Id = u.Id,
+                    DisplayName = u.DisplayName,
+                    Email = u.Email,
+                    Role = u.Role,
+                    IsSuspended = u.IsSuspended,
+                    CreatedAt = u.CreatedAt,
+                    TotalPoints = pts
+                };
             }).ToList();
 
         return Result<List<UserDto>>.Success(dtos);
@@ -108,6 +124,27 @@ public class AdminHandlers :
         user.Role = request.Role;
         await _unitOfWork.Users.UpdateAsync(user, ct);
         await _unitOfWork.SaveChangesAsync(ct);
+
+        return Result<bool>.Success(true);
+    }
+
+    public async Task<Result<bool>> Handle(ResetUserPasswordCommand request, CancellationToken ct)
+    {
+        var user = await _unitOfWork.Users.GetByIdAsync(request.UserId, ct);
+        if (user == null)
+            return Result<bool>.Failure("User not found.", 404);
+
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+        
+        // Close all open sessions by clearing refresh token details
+        user.RefreshToken = null;
+        user.RefreshTokenExpiryTime = null;
+
+        await _unitOfWork.Users.UpdateAsync(user, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
+
+        // Send email with new password
+        await _emailService.SendPasswordResetEmailAsync(user.Email, user.DisplayName, request.NewPassword, ct);
 
         return Result<bool>.Success(true);
     }
@@ -175,6 +212,7 @@ public class AdminHandlers :
                 stop.Longitude = lng;
                 stop.DescriptionAr = descAr;
                 stop.DescriptionEn = descEn;
+                stop.Location = new NetTopologySuite.Geometries.Point(lng, lat) { SRID = 4326 };
                 await _unitOfWork.Repository<Stop>().UpdateAsync(stop, ct);
             }
             else
@@ -188,7 +226,8 @@ public class AdminHandlers :
                     Latitude = lat,
                     Longitude = lng,
                     DescriptionAr = descAr,
-                    DescriptionEn = descEn
+                    DescriptionEn = descEn,
+                    Location = new NetTopologySuite.Geometries.Point(lng, lat) { SRID = 4326 }
                 };
                 await _unitOfWork.Repository<Stop>().AddAsync(stop, ct);
             }

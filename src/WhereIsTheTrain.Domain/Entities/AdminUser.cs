@@ -14,4 +14,6 @@ public class AdminUser : AuditableEntity
     public DateTime? RefreshTokenExpiryTime { get; set; }
     public string? Bio { get; set; }
     public string? AvatarUrl { get; set; }
+    
+    public ICollection<AdminNotification> AdminNotifications { get; set; } = new List<AdminNotification>();
 }

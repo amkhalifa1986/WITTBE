@@ -28,6 +28,11 @@ public class SettingsController : ControllerBase
                 isSuccess = true,
                 data = new
                 {
+                    lostFoundPostAutoPublish = result.Data.LostFoundPostAutoPublish,
+                    lostFoundCommentAutoPublish = result.Data.LostFoundCommentAutoPublish,
+                    tripLiveUpdateAutoPublish = result.Data.TripLiveUpdateAutoPublish,
+                    tripLiveUpdateRemovalAutoApprove = result.Data.TripLiveUpdateRemovalAutoApprove,
+                    adsEnabledPages = result.Data.AdsEnabledPages,
                     gpsTrackingEnabled = result.Data.GpsTrackingEnabled
                 }
             });
@@ -38,6 +43,11 @@ public class SettingsController : ControllerBase
             isSuccess = true,
             data = new
             {
+                lostFoundPostAutoPublish = true,
+                lostFoundCommentAutoPublish = true,
+                tripLiveUpdateAutoPublish = true,
+                tripLiveUpdateRemovalAutoApprove = false,
+                adsEnabledPages = "{}",
                 gpsTrackingEnabled = true
             }
         });

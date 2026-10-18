@@ -52,8 +52,15 @@ public record SuggestStopCommand(
 public class SuggestStopCommandHandler : IRequestHandler<SuggestStopCommand, Result<StopSuggestionDto>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly AdminNotificationHelper _adminNotificationHelper;
+    private readonly IMediator _mediator;
 
-    public SuggestStopCommandHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+    public SuggestStopCommandHandler(IUnitOfWork unitOfWork, AdminNotificationHelper adminNotificationHelper, IMediator mediator)
+    {
+        _unitOfWork = unitOfWork;
+        _adminNotificationHelper = adminNotificationHelper;
+        _mediator = mediator;
+    }
 
     public async Task<Result<StopSuggestionDto>> Handle(SuggestStopCommand request, CancellationToken ct)
     {
@@ -90,6 +97,13 @@ public class SuggestStopCommandHandler : IRequestHandler<SuggestStopCommand, Res
 
         await _unitOfWork.Repository<StopSuggestion>().AddAsync(suggestion, ct);
         await _unitOfWork.SaveChangesAsync(ct);
+
+        await _adminNotificationHelper.NotifyAdminsAsync(
+            "A new stop has been suggested.",
+            "تم اقتراح محطة جديدة.",
+            "/?tab=suggestions",
+            ct
+        );
 
         // Map City info for response
         string? cityNameAr = null;

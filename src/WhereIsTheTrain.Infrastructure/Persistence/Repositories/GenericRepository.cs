@@ -33,7 +33,11 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 
     public Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
     {
-        _context.Entry(entity).State = EntityState.Modified;
+        var entry = _context.Entry(entity);
+        if (entry.State == EntityState.Detached)
+        {
+            entry.State = EntityState.Modified;
+        }
         return Task.CompletedTask;
     }
 

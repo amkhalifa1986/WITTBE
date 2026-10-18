@@ -14,6 +14,7 @@ public static class DependencyInjection
         services.AddValidatorsFromAssembly(assembly);
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviors.ValidationBehavior<,>));
         services.AddScoped<Common.TripNotificationHelper>();
+        services.AddScoped<Common.AdminNotificationHelper>();
 
         return services;
     }

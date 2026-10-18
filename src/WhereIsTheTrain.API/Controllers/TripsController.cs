@@ -11,6 +11,7 @@ using WhereIsTheTrain.Application.Features.Trips.Queries;
 using WhereIsTheTrain.Domain.Enums;
 using WhereIsTheTrain.Domain.Entities;
 using WhereIsTheTrain.Application.Features.Admin;
+using WhereIsTheTrain.Application.Features.Points;
 
 namespace WhereIsTheTrain.API.Controllers;
 
@@ -203,6 +204,18 @@ public class TripsController : ControllerBase
         }
 
         var result = await _mediator.Send(new UpdateTripStatusCommand(id, statusId, null, null));
+        if (result.IsSuccess)
+        {
+            var userId = GetUserId();
+            if (statusId == TripStatuses.InTransit)
+            {
+                await _mediator.Send(new AwardPointsCommand(userId, "StartTrip", id));
+            }
+            else if (statusId == TripStatuses.Arrived)
+            {
+                await _mediator.Send(new AwardPointsCommand(userId, "EndTrip", id));
+            }
+        }
         return result.IsSuccess ? Ok(result) : StatusCode(result.StatusCode, result);
     }
 }

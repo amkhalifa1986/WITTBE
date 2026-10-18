@@ -16,16 +16,17 @@ public class TrainTypeDto
     public string NameAr { get; set; } = string.Empty;
     public string NameEn { get; set; } = string.Empty;
     public string? MarkerPngUrl { get; set; }
+    public string? ImageUrl { get; set; }
 }
 
 public record GetTrainTypesQuery() : IRequest<Result<List<TrainTypeDto>>>;
 
 public record CreateTrainTypeCommand(
-    string NameAr, string NameEn, string? MarkerPngUrl
+    string NameAr, string NameEn, string? MarkerPngUrl, string? ImageUrl
 ) : IRequest<Result<TrainTypeDto>>;
 
 public record UpdateTrainTypeCommand(
-    Guid Id, string NameAr, string NameEn, string? MarkerPngUrl
+    Guid Id, string NameAr, string NameEn, string? MarkerPngUrl, string? ImageUrl
 ) : IRequest<Result<TrainTypeDto>>;
 
 public record DeleteTrainTypeCommand(Guid Id) : IRequest<Result<bool>>;
@@ -48,7 +49,8 @@ public class TrainTypeHandlers :
             Id = t.Id,
             NameAr = t.NameAr,
             NameEn = t.NameEn,
-            MarkerPngUrl = t.MarkerPngUrl
+            MarkerPngUrl = t.MarkerPngUrl,
+            ImageUrl = t.ImageUrl
         }).ToList();
 
         return Result<List<TrainTypeDto>>.Success(dtos);
@@ -61,7 +63,8 @@ public class TrainTypeHandlers :
             Id = Guid.NewGuid(),
             NameAr = request.NameAr,
             NameEn = request.NameEn,
-            MarkerPngUrl = request.MarkerPngUrl
+            MarkerPngUrl = request.MarkerPngUrl,
+            ImageUrl = request.ImageUrl
         };
 
         await _unitOfWork.Repository<TrainType>().AddAsync(type, ct);
@@ -72,7 +75,8 @@ public class TrainTypeHandlers :
             Id = type.Id,
             NameAr = type.NameAr,
             NameEn = type.NameEn,
-            MarkerPngUrl = type.MarkerPngUrl
+            MarkerPngUrl = type.MarkerPngUrl,
+            ImageUrl = type.ImageUrl
         });
     }
 
@@ -85,6 +89,7 @@ public class TrainTypeHandlers :
         type.NameAr = request.NameAr;
         type.NameEn = request.NameEn;
         type.MarkerPngUrl = request.MarkerPngUrl;
+        type.ImageUrl = request.ImageUrl;
 
         await _unitOfWork.Repository<TrainType>().UpdateAsync(type, ct);
         await _unitOfWork.SaveChangesAsync(ct);
@@ -94,7 +99,8 @@ public class TrainTypeHandlers :
             Id = type.Id,
             NameAr = type.NameAr,
             NameEn = type.NameEn,
-            MarkerPngUrl = type.MarkerPngUrl
+            MarkerPngUrl = type.MarkerPngUrl,
+            ImageUrl = type.ImageUrl
         });
     }
 

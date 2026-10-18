@@ -6,4 +6,5 @@ public interface IStopRepository : IGenericRepository<Stop>
 {
     Task<Stop?> GetWithRailwayPathsByIdAsync(Guid id, CancellationToken ct = default);
     Task<IReadOnlyList<Stop>> GetAllWithRailwayPathsAsync(CancellationToken ct = default);
+    Task SetRailwayPathsAsync(Guid stopId, List<Guid> railwayPathIds, CancellationToken ct = default);
 }

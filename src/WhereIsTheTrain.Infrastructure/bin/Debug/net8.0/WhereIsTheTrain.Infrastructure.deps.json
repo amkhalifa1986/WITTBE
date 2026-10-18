@@ -9,6 +9,7 @@
       "WhereIsTheTrain.Infrastructure/1.0.0": {
         "dependencies": {
           "BCrypt.Net-Next": "4.2.0",
+          "Microsoft.EntityFrameworkCore.InMemory": "8.0.11",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "10.0.8",
           "Pomelo.EntityFrameworkCore.MySql": "8.0.3",
           "Pomelo.EntityFrameworkCore.MySql.NetTopologySuite": "8.0.3",
@@ -90,6 +91,17 @@
         }
       },
       "Microsoft.EntityFrameworkCore.Analyzers/8.0.13": {},
+      "Microsoft.EntityFrameworkCore.InMemory/8.0.11": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "8.0.13"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll": {
+            "assemblyVersion": "8.0.11.0",
+            "fileVersion": "8.0.1124.52104"
+          }
+        }
+      },
       "Microsoft.EntityFrameworkCore.Relational/8.0.13": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "8.0.13",
@@ -437,6 +449,13 @@
       "sha512": "sha512-ENny33QADFiRxge5ikJBs2p7JB4MQx/ZSPKPNwt2eJPO0lVUGSjTiJeunGGggkVHiaUy0yY4f625LQtNlErIsw==",
       "path": "microsoft.entityframeworkcore.analyzers/8.0.13",
       "hashPath": "microsoft.entityframeworkcore.analyzers.8.0.13.nupkg.sha512"
+    },
+    "Microsoft.EntityFrameworkCore.InMemory/8.0.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gFFdubZlRfudSw94OxO7s8OvLQZncnR0S1ll//wRtZP3mMYVeq8DrMnEILK6hBJwbTBB1SNm3apg9SdvdE/ySg==",
+      "path": "microsoft.entityframeworkcore.inmemory/8.0.11",
+      "hashPath": "microsoft.entityframeworkcore.inmemory.8.0.11.nupkg.sha512"
     },
     "Microsoft.EntityFrameworkCore.Relational/8.0.13": {
       "type": "package",

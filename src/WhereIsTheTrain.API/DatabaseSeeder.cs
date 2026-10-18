@@ -12,6 +12,53 @@ public static class DatabaseSeeder
         // Extract train types from existing train names and populate the lookup table
         await ExtractAndPopulateTrainTypesAsync(context);
 
+        // Generate yesterday's trips if not present
+        var egyptToday = WhereIsTheTrain.Domain.Common.DateHelper.GetEgyptToday();
+        var yesterday = egyptToday.AddDays(-1);
+        if (await context.Trains.AnyAsync())
+        {
+            bool hasYesterdayTrips = await context.Trips.AnyAsync(t => t.TripDate == yesterday);
+            if (!hasYesterdayTrips)
+            {
+                var trains = await context.Trains.ToListAsync();
+                var yesterdayTrips = new List<Trip>();
+
+                for (int i = 0; i < trains.Count; i++)
+                {
+                    yesterdayTrips.Add(new Trip
+                    {
+                        Id = Guid.NewGuid(),
+                        TrainId = trains[i].Id,
+                        TripDate = yesterday,
+                        StatusId = i % 5 == 0 ? TripStatuses.Scheduled : TripStatuses.Arrived
+                    });
+                }
+
+                await context.Trips.AddRangeAsync(yesterdayTrips);
+                await context.SaveChangesAsync();
+            }
+        }
+
+        var existingCodes = await context.PointActions.Select(pa => pa.Code).ToListAsync();
+        var pointActions = new List<PointAction>
+        {
+            new() { Id = Guid.Parse("00000000-0000-0000-0000-000000007001"), Code = "StartTrip", NameEn = "Start Trip Report", NameAr = "تقرير بدء الرحلة", Points = 20 },
+            new() { Id = Guid.Parse("00000000-0000-0000-0000-000000007002"), Code = "EndTrip", NameEn = "End Trip Report", NameAr = "تقرير انتهاء الرحلة", Points = 20 },
+            new() { Id = Guid.Parse("00000000-0000-0000-0000-000000007003"), Code = "PostUpdate", NameEn = "Post Live Update", NameAr = "نشر تحديث مباشر", Points = 10 },
+            new() { Id = Guid.Parse("00000000-0000-0000-0000-000000007004"), Code = "ThankReport", NameEn = "Thank a Report", NameAr = "شكر تقرير", Points = 0 },
+            new() { Id = Guid.Parse("00000000-0000-0000-0000-000000007005"), Code = "AcceptedTrainSuggestion", NameEn = "Accepted Train Suggestion", NameAr = "اقتراح قطار مقبول", Points = 50 },
+            new() { Id = Guid.Parse("00000000-0000-0000-0000-000000007006"), Code = "AcceptedStopSuggestion", NameEn = "Accepted Stop Suggestion", NameAr = "اقتراح محطة مقبولة", Points = 25 }
+        };
+
+        foreach (var action in pointActions)
+        {
+            if (!existingCodes.Contains(action.Code))
+            {
+                await context.PointActions.AddAsync(action);
+            }
+        }
+        await context.SaveChangesAsync();
+
         if (!await context.GenderLookups.AnyAsync())
         {
             context.GenderLookups.AddRange(
@@ -94,52 +141,6 @@ public static class DatabaseSeeder
         };
         context.Users.Add(adminUser);
 
-        // Create Default Admin Role and Privileges
-        var adminRole = new AdminRole
-        {
-            Id = Guid.Parse("00000000-0000-0000-0000-000000009001"),
-            Name = "Administrator",
-            Description = "Full access to manage all operational data"
-        };
-        
-        var modules = new[] { "Dashboard", "Users", "Trains", "Trips", "Stops", "Lookups", "LostFound", "Suggestions", "Disruptions", "RailwayPaths", "Updates", "Settings" };
-        foreach (var m in modules)
-        {
-            adminRole.Privileges.Add(new AdminRolePrivilege
-            {
-                Id = Guid.NewGuid(),
-                Module = m,
-                CanView = true,
-                CanAdd = true,
-                CanEdit = true,
-                CanDelete = true
-            });
-        }
-        context.AdminRoles.Add(adminRole);
-
-        // Create Super Admin in AdminUsers table
-        var superAdmin = new AdminUser
-        {
-            Id = Guid.Parse("00000000-0000-0000-0000-000000009002"),
-            DisplayName = "Super Admin",
-            Email = "superadmin@whereisthetrain.com",
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword("SuperAdmin@123"),
-            IsSuperAdmin = true,
-            RoleId = null
-        };
-        context.AdminUsers.Add(superAdmin);
-
-        // Create Regular Admin in AdminUsers table
-        var regularAdmin = new AdminUser
-        {
-            Id = Guid.Parse("00000000-0000-0000-0000-000000009003"),
-            DisplayName = "System Admin",
-            Email = "admin@whereisthetrain.com",
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
-            IsSuperAdmin = false,
-            RoleId = adminRole.Id
-        };
-        context.AdminUsers.Add(regularAdmin);
 
         // Create Test User
         var testUser = new User
@@ -542,10 +543,11 @@ public static class DatabaseSeeder
             new TrainRouteStop { TrainId = train6.Id, StopId = stops[4].Id, StopOrder = 9, ScheduledArrival = new TimeSpan(14, 18, 0), ScheduledDeparture = new TimeSpan(14, 25, 0) },
             new TrainRouteStop { TrainId = train6.Id, StopId = stops[5].Id, StopOrder = 10, ScheduledArrival = new TimeSpan(15, 55, 0), ScheduledDeparture = new TimeSpan(16, 0, 0) },
             new TrainRouteStop { TrainId = train6.Id, StopId = stops[16].Id, StopOrder = 11, ScheduledArrival = new TimeSpan(17, 20, 0), ScheduledDeparture = new TimeSpan(17, 25, 0) },
-            new TrainRouteStop { TrainId = train6.Id, StopId = stops[7].Id, StopOrder = 12, ScheduledArrival = new TimeSpan(19, 0, 0), ScheduledDeparture = new TimeSpan(19, 10, 0) },
-            new TrainRouteStop { TrainId = train6.Id, StopId = stops[17].Id, StopOrder = 13, ScheduledArrival = new TimeSpan(20, 43, 0), ScheduledDeparture = new TimeSpan(20, 48, 0) },
-            new TrainRouteStop { TrainId = train6.Id, StopId = stops[19].Id, StopOrder = 14, ScheduledArrival = new TimeSpan(21, 44, 0), ScheduledDeparture = new TimeSpan(21, 49, 0) },
-            new TrainRouteStop { TrainId = train6.Id, StopId = stops[8].Id, StopOrder = 15, ScheduledArrival = new TimeSpan(22, 25, 0) }
+            new TrainRouteStop { TrainId = train6.Id, StopId = stops[6].Id, StopOrder = 12, ScheduledArrival = new TimeSpan(18, 5, 0), ScheduledDeparture = new TimeSpan(18, 10, 0) },
+            new TrainRouteStop { TrainId = train6.Id, StopId = stops[7].Id, StopOrder = 13, ScheduledArrival = new TimeSpan(19, 0, 0), ScheduledDeparture = new TimeSpan(19, 10, 0) },
+            new TrainRouteStop { TrainId = train6.Id, StopId = stops[17].Id, StopOrder = 14, ScheduledArrival = new TimeSpan(20, 43, 0), ScheduledDeparture = new TimeSpan(20, 48, 0) },
+            new TrainRouteStop { TrainId = train6.Id, StopId = stops[19].Id, StopOrder = 15, ScheduledArrival = new TimeSpan(21, 44, 0), ScheduledDeparture = new TimeSpan(21, 49, 0) },
+            new TrainRouteStop { TrainId = train6.Id, StopId = stops[8].Id, StopOrder = 16, ScheduledArrival = new TimeSpan(22, 25, 0) }
         );
 
         // Train 7: Cairo - Aswan VIP Express (Train 2010)
@@ -1016,17 +1018,18 @@ public static class DatabaseSeeder
             new TrainRouteStop { TrainId = train23.Id, StopId = stops[19].Id, StopOrder = 2, ScheduledArrival = new TimeSpan(10, 35, 0), ScheduledDeparture = new TimeSpan(10, 38, 0) },
             new TrainRouteStop { TrainId = train23.Id, StopId = stops[17].Id, StopOrder = 3, ScheduledArrival = new TimeSpan(11, 30, 0), ScheduledDeparture = new TimeSpan(11, 33, 0) },
             new TrainRouteStop { TrainId = train23.Id, StopId = stops[7].Id, StopOrder = 4, ScheduledArrival = new TimeSpan(13, 0, 0), ScheduledDeparture = new TimeSpan(13, 10, 0) },
-            new TrainRouteStop { TrainId = train23.Id, StopId = stops[16].Id, StopOrder = 5, ScheduledArrival = new TimeSpan(14, 45, 0), ScheduledDeparture = new TimeSpan(14, 50, 0) },
-            new TrainRouteStop { TrainId = train23.Id, StopId = stops[5].Id, StopOrder = 6, ScheduledArrival = new TimeSpan(16, 0, 0), ScheduledDeparture = new TimeSpan(16, 5, 0) },
-            new TrainRouteStop { TrainId = train23.Id, StopId = stops[4].Id, StopOrder = 7, ScheduledArrival = new TimeSpan(17, 35, 0), ScheduledDeparture = new TimeSpan(17, 40, 0) },
-            new TrainRouteStop { TrainId = train23.Id, StopId = stops[3].Id, StopOrder = 8, ScheduledArrival = new TimeSpan(19, 40, 0), ScheduledDeparture = new TimeSpan(19, 45, 0) },
-            new TrainRouteStop { TrainId = train23.Id, StopId = stops[2].Id, StopOrder = 9, ScheduledArrival = new TimeSpan(21, 10, 0), ScheduledDeparture = new TimeSpan(21, 13, 0) },
-            new TrainRouteStop { TrainId = train23.Id, StopId = stops[1].Id, StopOrder = 10, ScheduledArrival = new TimeSpan(22, 15, 0), ScheduledDeparture = new TimeSpan(22, 20, 0) },
-            new TrainRouteStop { TrainId = train23.Id, StopId = stops[0].Id, StopOrder = 11, ScheduledArrival = new TimeSpan(22, 30, 0), ScheduledDeparture = new TimeSpan(22, 45, 0) },
-            new TrainRouteStop { TrainId = train23.Id, StopId = stops[10].Id, StopOrder = 12, ScheduledArrival = new TimeSpan(23, 45, 0), ScheduledDeparture = new TimeSpan(23, 48, 0) },
-            new TrainRouteStop { TrainId = train23.Id, StopId = stops[11].Id, StopOrder = 13, ScheduledArrival = new TimeSpan(0, 30, 0), ScheduledDeparture = new TimeSpan(0, 33, 0) },
-            new TrainRouteStop { TrainId = train23.Id, StopId = stops[12].Id, StopOrder = 14, ScheduledArrival = new TimeSpan(1, 15, 0), ScheduledDeparture = new TimeSpan(1, 18, 0) },
-            new TrainRouteStop { TrainId = train23.Id, StopId = stops[9].Id, StopOrder = 15, ScheduledArrival = new TimeSpan(1, 30, 0) }
+            new TrainRouteStop { TrainId = train23.Id, StopId = stops[6].Id, StopOrder = 5, ScheduledArrival = new TimeSpan(14, 0, 0), ScheduledDeparture = new TimeSpan(14, 05, 0) },
+            new TrainRouteStop { TrainId = train23.Id, StopId = stops[16].Id, StopOrder = 6, ScheduledArrival = new TimeSpan(14, 45, 0), ScheduledDeparture = new TimeSpan(14, 50, 0) },
+            new TrainRouteStop { TrainId = train23.Id, StopId = stops[5].Id, StopOrder = 7, ScheduledArrival = new TimeSpan(16, 0, 0), ScheduledDeparture = new TimeSpan(16, 5, 0) },
+            new TrainRouteStop { TrainId = train23.Id, StopId = stops[4].Id, StopOrder = 8, ScheduledArrival = new TimeSpan(17, 35, 0), ScheduledDeparture = new TimeSpan(17, 40, 0) },
+            new TrainRouteStop { TrainId = train23.Id, StopId = stops[3].Id, StopOrder = 9, ScheduledArrival = new TimeSpan(19, 40, 0), ScheduledDeparture = new TimeSpan(19, 45, 0) },
+            new TrainRouteStop { TrainId = train23.Id, StopId = stops[2].Id, StopOrder = 10, ScheduledArrival = new TimeSpan(21, 10, 0), ScheduledDeparture = new TimeSpan(21, 13, 0) },
+            new TrainRouteStop { TrainId = train23.Id, StopId = stops[1].Id, StopOrder = 11, ScheduledArrival = new TimeSpan(22, 15, 0), ScheduledDeparture = new TimeSpan(22, 20, 0) },
+            new TrainRouteStop { TrainId = train23.Id, StopId = stops[0].Id, StopOrder = 12, ScheduledArrival = new TimeSpan(22, 30, 0), ScheduledDeparture = new TimeSpan(22, 45, 0) },
+            new TrainRouteStop { TrainId = train23.Id, StopId = stops[10].Id, StopOrder = 13, ScheduledArrival = new TimeSpan(23, 45, 0), ScheduledDeparture = new TimeSpan(23, 48, 0) },
+            new TrainRouteStop { TrainId = train23.Id, StopId = stops[11].Id, StopOrder = 14, ScheduledArrival = new TimeSpan(0, 30, 0), ScheduledDeparture = new TimeSpan(0, 33, 0) },
+            new TrainRouteStop { TrainId = train23.Id, StopId = stops[12].Id, StopOrder = 15, ScheduledArrival = new TimeSpan(1, 15, 0), ScheduledDeparture = new TimeSpan(1, 18, 0) },
+            new TrainRouteStop { TrainId = train23.Id, StopId = stops[9].Id, StopOrder = 16, ScheduledArrival = new TimeSpan(1, 30, 0) }
         );
 
         // Train 24: Aswan - Cairo VIP Express (Train 2011)
@@ -1231,38 +1234,50 @@ public static class DatabaseSeeder
         });
 
         // Seed default system settings
-        context.SystemSettings.Add(new SystemSetting
+        if (!context.SystemSettings.Any())
         {
-            Id = Guid.Parse("00000000-0000-0000-0000-000000009999"),
-            LostFoundPostAutoPublish = true,
-            LostFoundCommentAutoPublish = true,
-            TripLiveUpdateAutoPublish = true
-        });
+            context.SystemSettings.Add(new SystemSetting
+            {
+                Id = Guid.Parse("00000000-0000-0000-0000-000000009999"),
+                LostFoundPostAutoPublish = true,
+                LostFoundCommentAutoPublish = true,
+                TripLiveUpdateAutoPublish = true
+            });
+        }
 
         // Seed default lookups
-        context.StatusTagLookups.AddRange(
-            new StatusTagLookup { Id = Guid.NewGuid(), Code = "OnTime", NameAr = "في الموعد", NameEn = "On Time" },
-            new StatusTagLookup { Id = Guid.NewGuid(), Code = "Delayed", NameAr = "متأخر", NameEn = "Delayed" },
-            new StatusTagLookup { Id = Guid.NewGuid(), Code = "Crowded", NameAr = "مزدحم", NameEn = "Crowded" },
-            new StatusTagLookup { Id = Guid.NewGuid(), Code = "Empty", NameAr = "فارغ", NameEn = "Empty" },
-            new StatusTagLookup { Id = Guid.NewGuid(), Code = "Cancelled", NameAr = "ملغي", NameEn = "Cancelled" },
-            new StatusTagLookup { Id = Guid.NewGuid(), Code = "AtStation", NameAr = "في المحطة", NameEn = "At Station" }
-        );
+        if (!context.StatusTagLookups.Any())
+        {
+            context.StatusTagLookups.AddRange(
+                new StatusTagLookup { Id = Guid.NewGuid(), Code = "OnTime", NameAr = "في الموعد", NameEn = "On Time" },
+                new StatusTagLookup { Id = Guid.NewGuid(), Code = "Delayed", NameAr = "متأخر", NameEn = "Delayed" },
+                new StatusTagLookup { Id = Guid.NewGuid(), Code = "Crowded", NameAr = "مزدحم", NameEn = "Crowded" },
+                new StatusTagLookup { Id = Guid.NewGuid(), Code = "Empty", NameAr = "فارغ", NameEn = "Empty" },
+                new StatusTagLookup { Id = Guid.NewGuid(), Code = "Cancelled", NameAr = "ملغي", NameEn = "Cancelled" },
+                new StatusTagLookup { Id = Guid.NewGuid(), Code = "AtStation", NameAr = "في المحطة", NameEn = "At Station" }
+            );
+        }
 
-        context.TripStatusLookups.AddRange(
-            new TripStatusLookup { Id = TripStatuses.Scheduled, Code = "Scheduled", NameAr = "مجدول", NameEn = "Scheduled", Color = "#71717a" },
-            new TripStatusLookup { Id = TripStatuses.Departed, Code = "Departed", NameAr = "غادر", NameEn = "Departed", Color = "#3b82f6" },
-            new TripStatusLookup { Id = TripStatuses.InTransit, Code = "InTransit", NameAr = "في الطريق", NameEn = "In Transit", Color = "#6366f1" },
-            new TripStatusLookup { Id = TripStatuses.Arrived, Code = "Arrived", NameAr = "وصل", NameEn = "Arrived", Color = "#10b981" },
-            new TripStatusLookup { Id = TripStatuses.Cancelled, Code = "Cancelled", NameAr = "ملغي", NameEn = "Cancelled", Color = "#ef4444" },
-            new TripStatusLookup { Id = TripStatuses.Delayed, Code = "Delayed", NameAr = "متأخر", NameEn = "Delayed", Color = "#f59e0b" }
-        );
+        if (!context.TripStatusLookups.Any())
+        {
+            context.TripStatusLookups.AddRange(
+                new TripStatusLookup { Id = TripStatuses.Scheduled, Code = "Scheduled", NameAr = "مجدول", NameEn = "Scheduled", Color = "#71717a" },
+                new TripStatusLookup { Id = TripStatuses.Departed, Code = "Departed", NameAr = "غادر", NameEn = "Departed", Color = "#3b82f6" },
+                new TripStatusLookup { Id = TripStatuses.InTransit, Code = "InTransit", NameAr = "في الطريق", NameEn = "In Transit", Color = "#6366f1" },
+                new TripStatusLookup { Id = TripStatuses.Arrived, Code = "Arrived", NameAr = "وصل", NameEn = "Arrived", Color = "#10b981" },
+                new TripStatusLookup { Id = TripStatuses.Cancelled, Code = "Cancelled", NameAr = "ملغي", NameEn = "Cancelled", Color = "#ef4444" },
+                new TripStatusLookup { Id = TripStatuses.Delayed, Code = "Delayed", NameAr = "متأخر", NameEn = "Delayed", Color = "#f59e0b" }
+            );
+        }
 
-        context.CrowdLevelLookups.AddRange(
-            new CrowdLevelLookup { Id = Guid.NewGuid(), Code = "EmptyChairs", NameAr = "كراسي شاغرة", NameEn = "Empty Chairs" },
-            new CrowdLevelLookup { Id = Guid.NewGuid(), Code = "FullChairs", NameAr = "كراسي ممتلئة", NameEn = "Full Chairs" },
-            new CrowdLevelLookup { Id = Guid.NewGuid(), Code = "AisleCrowded", NameAr = "الممرات مزدحمة", NameEn = "Aisle Crowded" }
-        );
+        if (!context.CrowdLevelLookups.Any())
+        {
+            context.CrowdLevelLookups.AddRange(
+                new CrowdLevelLookup { Id = Guid.NewGuid(), Code = "EmptyChairs", NameAr = "كراسي شاغرة", NameEn = "Empty Chairs" },
+                new CrowdLevelLookup { Id = Guid.NewGuid(), Code = "FullChairs", NameAr = "كراسي ممتلئة", NameEn = "Full Chairs" },
+                new CrowdLevelLookup { Id = Guid.NewGuid(), Code = "AisleCrowded", NameAr = "الممرات مزدحمة", NameEn = "Aisle Crowded" }
+            );
+        }
 
         if (!context.DashboardGalleryItems.Any())
         {
