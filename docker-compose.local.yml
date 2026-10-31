@@ -1,0 +1,49 @@
+# Local development stack: MySQL + API (Development mode).
+# Usage:  docker compose -f docker-compose.local.yml up --build
+#   API      -> http://localhost:5245  (Swagger: http://localhost:5245/swagger)
+#   MySQL    -> localhost:3306  (user witt_user / WittPass@2026, db WhereIsTheTrain)
+# In Development mode the API applies EF migrations and seeds test data on startup.
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: witt_mysql_local
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: WhereIsTheTrain
+      MYSQL_USER: witt_user
+      MYSQL_PASSWORD: WittPass@2026
+    ports:
+      - "3306:3306"
+    volumes:
+      - witt_mysql_local:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: witt_api_local
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=WhereIsTheTrain;User=witt_user;Password=WittPass@2026;ConnectionTimeout=30;DefaultCommandTimeout=30;"
+    ports:
+      - "5245:8080"
+    volumes:
+      - witt_api_local_data:/app/data
+      - witt_api_local_uploads:/app/wwwroot/uploads
+
+volumes:
+  witt_mysql_local:
+  witt_api_local_data:
+  witt_api_local_uploads:
