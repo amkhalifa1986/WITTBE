@@ -129,30 +129,8 @@ public class GetTripLeaderboardQueryHandler : IRequestHandler<GetTripLeaderboard
 
     public async Task<Result<List<LeaderboardEntryDto>>> Handle(GetTripLeaderboardQuery request, CancellationToken ct)
     {
-        var logs = await _unitOfWork.Repository<UserPointLog>().FindAsync(l => l.TripId == request.TripId, ct);
-        var grouped = logs.GroupBy(l => l.UserId)
-            .Select(g => new { UserId = g.Key, Total = g.Sum(l => l.PointsAwarded) })
-            .OrderByDescending(x => x.Total)
-            .Take(request.Top)
-            .ToList();
-
-        var result = new List<LeaderboardEntryDto>();
-        int rank = 1;
-        foreach (var entry in grouped)
-        {
-            var user = await _unitOfWork.Users.GetByIdAsync(entry.UserId, ct);
-            if (user != null)
-            {
-                result.Add(new LeaderboardEntryDto 
-                { 
-                    UserId = entry.UserId, 
-                    DisplayName = user.DisplayName, 
-                    AvatarUrl = user.AvatarUrl, 
-                    TotalPoints = entry.Total, 
-                    Rank = rank++ 
-                });
-            }
-        }
+        var result = await LeaderboardHelper.GetTopAsync(
+            _unitOfWork, l => l.TripId == request.TripId, request.Top, ct);
         return Result<List<LeaderboardEntryDto>>.Success(result);
     }
 }
@@ -167,32 +145,14 @@ public class GetMonthlyLeaderboardQueryHandler : IRequestHandler<GetMonthlyLeade
 
     public async Task<Result<List<LeaderboardEntryDto>>> Handle(GetMonthlyLeaderboardQuery request, CancellationToken ct)
     {
-        var logs = await _unitOfWork.Repository<UserPointLog>().FindAsync(
-            l => l.CreatedAt.Year == request.Year && l.CreatedAt.Month == request.Month, ct);
+        if (request.Year < 1 || request.Year > 9998 || request.Month < 1 || request.Month > 12)
+            return Result<List<LeaderboardEntryDto>>.Success(new List<LeaderboardEntryDto>());
 
-        var grouped = logs.GroupBy(l => l.UserId)
-            .Select(g => new { UserId = g.Key, Total = g.Sum(l => l.PointsAwarded) })
-            .OrderByDescending(x => x.Total)
-            .Take(request.Top)
-            .ToList();
-
-        var result = new List<LeaderboardEntryDto>();
-        int rank = 1;
-        foreach (var entry in grouped)
-        {
-            var user = await _unitOfWork.Users.GetByIdAsync(entry.UserId, ct);
-            if (user != null)
-            {
-                result.Add(new LeaderboardEntryDto 
-                { 
-                    UserId = entry.UserId, 
-                    DisplayName = user.DisplayName, 
-                    AvatarUrl = user.AvatarUrl, 
-                    TotalPoints = entry.Total, 
-                    Rank = rank++ 
-                });
-            }
-        }
+        // Date range instead of .Year/.Month so the CreatedAt filter can use an index
+        var start = new DateTime(request.Year, request.Month, 1);
+        var end = start.AddMonths(1);
+        var result = await LeaderboardHelper.GetTopAsync(
+            _unitOfWork, l => l.CreatedAt >= start && l.CreatedAt < end, request.Top, ct);
         return Result<List<LeaderboardEntryDto>>.Success(result);
     }
 }
@@ -207,30 +167,14 @@ public class GetYearlyLeaderboardQueryHandler : IRequestHandler<GetYearlyLeaderb
 
     public async Task<Result<List<LeaderboardEntryDto>>> Handle(GetYearlyLeaderboardQuery request, CancellationToken ct)
     {
-        var logs = await _unitOfWork.Repository<UserPointLog>().FindAsync(l => l.CreatedAt.Year == request.Year, ct);
-        var grouped = logs.GroupBy(l => l.UserId)
-            .Select(g => new { UserId = g.Key, Total = g.Sum(l => l.PointsAwarded) })
-            .OrderByDescending(x => x.Total)
-            .Take(request.Top)
-            .ToList();
+        if (request.Year < 1 || request.Year > 9998)
+            return Result<List<LeaderboardEntryDto>>.Success(new List<LeaderboardEntryDto>());
 
-        var result = new List<LeaderboardEntryDto>();
-        int rank = 1;
-        foreach (var entry in grouped)
-        {
-            var user = await _unitOfWork.Users.GetByIdAsync(entry.UserId, ct);
-            if (user != null)
-            {
-                result.Add(new LeaderboardEntryDto 
-                { 
-                    UserId = entry.UserId, 
-                    DisplayName = user.DisplayName, 
-                    AvatarUrl = user.AvatarUrl, 
-                    TotalPoints = entry.Total, 
-                    Rank = rank++ 
-                });
-            }
-        }
+        // Date range instead of .Year so the CreatedAt filter can use an index
+        var start = new DateTime(request.Year, 1, 1);
+        var end = start.AddYears(1);
+        var result = await LeaderboardHelper.GetTopAsync(
+            _unitOfWork, l => l.CreatedAt >= start && l.CreatedAt < end, request.Top, ct);
         return Result<List<LeaderboardEntryDto>>.Success(result);
     }
 }

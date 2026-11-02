@@ -14,4 +14,10 @@ public interface IGenericRepository<T> where T : BaseEntity
     Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
     Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default);
     IQueryable<T> AsQueryable();
+
+    /// <summary>
+    /// Runs a shaped query (filter, projection, grouping, ordering, paging) in the database
+    /// and returns only the resulting rows, instead of loading whole entities into memory.
+    /// </summary>
+    Task<List<TResult>> QueryAsync<TResult>(Func<IQueryable<T>, IQueryable<TResult>> query, CancellationToken cancellationToken = default);
 }

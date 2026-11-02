@@ -184,28 +184,9 @@ public class GetTripDetailsQueryHandler : IRequestHandler<GetTripDetailsQuery, R
         };
 
         // Populate top 3 contributors for this trip
-        var tripLogs = (await _unitOfWork.Repository<UserPointLog>().FindAsync(l => l.TripId == dto.Id, ct)).ToList();
-        var topContributors = tripLogs.GroupBy(l => l.UserId)
-            .Select(g => new { UserId = g.Key, Total = g.Sum(l => l.PointsAwarded) })
-            .OrderByDescending(x => x.Total)
-            .Take(3)
-            .ToList();
-        int contribRank = 1;
-        foreach (var entry in topContributors)
-        {
-            var contribUser = await _unitOfWork.Users.GetByIdAsync(entry.UserId, ct);
-            if (contribUser != null)
-            {
-                dto.TopContributors.Add(new LeaderboardEntryDto 
-                { 
-                    UserId = entry.UserId, 
-                    DisplayName = contribUser.DisplayName, 
-                    AvatarUrl = contribUser.AvatarUrl, 
-                    TotalPoints = entry.Total, 
-                    Rank = contribRank++ 
-                });
-            }
-        }
+        var tripId = dto.Id;
+        dto.TopContributors.AddRange(await LeaderboardHelper.GetTopAsync(
+            _unitOfWork, l => l.TripId == tripId, 3, ct));
 
         return Result<TripDetailDto>.Success(dto);
     }
@@ -519,22 +500,16 @@ public class GetDashboardStatsQueryHandler : IRequestHandler<GetDashboardStatsQu
         var totalUpdatesToday = await _unitOfWork.Repository<Domain.Entities.TripLiveUpdate>()
             .CountAsync(u => u.CreatedAt >= todayStart && u.IsApproved, ct);
 
-        // Load approved updates then take top 5 by recency
-        var updates = await _unitOfWork.Repository<TripLiveUpdate>().FindAsync(u => u.IsApproved, ct);
-        var top5 = updates.OrderByDescending(x => x.CreatedAt).Take(5).ToList();
+        // Only the 5 most recent approved updates are needed: sort and limit in the database
+        var top5 = await _unitOfWork.Repository<TripLiveUpdate>().QueryAsync(q => q
+            .Where(u => u.IsApproved)
+            .OrderByDescending(u => u.CreatedAt)
+            .Take(5), ct);
 
-        var authorDict = new Dictionary<Guid, Domain.Entities.User>();
-        foreach (var u in top5.Where(u => u.AuthorId.HasValue))
-        {
-            if (!authorDict.ContainsKey(u.AuthorId!.Value))
-            {
-                var user = await _unitOfWork.Users.GetByIdAsync(u.AuthorId.Value, ct);
-                if (user != null)
-                {
-                    authorDict[user.Id] = user;
-                }
-            }
-        }
+        var authorIds = top5.Where(u => u.AuthorId.HasValue).Select(u => u.AuthorId!.Value).Distinct().ToList();
+        var authorDict = authorIds.Count == 0
+            ? new Dictionary<Guid, Domain.Entities.User>()
+            : (await _unitOfWork.Users.FindAsync(u => authorIds.Contains(u.Id), ct)).ToDictionary(u => u.Id);
 
         var recentUpdates = top5.Select(u =>
         {
@@ -562,30 +537,8 @@ public class GetDashboardStatsQueryHandler : IRequestHandler<GetDashboardStatsQu
         // Top 3 monthly leaderboard
         var monthStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
         var monthEnd = monthStart.AddMonths(1);
-        var monthLogs = (await _unitOfWork.Repository<UserPointLog>().FindAsync(
-            l => l.CreatedAt >= monthStart && l.CreatedAt < monthEnd, ct)).ToList();
-        var monthGrouped = monthLogs.GroupBy(l => l.UserId)
-            .Select(g => new { UserId = g.Key, Total = g.Sum(l => l.PointsAwarded) })
-            .OrderByDescending(x => x.Total)
-            .Take(3)
-            .ToList();
-        var monthlyLeaderboard = new List<LeaderboardEntryDto>();
-        int mlRank = 1;
-        foreach (var entry in monthGrouped)
-        {
-            var mlUser = await _unitOfWork.Users.GetByIdAsync(entry.UserId, ct);
-            if (mlUser != null)
-            {
-                monthlyLeaderboard.Add(new LeaderboardEntryDto 
-                { 
-                    UserId = entry.UserId, 
-                    DisplayName = mlUser.DisplayName, 
-                    AvatarUrl = mlUser.AvatarUrl, 
-                    TotalPoints = entry.Total, 
-                    Rank = mlRank++ 
-                });
-            }
-        }
+        var monthlyLeaderboard = await LeaderboardHelper.GetTopAsync(
+            _unitOfWork, l => l.CreatedAt >= monthStart && l.CreatedAt < monthEnd, 3, ct);
 
         return Result<DashboardDto>.Success(new DashboardDto
         {

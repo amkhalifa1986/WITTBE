@@ -57,4 +57,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 
     public IQueryable<T> AsQueryable()
         => _dbSet.AsQueryable();
+
+    public async Task<List<TResult>> QueryAsync<TResult>(Func<IQueryable<T>, IQueryable<TResult>> query, CancellationToken cancellationToken = default)
+        => await query(_dbSet.AsQueryable()).ToListAsync(cancellationToken);
 }

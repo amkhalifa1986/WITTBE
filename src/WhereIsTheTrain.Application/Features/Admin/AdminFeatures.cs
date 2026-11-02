@@ -572,20 +572,27 @@ public class TrainsAdminHandlers :
         var followPlansGrouped = followPlans.GroupBy(p => p.TrainId)
             .ToDictionary(g => g.Key, g => g.Select(p => p.UserId).Distinct().Count());
         var railwayPaths = await _unitOfWork.RailwayPaths.GetAllWithStopsAsync(ct);
+
+        // Load every route stop, stop and city once, instead of querying per train and per stop
+        var routeStopsByTrain = (await _unitOfWork.Repository<TrainRouteStop>().GetAllAsync(ct))
+            .GroupBy(rs => rs.TrainId)
+            .ToDictionary(g => g.Key, g => g.ToList());
+        var stopsById = (await _unitOfWork.Repository<Stop>().GetAllAsync(ct)).ToDictionary(s => s.Id);
+        var citiesById = (await _unitOfWork.Repository<City>().GetAllAsync(ct)).ToDictionary(c => c.Id);
         var dtos = new List<TrainDto>();
 
         foreach (var train in trains)
         {
-            var routeStops = await _unitOfWork.Repository<TrainRouteStop>().FindAsync(rs => rs.TrainId == train.Id, ct);
+            var routeStops = routeStopsByTrain.TryGetValue(train.Id, out var trainStops) ? trainStops : new List<TrainRouteStop>();
             var stopDtos = new List<RouteStopDto>();
 
             foreach (var rs in routeStops.OrderBy(x => x.StopOrder))
             {
-                var stop = await _unitOfWork.Repository<Stop>().GetByIdAsync(rs.StopId, ct);
+                var stop = stopsById.TryGetValue(rs.StopId, out var foundStop) ? foundStop : null;
                 if (stop != null)
                 {
                     rs.Stop = stop;
-                    var city = await _unitOfWork.Repository<City>().GetByIdAsync(stop.CityId, ct);
+                    var city = citiesById.TryGetValue(stop.CityId, out var foundCity) ? foundCity : null;
                     stopDtos.Add(new RouteStopDto
                     {
                         StopId = rs.StopId,
@@ -642,13 +649,19 @@ public class TrainsAdminHandlers :
         var stopDtos = new List<RouteStopDto>();
         var railwayPaths = await _unitOfWork.RailwayPaths.GetAllWithStopsAsync(ct);
 
+        // Load the train's stops and their cities in two queries, not two per stop
+        var stopIds = routeStops.Select(rs => rs.StopId).Distinct().ToList();
+        var stopsById = (await _unitOfWork.Repository<Stop>().FindAsync(st => stopIds.Contains(st.Id), ct)).ToDictionary(st => st.Id);
+        var cityIds = stopsById.Values.Select(st => st.CityId).Distinct().ToList();
+        var citiesById = (await _unitOfWork.Repository<City>().FindAsync(c => cityIds.Contains(c.Id), ct)).ToDictionary(c => c.Id);
+
         foreach (var rs in routeStops.OrderBy(x => x.StopOrder))
         {
-            var stop = await _unitOfWork.Repository<Stop>().GetByIdAsync(rs.StopId, ct);
+            var stop = stopsById.TryGetValue(rs.StopId, out var foundStop) ? foundStop : null;
             if (stop != null)
             {
                 rs.Stop = stop;
-                var city = await _unitOfWork.Repository<City>().GetByIdAsync(stop.CityId, ct);
+                var city = citiesById.TryGetValue(stop.CityId, out var foundCity) ? foundCity : null;
                 stopDtos.Add(new RouteStopDto
                 {
                     StopId = rs.StopId,
@@ -914,12 +927,19 @@ public class TripsAdminHandlers :
         var trainTypesDict = trainTypes.ToDictionary(t => t.Id);
         var statusLookups = await _unitOfWork.Repository<TripStatusLookup>().GetAllAsync(ct);
         var statusLookupsDict = statusLookups.ToDictionary(s => s.Id);
+
+        // One query for trains and one grouped count for followers, instead of two queries per trip
+        var trainsById = (await _unitOfWork.Trains.GetAllAsync(ct)).ToDictionary(t => t.Id);
+        var followerCounts = (await _unitOfWork.Repository<TripFollower>().QueryAsync(q => q
+                .GroupBy(tf => tf.TripId)
+                .Select(g => new { TripId = g.Key, Count = g.Count() }), ct))
+            .ToDictionary(x => x.TripId, x => x.Count);
         var dtos = new List<TripDto>();
 
         foreach (var trip in trips)
         {
-            var train = await _unitOfWork.Trains.GetByIdAsync(trip.TrainId, ct);
-            var followers = await _unitOfWork.Repository<TripFollower>().CountAsync(tf => tf.TripId == trip.Id, ct);
+            var train = trainsById.TryGetValue(trip.TrainId, out var foundTrain) ? foundTrain : null;
+            var followers = followerCounts.TryGetValue(trip.Id, out var followerCount) ? followerCount : 0;
             
             var trainType = train?.TrainTypeId.HasValue == true && trainTypesDict.TryGetValue(train.TrainTypeId.Value, out var tt)
                 ? tt
@@ -1078,11 +1098,16 @@ public class SuggestionsAdminHandlers :
     {
         var suggestions = await _unitOfWork.Repository<TrainSuggestion>()
             .FindAsync(s => s.Status == SuggestionStatus.Pending, ct);
+        if (suggestions.Count == 0)
+            return Result<List<TrainSuggestionDto>>.Success(new List<TrainSuggestionDto>());
+
+        var userIds = suggestions.Select(s => s.SuggestedById).Distinct().ToList();
+        var usersById = (await _unitOfWork.Users.FindAsync(u => userIds.Contains(u.Id), ct)).ToDictionary(u => u.Id);
 
         var dtos = new List<TrainSuggestionDto>();
         foreach (var s in suggestions)
         {
-            var user = await _unitOfWork.Users.GetByIdAsync(s.SuggestedById, ct);
+            var user = usersById.TryGetValue(s.SuggestedById, out var foundUser) ? foundUser : null;
             dtos.Add(new TrainSuggestionDto
             {
                 Id = s.Id,
@@ -1107,21 +1132,23 @@ public class SuggestionsAdminHandlers :
     {
         var suggestions = await _unitOfWork.Repository<StopSuggestion>()
             .FindAsync(s => s.Status == SuggestionStatus.Pending, ct);
+        if (suggestions.Count == 0)
+            return Result<List<StopSuggestionDto>>.Success(new List<StopSuggestionDto>());
+
+        // Load referenced users, cities and governorates once, not per suggestion
+        var userIds = suggestions.Select(s => s.SuggestedById).Distinct().ToList();
+        var usersById = (await _unitOfWork.Users.FindAsync(u => userIds.Contains(u.Id), ct)).ToDictionary(u => u.Id);
+        var cityIds = suggestions.Where(s => s.CityId.HasValue).Select(s => s.CityId!.Value).Distinct().ToList();
+        var citiesById = (await _unitOfWork.Repository<City>().FindAsync(c => cityIds.Contains(c.Id), ct)).ToDictionary(c => c.Id);
+        var govIds = suggestions.Where(s => s.NewCityGovernorateId.HasValue).Select(s => s.NewCityGovernorateId!.Value).Distinct().ToList();
+        var govsById = (await _unitOfWork.Repository<Governorate>().FindAsync(g => govIds.Contains(g.Id), ct)).ToDictionary(g => g.Id);
 
         var dtos = new List<StopSuggestionDto>();
         foreach (var s in suggestions)
         {
-            var user = await _unitOfWork.Users.GetByIdAsync(s.SuggestedById, ct);
-            City? city = null;
-            if (s.CityId.HasValue)
-            {
-                city = await _unitOfWork.Repository<City>().GetByIdAsync(s.CityId.Value, ct);
-            }
-            Governorate? gov = null;
-            if (s.NewCityGovernorateId.HasValue)
-            {
-                gov = await _unitOfWork.Repository<Governorate>().GetByIdAsync(s.NewCityGovernorateId.Value, ct);
-            }
+            var user = usersById.TryGetValue(s.SuggestedById, out var foundUser) ? foundUser : null;
+            City? city = s.CityId.HasValue && citiesById.TryGetValue(s.CityId.Value, out var foundCity) ? foundCity : null;
+            Governorate? gov = s.NewCityGovernorateId.HasValue && govsById.TryGetValue(s.NewCityGovernorateId.Value, out var foundGov) ? foundGov : null;
 
             dtos.Add(new StopSuggestionDto
             {
@@ -1401,19 +1428,24 @@ public class AdminLostFoundHandlers :
     {
         var posts = await _unitOfWork.Repository<LostFoundPost>().GetAllAsync(ct);
 
-        // Load users to map names
-        var authorIds = posts.Select(p => p.AuthorId).Distinct().ToList();
+        // Load all comments (including hidden ones) once, grouped by post
+        var commentsByPost = (await _unitOfWork.Repository<LostFoundComment>().GetAllAsync(ct))
+            .GroupBy(c => c.PostId)
+            .ToDictionary(g => g.Key, g => g.ToList());
+
+        // Load post and comment authors in one query to map names
+        var authorIds = posts.Select(p => p.AuthorId)
+            .Concat(commentsByPost.Values.SelectMany(cs => cs).Select(c => c.AuthorId))
+            .Distinct()
+            .ToList();
         var users = await _unitOfWork.Users.FindAsync(u => authorIds.Contains(u.Id), ct);
         var userDict = users.ToDictionary(u => u.Id);
 
         var dtos = new List<LostFoundPostDto>();
         foreach (var p in posts.OrderByDescending(p => p.CreatedAt))
         {
-            // Load comments for each post (including hidden ones)
-            var comments = await _unitOfWork.Repository<LostFoundComment>().FindAsync(c => c.PostId == p.Id, ct);
-            var commentAuthorIds = comments.Select(c => c.AuthorId).Distinct().ToList();
-            var commentAuthors = await _unitOfWork.Users.FindAsync(u => commentAuthorIds.Contains(u.Id), ct);
-            var commentAuthorDict = commentAuthors.ToDictionary(u => u.Id);
+            var comments = commentsByPost.TryGetValue(p.Id, out var postComments) ? postComments : new List<LostFoundComment>();
+            var commentAuthorDict = userDict;
 
             var commentDtos = comments.OrderBy(c => c.CreatedAt).Select(c => new LostFoundCommentDto
             {
@@ -1611,26 +1643,34 @@ public class LiveUpdateModerationHandlers :
         _notificationHelper = notificationHelper;
     }
 
-    public async Task<Result<List<PendingLiveUpdateDto>>> Handle(GetPendingLiveUpdatesQuery request, CancellationToken ct)
+    // Loads the trips, trains and authors for a batch of updates in three queries,
+    // instead of up to three queries per update.
+    private async Task<List<PendingLiveUpdateDto>> MapModerationDtosAsync(IReadOnlyList<TripLiveUpdate> updates, CancellationToken ct)
     {
-        var updates = await _unitOfWork.Repository<TripLiveUpdate>().FindAsync(u => !u.IsApproved, ct);
-        var dtos = new List<PendingLiveUpdateDto>();
+        if (updates.Count == 0)
+            return new List<PendingLiveUpdateDto>();
 
+        var tripIds = updates.Select(u => u.TripId).Distinct().ToList();
+        var tripsById = (await _unitOfWork.Trips.FindAsync(t => tripIds.Contains(t.Id), ct)).ToDictionary(t => t.Id);
+        var trainIds = tripsById.Values.Select(t => t.TrainId).Distinct().ToList();
+        var trainsById = (await _unitOfWork.Trains.FindAsync(t => trainIds.Contains(t.Id), ct)).ToDictionary(t => t.Id);
+        var authorIds = updates.Where(u => u.AuthorId.HasValue).Select(u => u.AuthorId!.Value).Distinct().ToList();
+        var authorsById = (await _unitOfWork.Users.FindAsync(x => authorIds.Contains(x.Id), ct)).ToDictionary(x => x.Id);
+
+        var dtos = new List<PendingLiveUpdateDto>();
         foreach (var u in updates)
         {
-            var trip = await _unitOfWork.Trips.GetByIdAsync(u.TripId, ct);
             string trainNumber = string.Empty;
             DateOnly tripDate = default;
-            if (trip != null)
+            if (tripsById.TryGetValue(u.TripId, out var trip))
             {
                 tripDate = trip.TripDate;
-                var train = await _unitOfWork.Trains.GetByIdAsync(trip.TrainId, ct);
-                if (train != null)
+                if (trainsById.TryGetValue(trip.TrainId, out var train))
                 {
                     trainNumber = train.TrainNumber;
                 }
             }
-            var author = u.AuthorId.HasValue ? await _unitOfWork.Users.GetByIdAsync(u.AuthorId.Value, ct) : null;
+            var author = u.AuthorId.HasValue && authorsById.TryGetValue(u.AuthorId.Value, out var foundAuthor) ? foundAuthor : null;
 
             dtos.Add(new PendingLiveUpdateDto
             {
@@ -1647,47 +1687,20 @@ public class LiveUpdateModerationHandlers :
                 CreatedAt = u.CreatedAt
             });
         }
+        return dtos;
+    }
 
+    public async Task<Result<List<PendingLiveUpdateDto>>> Handle(GetPendingLiveUpdatesQuery request, CancellationToken ct)
+    {
+        var updates = await _unitOfWork.Repository<TripLiveUpdate>().FindAsync(u => !u.IsApproved, ct);
+        var dtos = await MapModerationDtosAsync(updates, ct);
         return Result<List<PendingLiveUpdateDto>>.Success(dtos.OrderByDescending(d => d.CreatedAt).ToList());
     }
 
     public async Task<Result<List<PendingLiveUpdateDto>>> Handle(GetRemovalRequestedLiveUpdatesQuery request, CancellationToken ct)
     {
         var updates = await _unitOfWork.Repository<TripLiveUpdate>().FindAsync(u => u.IsApproved && u.IsRemovalRequested, ct);
-        var dtos = new List<PendingLiveUpdateDto>();
-
-        foreach (var u in updates)
-        {
-            var trip = await _unitOfWork.Trips.GetByIdAsync(u.TripId, ct);
-            string trainNumber = string.Empty;
-            DateOnly tripDate = default;
-            if (trip != null)
-            {
-                tripDate = trip.TripDate;
-                var train = await _unitOfWork.Trains.GetByIdAsync(trip.TrainId, ct);
-                if (train != null)
-                {
-                    trainNumber = train.TrainNumber;
-                }
-            }
-            var author = u.AuthorId.HasValue ? await _unitOfWork.Users.GetByIdAsync(u.AuthorId.Value, ct) : null;
-
-            dtos.Add(new PendingLiveUpdateDto
-            {
-                Id = u.Id,
-                TripId = u.TripId,
-                TrainNumber = trainNumber,
-                TripDate = tripDate,
-                AuthorName = author?.DisplayName ?? "Unknown",
-                Content = u.Content,
-                StatusTag = u.StatusTag?.ToString(),
-                CrowdState = u.CrowdState?.ToString(),
-                Latitude = u.Latitude,
-                Longitude = u.Longitude,
-                CreatedAt = u.CreatedAt
-            });
-        }
-
+        var dtos = await MapModerationDtosAsync(updates, ct);
         return Result<List<PendingLiveUpdateDto>>.Success(dtos.OrderByDescending(d => d.CreatedAt).ToList());
     }
 
