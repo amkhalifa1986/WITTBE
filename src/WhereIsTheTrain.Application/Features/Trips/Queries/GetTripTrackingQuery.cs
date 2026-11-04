@@ -59,18 +59,10 @@ public class GetTripTrackingQueryHandler : IRequestHandler<GetTripTrackingQuery,
             return Result<TripTrackingDto>.Failure("Trip not found.", 404);
 
         // Cache railway paths — they are static reference data, expensive to load
-        var railwayPaths = await _cache.GetOrCreateAsync("railway_paths", async entry =>
-        {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
-            return await _unitOfWork.RailwayPaths.GetAllWithStopsAsync(ct);
-        }) ?? new List<WhereIsTheTrain.Domain.Entities.RailwayPath>();
+        var railwayPaths = await RouteCache.GetRailwayPathsAsync(_cache, _unitOfWork, ct);
 
         // Cache computed geometry per train — CPU-intensive, deterministic per route
-        var routePath = _cache.GetOrCreate($"route_path_{trip.Train.Id}", entry =>
-        {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
-            return RoutePathBuilder.BuildRoutePath(trip.Train.RouteStops, railwayPaths);
-        })!;
+        var routePath = RouteCache.GetRoutePath(_cache, trip.Train.Id, trip.Train.RouteStops, railwayPaths);
         bool hasRoutePath = routePath.Coordinates.Length >= 2;
 
         // Fetch recent telemetry (last 10 min)

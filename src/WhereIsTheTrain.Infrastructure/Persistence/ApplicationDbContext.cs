@@ -56,7 +56,7 @@ public class ApplicationDbContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         foreach (var entry in ChangeTracker.Entries<Domain.Common.AuditableEntity>())
         {
@@ -70,6 +70,25 @@ public class ApplicationDbContext : DbContext
                     break;
             }
         }
-        return base.SaveChangesAsync(cancellationToken);
+
+        var routesChanged = ChangeTracker.Entries().Any(e =>
+            (e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted) &&
+            AffectsRouteGeometry(e.Metadata.ClrType, e.Metadata.GetTableName()));
+
+        var result = await base.SaveChangesAsync(cancellationToken);
+
+        // Maps and tracking cache railway paths and route geometry; drop them as soon as
+        // trains, their stops, stations or railway paths change, so edits show up at once.
+        if (routesChanged)
+            Application.Common.RouteCache.Invalidate();
+
+        return result;
     }
+
+    private static bool AffectsRouteGeometry(Type clrType, string? tableName) =>
+        clrType == typeof(Train) ||
+        clrType == typeof(TrainRouteStop) ||
+        clrType == typeof(Stop) ||
+        clrType == typeof(RailwayPath) ||
+        tableName == "RailwayPathStops"; // railway path <-> stop join table
 }

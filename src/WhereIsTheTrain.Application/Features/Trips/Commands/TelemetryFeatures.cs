@@ -75,28 +75,27 @@ public class SubmitTelemetryCommandHandler : IRequestHandler<SubmitTelemetryComm
         {
             rs.Stop = stopsById.TryGetValue(rs.StopId, out var stop) ? stop : null!;
         }
+        // A route stop whose station was deleted has no coordinates to place on the map
+        routeStopsList = routeStopsList.Where(rs => rs.Stop != null).ToList();
 
-        // Telemetry arrives every few seconds per passenger: reuse the same cached
-        // railway paths and per-train route geometry as the trip queries.
-        var railwayPaths = await _cache.GetOrCreateAsync("railway_paths", async entry =>
-        {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
-            return await _unitOfWork.RailwayPaths.GetAllWithStopsAsync(cancellationToken);
-        }) ?? new List<RailwayPath>();
-        var routePath = _cache.GetOrCreate($"route_path_{train.Id}", entry =>
-        {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
-            return RoutePathBuilder.BuildRoutePath(routeStopsList, railwayPaths);
-        })!;
+        var railwayPaths = await RouteCache.GetRailwayPathsAsync(_cache, _unitOfWork, cancellationToken);
+        var routePath = RouteCache.GetRoutePath(_cache, train.Id, routeStopsList, railwayPaths);
+
+        // Without at least two points there is no line to place the train on
+        if (routePath.NumPoints < 2)
+            return Result<TelemetryResponseDto>.Failure("Telemetry discarded: this train has no route to track yet.", 400);
 
         // Snap coordinates
         var rawPoint = new Point(request.Longitude, request.Latitude) { SRID = 4326 };
         var (snappedCoord, segmentIndex) = GeoUtils.ProjectPointOnPolyline(routePath, rawPoint);
 
-        // Snap distance check (filtering)
+        // Snap distance check (filtering). Stretches with no railway path are drawn as
+        // straight lines between stations, and real tracks curve away from those, so
+        // allow more distance there than on surveyed railway geometry.
+        double snapTolerance = RoutePathBuilder.IsFullyCovered(routeStopsList, railwayPaths) ? 150.0 : 2000.0;
         double snapErrorDist = GeoUtils.HaversineDistance(request.Latitude, request.Longitude, snappedCoord.Y, snappedCoord.X);
         bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
-        if (snapErrorDist > 150.0 && !isDevelopment)
+        if (snapErrorDist > snapTolerance && !isDevelopment)
             return Result<TelemetryResponseDto>.Failure("Telemetry discarded: raw coordinate is too far from the track.", 400);
 
         // Speed check (filtering)
