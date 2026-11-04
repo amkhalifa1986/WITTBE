@@ -95,6 +95,19 @@ builder.Services.AddHostedService<WhereIsTheTrain.API.BackgroundServices.Midnigh
 // SignalR
 builder.Services.AddSignalR();
 
+// Response compression: trip and train lists carry full route geometry, so JSON
+// payloads are large. Brotli/Gzip at the fastest level cuts transfer time a lot.
+// HTTPS responses stay uncompressed (framework default) to avoid BREACH-style issues.
+builder.Services.AddResponseCompression(options =>
+{
+    options.Providers.Add<Microsoft.AspNetCore.ResponseCompression.BrotliCompressionProvider>();
+    options.Providers.Add<Microsoft.AspNetCore.ResponseCompression.GzipCompressionProvider>();
+});
+builder.Services.Configure<Microsoft.AspNetCore.ResponseCompression.BrotliCompressionProviderOptions>(o =>
+    o.Level = System.IO.Compression.CompressionLevel.Fastest);
+builder.Services.Configure<Microsoft.AspNetCore.ResponseCompression.GzipCompressionProviderOptions>(o =>
+    o.Level = System.IO.Compression.CompressionLevel.Fastest);
+
 // CORS
 builder.Services.AddCors(options =>
 {
@@ -140,6 +153,7 @@ builder.Services.AddSwaggerGen(c =>
 var app = builder.Build();
 
 // Middleware
+app.UseResponseCompression();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())

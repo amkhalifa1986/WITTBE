@@ -16,16 +16,35 @@ public static class DependencyInjection
     {
         // Database
         var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+        // AutoDetect opens a connection, and the options callback below runs for every
+        // DbContext (every request), so the detected version is cached after the first
+        // success instead of adding a database round trip to each API call. A failed
+        // detection is not cached, so the API picks MySQL up once it becomes reachable.
+        ServerVersion? serverVersion = null;
+
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            try
+            if (serverVersion == null)
+            {
+                try
+                {
+                    serverVersion = ServerVersion.AutoDetect(connectionString);
+                }
+                catch
+                {
+                    // Database unreachable: fall back to the in-memory provider below.
+                }
+            }
+
+            if (serverVersion != null)
             {
                 options.UseMySql(
                     connectionString,
-                    ServerVersion.AutoDetect(connectionString),
+                    serverVersion,
                     x => x.UseNetTopologySuite());
             }
-            catch
+            else
             {
                 options.UseInMemoryDatabase("WhereIsTheTrainDB");
             }

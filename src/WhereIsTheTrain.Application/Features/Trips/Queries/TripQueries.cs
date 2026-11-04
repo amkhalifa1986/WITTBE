@@ -29,20 +29,28 @@ public class GetTodayTripsQueryHandler : IRequestHandler<GetTodayTripsQuery, Res
     {
         var trips = await _tripRepo.GetTodayTripsAsync(ct);
 
+        // Followers are not loaded with the trips (a popular trip can have thousands):
+        // count them per trip in one grouped query, and load only the current user's follows.
+        var tripIds = trips.Select(t => t.Id).ToList();
+        var followerCounts = tripIds.Count == 0
+            ? new Dictionary<Guid, int>()
+            : (await _unitOfWork.Repository<TripFollower>().QueryAsync(q => q
+                    .Where(f => tripIds.Contains(f.TripId))
+                    .GroupBy(f => f.TripId)
+                    .Select(g => new { TripId = g.Key, Count = g.Count() }), ct))
+                .ToDictionary(x => x.TripId, x => x.Count);
+        var myFollows = request.CurrentUserId.HasValue && tripIds.Count > 0
+            ? (await _unitOfWork.Repository<TripFollower>().FindAsync(
+                    f => f.UserId == request.CurrentUserId.Value && tripIds.Contains(f.TripId), ct))
+                .ToDictionary(f => f.TripId)
+            : new Dictionary<Guid, TripFollower>();
+
         // Cache railway paths — they are static reference data, expensive to load
-        var railwayPaths = await _cache.GetOrCreateAsync("railway_paths", async entry =>
-        {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
-            return await _unitOfWork.RailwayPaths.GetAllWithStopsAsync(ct);
-        }) ?? new List<WhereIsTheTrain.Domain.Entities.RailwayPath>();
+        var railwayPaths = await RouteCache.GetRailwayPathsAsync(_cache, _unitOfWork, ct);
 
         var dtos = trips.Select(t => {
             // Cache computed geometry per train — CPU-intensive, deterministic per route
-            var routePath = _cache.GetOrCreate($"route_path_{t.TrainId}", entry =>
-            {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
-                return RoutePathBuilder.BuildRoutePath(t.Train.RouteStops, railwayPaths);
-            })!;
+            var routePath = RouteCache.GetRoutePath(_cache, t.TrainId, t.Train.RouteStops, railwayPaths);
             return new TripDto
             {
                 Id = t.Id,
@@ -62,9 +70,9 @@ public class GetTodayTripsQueryHandler : IRequestHandler<GetTodayTripsQuery, Res
                 } : new TripStatusLookupDto(),
                 ActualDeparture = t.ActualDeparture,
                 ActualArrival = t.ActualArrival,
-                FollowerCount = t.Followers?.Count ?? 0,
-                IsFollowedByCurrentUser = request.CurrentUserId.HasValue && (t.Followers?.Any(f => f.UserId == request.CurrentUserId.Value) ?? false),
-                IsNotificationsEnabled = request.CurrentUserId.HasValue && (t.Followers?.Any(f => f.UserId == request.CurrentUserId.Value && f.NotificationsEnabled) ?? false),
+                FollowerCount = followerCounts.TryGetValue(t.Id, out var followerCount) ? followerCount : 0,
+                IsFollowedByCurrentUser = myFollows.ContainsKey(t.Id),
+                IsNotificationsEnabled = myFollows.TryGetValue(t.Id, out var myFollow) && myFollow.NotificationsEnabled,
                 RoutePath = routePath.Coordinates.Select(c => new double[] { c.Y, c.X }).ToList(),
                 TrainTypeId = t.Train.TrainTypeId,
                 TrainTypeNameAr = t.Train.TrainType?.NameAr,
@@ -106,18 +114,10 @@ public class GetTripDetailsQueryHandler : IRequestHandler<GetTripDetailsQuery, R
             return Result<TripDetailDto>.Failure("Trip not found.", 404);
 
         // Cache railway paths — they are static reference data, expensive to load
-        var railwayPaths = await _cache.GetOrCreateAsync("railway_paths", async entry =>
-        {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
-            return await _unitOfWork.RailwayPaths.GetAllWithStopsAsync(ct);
-        }) ?? new List<WhereIsTheTrain.Domain.Entities.RailwayPath>();
+        var railwayPaths = await RouteCache.GetRailwayPathsAsync(_cache, _unitOfWork, ct);
 
         // Cache computed geometry per train — CPU-intensive, deterministic per route
-        var routePath = _cache.GetOrCreate($"route_path_{trip.TrainId}", entry =>
-        {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
-            return RoutePathBuilder.BuildRoutePath(trip.Train.RouteStops, railwayPaths);
-        })!;
+        var routePath = RouteCache.GetRoutePath(_cache, trip.TrainId, trip.Train.RouteStops, railwayPaths);
 
         var dto = new TripDetailDto
         {
@@ -184,28 +184,9 @@ public class GetTripDetailsQueryHandler : IRequestHandler<GetTripDetailsQuery, R
         };
 
         // Populate top 3 contributors for this trip
-        var tripLogs = (await _unitOfWork.Repository<UserPointLog>().FindAsync(l => l.TripId == dto.Id, ct)).ToList();
-        var topContributors = tripLogs.GroupBy(l => l.UserId)
-            .Select(g => new { UserId = g.Key, Total = g.Sum(l => l.PointsAwarded) })
-            .OrderByDescending(x => x.Total)
-            .Take(3)
-            .ToList();
-        int contribRank = 1;
-        foreach (var entry in topContributors)
-        {
-            var contribUser = await _unitOfWork.Users.GetByIdAsync(entry.UserId, ct);
-            if (contribUser != null)
-            {
-                dto.TopContributors.Add(new LeaderboardEntryDto 
-                { 
-                    UserId = entry.UserId, 
-                    DisplayName = contribUser.DisplayName, 
-                    AvatarUrl = contribUser.AvatarUrl, 
-                    TotalPoints = entry.Total, 
-                    Rank = contribRank++ 
-                });
-            }
-        }
+        var tripId = dto.Id;
+        dto.TopContributors.AddRange(await LeaderboardHelper.GetTopAsync(
+            _unitOfWork, l => l.TripId == tripId, 3, ct));
 
         return Result<TripDetailDto>.Success(dto);
     }
@@ -278,22 +259,14 @@ public class SearchTrainByNumberQueryHandler : IRequestHandler<SearchTrainByNumb
         var trains = await _trainRepo.SearchByNumberAsync(request.SearchTerm, ct);
 
         // Cache railway paths — they are static reference data, expensive to load
-        var railwayPaths = await _cache.GetOrCreateAsync("railway_paths", async entry =>
-        {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
-            return await _unitOfWork.RailwayPaths.GetAllWithStopsAsync(ct);
-        }) ?? new List<WhereIsTheTrain.Domain.Entities.RailwayPath>();
+        var railwayPaths = await RouteCache.GetRailwayPathsAsync(_cache, _unitOfWork, ct);
 
         var trainTypes = await _unitOfWork.Repository<TrainType>().GetAllAsync(ct);
         var trainTypesDict = trainTypes.ToDictionary(tt => tt.Id);
 
         var dtos = trains.Select(t => {
             // Cache computed geometry per train — CPU-intensive, deterministic per route
-            var routePath = _cache.GetOrCreate($"route_path_{t.Id}", entry =>
-            {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
-                return RoutePathBuilder.BuildRoutePath(t.RouteStops, railwayPaths);
-            })!;
+            var routePath = RouteCache.GetRoutePath(_cache, t.Id, t.RouteStops, railwayPaths);
             var coveringPaths = RoutePathBuilder.GetCoveringPaths(t.RouteStops, railwayPaths);
             var typeInfo = t.TrainTypeId.HasValue && trainTypesDict.TryGetValue(t.TrainTypeId.Value, out var ttVal) ? ttVal : null;
 
@@ -357,22 +330,14 @@ public class SearchTrainByStopsQueryHandler : IRequestHandler<SearchTrainByStops
         var trains = await _trainRepo.SearchByStopsAsync(request.FromStop, request.ToStop, ct);
 
         // Cache railway paths — they are static reference data, expensive to load
-        var railwayPaths = await _cache.GetOrCreateAsync("railway_paths", async entry =>
-        {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
-            return await _unitOfWork.RailwayPaths.GetAllWithStopsAsync(ct);
-        }) ?? new List<WhereIsTheTrain.Domain.Entities.RailwayPath>();
+        var railwayPaths = await RouteCache.GetRailwayPathsAsync(_cache, _unitOfWork, ct);
 
         var trainTypes = await _unitOfWork.Repository<TrainType>().GetAllAsync(ct);
         var trainTypesDict = trainTypes.ToDictionary(tt => tt.Id);
 
         var dtos = trains.Select(t => {
             // Cache computed geometry per train — CPU-intensive, deterministic per route
-            var routePath = _cache.GetOrCreate($"route_path_{t.Id}", entry =>
-            {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
-                return RoutePathBuilder.BuildRoutePath(t.RouteStops, railwayPaths);
-            })!;
+            var routePath = RouteCache.GetRoutePath(_cache, t.Id, t.RouteStops, railwayPaths);
             var coveringPaths = RoutePathBuilder.GetCoveringPaths(t.RouteStops, railwayPaths);
             var typeInfo = t.TrainTypeId.HasValue && trainTypesDict.TryGetValue(t.TrainTypeId.Value, out var ttVal) ? ttVal : null;
 
@@ -438,18 +403,10 @@ public class GetTrainDetailsQueryHandler : IRequestHandler<GetTrainDetailsQuery,
             return Result<TrainDto>.Failure("Train not found.", 404);
 
         // Cache railway paths — they are static reference data, expensive to load
-        var railwayPaths = await _cache.GetOrCreateAsync("railway_paths", async entry =>
-        {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
-            return await _unitOfWork.RailwayPaths.GetAllWithStopsAsync(ct);
-        }) ?? new List<WhereIsTheTrain.Domain.Entities.RailwayPath>();
+        var railwayPaths = await RouteCache.GetRailwayPathsAsync(_cache, _unitOfWork, ct);
 
         // Cache computed geometry per train — CPU-intensive, deterministic per route
-        var routePath = _cache.GetOrCreate($"route_path_{train.Id}", entry =>
-        {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
-            return RoutePathBuilder.BuildRoutePath(train.RouteStops, railwayPaths);
-        })!;
+        var routePath = RouteCache.GetRoutePath(_cache, train.Id, train.RouteStops, railwayPaths);
         var coveringPaths = RoutePathBuilder.GetCoveringPaths(train.RouteStops, railwayPaths);
 
         var trainType = train.TrainTypeId.HasValue
@@ -519,22 +476,16 @@ public class GetDashboardStatsQueryHandler : IRequestHandler<GetDashboardStatsQu
         var totalUpdatesToday = await _unitOfWork.Repository<Domain.Entities.TripLiveUpdate>()
             .CountAsync(u => u.CreatedAt >= todayStart && u.IsApproved, ct);
 
-        // Load approved updates then take top 5 by recency
-        var updates = await _unitOfWork.Repository<TripLiveUpdate>().FindAsync(u => u.IsApproved, ct);
-        var top5 = updates.OrderByDescending(x => x.CreatedAt).Take(5).ToList();
+        // Only the 5 most recent approved updates are needed: sort and limit in the database
+        var top5 = await _unitOfWork.Repository<TripLiveUpdate>().QueryAsync(q => q
+            .Where(u => u.IsApproved)
+            .OrderByDescending(u => u.CreatedAt)
+            .Take(5), ct);
 
-        var authorDict = new Dictionary<Guid, Domain.Entities.User>();
-        foreach (var u in top5.Where(u => u.AuthorId.HasValue))
-        {
-            if (!authorDict.ContainsKey(u.AuthorId!.Value))
-            {
-                var user = await _unitOfWork.Users.GetByIdAsync(u.AuthorId.Value, ct);
-                if (user != null)
-                {
-                    authorDict[user.Id] = user;
-                }
-            }
-        }
+        var authorIds = top5.Where(u => u.AuthorId.HasValue).Select(u => u.AuthorId!.Value).Distinct().ToList();
+        var authorDict = authorIds.Count == 0
+            ? new Dictionary<Guid, Domain.Entities.User>()
+            : (await _unitOfWork.Users.FindAsync(u => authorIds.Contains(u.Id), ct)).ToDictionary(u => u.Id);
 
         var recentUpdates = top5.Select(u =>
         {
@@ -562,30 +513,8 @@ public class GetDashboardStatsQueryHandler : IRequestHandler<GetDashboardStatsQu
         // Top 3 monthly leaderboard
         var monthStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
         var monthEnd = monthStart.AddMonths(1);
-        var monthLogs = (await _unitOfWork.Repository<UserPointLog>().FindAsync(
-            l => l.CreatedAt >= monthStart && l.CreatedAt < monthEnd, ct)).ToList();
-        var monthGrouped = monthLogs.GroupBy(l => l.UserId)
-            .Select(g => new { UserId = g.Key, Total = g.Sum(l => l.PointsAwarded) })
-            .OrderByDescending(x => x.Total)
-            .Take(3)
-            .ToList();
-        var monthlyLeaderboard = new List<LeaderboardEntryDto>();
-        int mlRank = 1;
-        foreach (var entry in monthGrouped)
-        {
-            var mlUser = await _unitOfWork.Users.GetByIdAsync(entry.UserId, ct);
-            if (mlUser != null)
-            {
-                monthlyLeaderboard.Add(new LeaderboardEntryDto 
-                { 
-                    UserId = entry.UserId, 
-                    DisplayName = mlUser.DisplayName, 
-                    AvatarUrl = mlUser.AvatarUrl, 
-                    TotalPoints = entry.Total, 
-                    Rank = mlRank++ 
-                });
-            }
-        }
+        var monthlyLeaderboard = await LeaderboardHelper.GetTopAsync(
+            _unitOfWork, l => l.CreatedAt >= monthStart && l.CreatedAt < monthEnd, 3, ct);
 
         return Result<DashboardDto>.Success(new DashboardDto
         {

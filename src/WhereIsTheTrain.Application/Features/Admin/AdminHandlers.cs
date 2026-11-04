@@ -76,8 +76,11 @@ public class AdminHandlers :
     public async Task<Result<List<UserDto>>> Handle(GetUsersQuery request, CancellationToken ct)
     {
         var users = await _unitOfWork.Users.GetAllAsync(ct);
-        var logs = await _unitOfWork.Repository<UserPointLog>().GetAllAsync(ct);
-        var pointsDict = logs.GroupBy(l => l.UserId).ToDictionary(g => g.Key, g => g.Sum(l => l.PointsAwarded));
+        // Sum points per user in the database instead of loading every point log
+        var pointsDict = (await _unitOfWork.Repository<UserPointLog>().QueryAsync(q => q
+                .GroupBy(l => l.UserId)
+                .Select(g => new { UserId = g.Key, Total = g.Sum(l => l.PointsAwarded) }), ct))
+            .ToDictionary(x => x.UserId, x => x.Total);
 
         var dtos = users
             .Where(u => u.Role != UserRole.Admin) // Filter out admins from standard users list

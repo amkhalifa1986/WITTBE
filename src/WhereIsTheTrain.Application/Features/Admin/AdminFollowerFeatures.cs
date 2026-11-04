@@ -94,12 +94,21 @@ public class AdminFollowerHandlers :
         var trainPlans = await _unitOfWork.Repository<TrainFollowPlan>().FindAsync(p => p.UserId == request.UserId, ct);
         var tripFollowers = await _unitOfWork.Repository<TripFollower>().FindAsync(p => p.UserId == request.UserId, ct);
 
+        // Load the user's followed trips and every train involved in two queries, not one per item
+        var tripIds = tripFollowers.Select(tf => tf.TripId).Distinct().ToList();
+        var tripsById = (await _unitOfWork.Trips.FindAsync(t => tripIds.Contains(t.Id), ct)).ToDictionary(t => t.Id);
+        var trainIds = trainPlans.Select(p => p.TrainId)
+            .Concat(tripsById.Values.Select(t => t.TrainId))
+            .Distinct()
+            .ToList();
+        var trainsById = (await _unitOfWork.Trains.FindAsync(t => trainIds.Contains(t.Id), ct)).ToDictionary(t => t.Id);
+
         var followedTrains = new List<AdminFollowedTrainDto>();
         var groupedPlans = trainPlans.GroupBy(p => p.TrainId);
 
         foreach (var group in groupedPlans)
         {
-            var train = await _unitOfWork.Trains.GetByIdAsync(group.Key, ct);
+            var train = trainsById.TryGetValue(group.Key, out var foundTrain) ? foundTrain : null;
             if (train != null)
             {
                 followedTrains.Add(new AdminFollowedTrainDto
@@ -116,10 +125,10 @@ public class AdminFollowerHandlers :
         var followedTrips = new List<AdminFollowedTripDto>();
         foreach (var tf in tripFollowers)
         {
-            var trip = await _unitOfWork.Trips.GetByIdAsync(tf.TripId, ct);
+            var trip = tripsById.TryGetValue(tf.TripId, out var foundTrip) ? foundTrip : null;
             if (trip != null)
             {
-                var train = await _unitOfWork.Trains.GetByIdAsync(trip.TrainId, ct);
+                var train = trainsById.TryGetValue(trip.TrainId, out var tripTrain) ? tripTrain : null;
                 followedTrips.Add(new AdminFollowedTripDto
                 {
                     FollowerId = tf.Id,

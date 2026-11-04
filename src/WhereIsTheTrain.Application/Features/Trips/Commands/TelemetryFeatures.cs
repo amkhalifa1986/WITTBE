@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.Extensions.Caching.Memory;
 using NetTopologySuite.Geometries;
 using WhereIsTheTrain.Application.Common;
 using WhereIsTheTrain.Application.Features.Trips.DTOs;
@@ -29,11 +30,13 @@ public class SubmitTelemetryCommandHandler : IRequestHandler<SubmitTelemetryComm
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly TripNotificationHelper _notificationHelper;
+    private readonly IMemoryCache _cache;
 
-    public SubmitTelemetryCommandHandler(IUnitOfWork unitOfWork, TripNotificationHelper notificationHelper)
+    public SubmitTelemetryCommandHandler(IUnitOfWork unitOfWork, TripNotificationHelper notificationHelper, IMemoryCache cache)
     {
         _unitOfWork = unitOfWork;
         _notificationHelper = notificationHelper;
+        _cache = cache;
     }
 
     public async Task<Result<TelemetryResponseDto>> Handle(SubmitTelemetryCommand request, CancellationToken cancellationToken)
@@ -61,26 +64,38 @@ public class SubmitTelemetryCommandHandler : IRequestHandler<SubmitTelemetryComm
         if (train == null)
             return Result<TelemetryResponseDto>.Failure("Train not found.", 404);
 
-        // Load route stops and stop details
-        var routeStopsList = new List<TrainRouteStop>();
-        var stops = await _unitOfWork.Repository<TrainRouteStop>().FindAsync(rs => rs.TrainId == train.Id, cancellationToken);
-        foreach (var rs in stops.OrderBy(rs => rs.StopOrder))
+        // Load route stops and their stop details in two queries (not one query per stop)
+        var routeStopsList = (await _unitOfWork.Repository<TrainRouteStop>().FindAsync(rs => rs.TrainId == train.Id, cancellationToken))
+            .OrderBy(rs => rs.StopOrder)
+            .ToList();
+        var stopIds = routeStopsList.Select(rs => rs.StopId).Distinct().ToList();
+        var stopsById = (await _unitOfWork.Repository<Stop>().FindAsync(s => stopIds.Contains(s.Id), cancellationToken))
+            .ToDictionary(s => s.Id);
+        foreach (var rs in routeStopsList)
         {
-            rs.Stop = await _unitOfWork.Repository<Stop>().GetByIdAsync(rs.StopId, cancellationToken);
-            routeStopsList.Add(rs);
+            rs.Stop = stopsById.TryGetValue(rs.StopId, out var stop) ? stop : null!;
         }
+        // A route stop whose station was deleted has no coordinates to place on the map
+        routeStopsList = routeStopsList.Where(rs => rs.Stop != null).ToList();
 
-        var railwayPaths = await _unitOfWork.RailwayPaths.GetAllWithStopsAsync(cancellationToken);
-        var routePath = RoutePathBuilder.BuildRoutePath(routeStopsList, railwayPaths);
+        var railwayPaths = await RouteCache.GetRailwayPathsAsync(_cache, _unitOfWork, cancellationToken);
+        var routePath = RouteCache.GetRoutePath(_cache, train.Id, routeStopsList, railwayPaths);
+
+        // Without at least two points there is no line to place the train on
+        if (routePath.NumPoints < 2)
+            return Result<TelemetryResponseDto>.Failure("Telemetry discarded: this train has no route to track yet.", 400);
 
         // Snap coordinates
         var rawPoint = new Point(request.Longitude, request.Latitude) { SRID = 4326 };
         var (snappedCoord, segmentIndex) = GeoUtils.ProjectPointOnPolyline(routePath, rawPoint);
 
-        // Snap distance check (filtering)
+        // Snap distance check (filtering). Stretches with no railway path are drawn as
+        // straight lines between stations, and real tracks curve away from those, so
+        // allow more distance there than on surveyed railway geometry.
+        double snapTolerance = RoutePathBuilder.IsFullyCovered(routeStopsList, railwayPaths) ? 150.0 : 2000.0;
         double snapErrorDist = GeoUtils.HaversineDistance(request.Latitude, request.Longitude, snappedCoord.Y, snappedCoord.X);
         bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
-        if (snapErrorDist > 150.0 && !isDevelopment)
+        if (snapErrorDist > snapTolerance && !isDevelopment)
             return Result<TelemetryResponseDto>.Failure("Telemetry discarded: raw coordinate is too far from the track.", 400);
 
         // Speed check (filtering)

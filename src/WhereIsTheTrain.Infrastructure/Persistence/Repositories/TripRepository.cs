@@ -21,6 +21,7 @@ public class TripRepository : GenericRepository<Trip>, ITripRepository
                 .ThenInclude(tr => tr.RouteStops.OrderBy(rs => rs.StopOrder))
                     .ThenInclude(rs => rs.Stop)
             .Where(t => t.TripDate == today || t.TripDate == yesterday)
+            .AsSplitQuery()
             .OrderBy(t => t.Train.RouteStops
                 .OrderBy(rs => rs.StopOrder)
                 .Select(rs => rs.ScheduledDeparture)
@@ -42,6 +43,9 @@ public class TripRepository : GenericRepository<Trip>, ITripRepository
             .Include(t => t.LiveUpdates)
                 .ThenInclude(u => u.ThanksList)
             .Include(t => t.Followers)
+            // Several collections are included; a single joined query multiplies
+            // stops x updates x thanks x followers rows, so load them separately.
+            .AsSplitQuery()
             .FirstOrDefaultAsync(t => t.Id == tripId, cancellationToken);
 
     public async Task<IReadOnlyList<Trip>> GetFollowedTripsAsync(Guid userId, CancellationToken cancellationToken = default)

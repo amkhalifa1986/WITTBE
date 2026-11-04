@@ -63,6 +63,14 @@ public static class RoutePathBuilder
 
                 AddCoordinate(stitchedCoords, snapped2);
             }
+            else
+            {
+                // No railway path covers this stretch yet: join the two stations with a
+                // straight line so the route stays continuous on the map and GPS pings
+                // can still be placed along it.
+                AddCoordinate(stitchedCoords, new Coordinate(s1.Longitude, s1.Latitude));
+                AddCoordinate(stitchedCoords, new Coordinate(s2.Longitude, s2.Latitude));
+            }
         }
 
         if (stitchedCoords.Count < 2)
@@ -112,6 +120,28 @@ public static class RoutePathBuilder
         }
 
         return result.ToList();
+    }
+
+    /// <summary>
+    /// True when every stretch between consecutive stops follows a real railway path,
+    /// false when at least one stretch is a straight-line approximation.
+    /// </summary>
+    public static bool IsFullyCovered(
+        IEnumerable<TrainRouteStop> routeStops,
+        IEnumerable<RailwayPath> railwayPaths)
+    {
+        var orderedStops = routeStops.OrderBy(rs => rs.StopOrder).Select(rs => rs.Stop).ToList();
+        var pathsList = railwayPaths.ToList();
+        for (int i = 0; i < orderedStops.Count - 1; i++)
+        {
+            var s1 = orderedStops[i];
+            var s2 = orderedStops[i + 1];
+            // Same path choice as BuildRoutePath, so both agree on which stretches are real
+            var path = pathsList.FirstOrDefault(p => IsStopOnPath(s1, p) && IsStopOnPath(s2, p));
+            if (path?.RoutePath == null)
+                return false;
+        }
+        return true;
     }
 
     private static bool IsStopOnPath(Stop stop, RailwayPath path)

@@ -359,8 +359,20 @@ public class AdminController : ControllerBase
 
     [HttpGet("trips")]
     [AdminPermission("Trips", "View")]
-    public async Task<IActionResult> GetAllTrips()
+    public async Task<IActionResult> GetAllTrips(
+        [FromQuery] int? page,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? search = null,
+        [FromQuery] Guid? trainTypeId = null)
     {
+        // With a page number, return one filtered page (the trip count grows every day);
+        // without one, keep returning the full list for existing callers.
+        if (page.HasValue)
+        {
+            var paged = await _mediator.Send(new GetTripsPageQuery(page.Value, pageSize, search, trainTypeId));
+            return Ok(paged);
+        }
+
         var result = await _mediator.Send(new GetAllTripsQuery());
         return Ok(result);
     }
